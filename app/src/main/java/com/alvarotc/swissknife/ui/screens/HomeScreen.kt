@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Payments
+import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.SwapHoriz
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Toll
@@ -40,6 +41,7 @@ import com.alvarotc.swissknife.ui.theme.AccentFinger
 import com.alvarotc.swissknife.ui.theme.AccentLevel
 import com.alvarotc.swissknife.ui.theme.AccentList
 import com.alvarotc.swissknife.ui.theme.AccentPassword
+import com.alvarotc.swissknife.ui.theme.AccentQR
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.AccentTimer
@@ -129,6 +131,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Filled.FrontHand,
                 accentColor = AccentFinger,
                 route = NavRoutes.FingerPicker.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_qr,
+                icon = Icons.Filled.QrCode2,
+                accentColor = AccentQR,
+                route = NavRoutes.QRTool.route,
             ),
         )
 

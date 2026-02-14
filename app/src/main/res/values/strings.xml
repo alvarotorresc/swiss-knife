@@ -20,6 +20,7 @@
     <string name="tool_level">Level</string>
     <string name="tool_fortune_wheel">Fortune Wheel</string>
     <string name="tool_finger_picker">Finger Picker</string>
+    <string name="tool_qr">QR Generator</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -128,6 +129,13 @@
     <string name="pick_winners">Pick Winners</string>
     <string name="winner_selected">Winner Selected!</string>
     <string name="winners_selected">Winners Selected!</string>
+
+    <!-- QR Tool -->
+    <string name="text_to_encode">Text to encode</string>
+    <string name="qr_code">QR Code</string>
+    <string name="qr_preview_here">QR code will appear here</string>
+    <string name="generate_qr">Generate QR</string>
+    <string name="new_qr">New QR</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>

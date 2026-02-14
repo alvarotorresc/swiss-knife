@@ -20,6 +20,7 @@
     <string name="tool_level">Nivel</string>
     <string name="tool_fortune_wheel">Ruleta de la Fortuna</string>
     <string name="tool_finger_picker">Selector de Dedos</string>
+    <string name="tool_qr">Generador QR</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -128,6 +129,13 @@
     <string name="pick_winners">Elegir Ganadores</string>
     <string name="winner_selected">¡Ganador Seleccionado!</string>
     <string name="winners_selected">¡Ganadores Seleccionados!</string>
+
+    <!-- QR Tool -->
+    <string name="text_to_encode">Texto a codificar</string>
+    <string name="qr_code">Código QR</string>
+    <string name="qr_preview_here">El código QR aparecerá aquí</string>
+    <string name="generate_qr">Generar QR</string>
+    <string name="new_qr">Nuevo QR</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

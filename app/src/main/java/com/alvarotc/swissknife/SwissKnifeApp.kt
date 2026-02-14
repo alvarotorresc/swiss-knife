@@ -30,6 +30,7 @@ import com.alvarotc.swissknife.ui.screens.FingerPickerScreen
 import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.LevelScreen
+import com.alvarotc.swissknife.ui.screens.QRToolScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
 import com.alvarotc.swissknife.ui.screens.RandomListScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
@@ -64,6 +65,7 @@ fun SwissKnifeApp() {
             NavRoutes.Level.route -> stringResource(R.string.tool_level)
             NavRoutes.FortuneWheel.route -> stringResource(R.string.tool_fortune_wheel)
             NavRoutes.FingerPicker.route -> stringResource(R.string.tool_finger_picker)
+            NavRoutes.QRTool.route -> stringResource(R.string.tool_qr)
             else -> stringResource(R.string.app_name)
         }
 
@@ -191,6 +193,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.FingerPicker.route) {
                 FingerPickerScreen()
+            }
+            composable(NavRoutes.QRTool.route) {
+                QRToolScreen()
             }
         }
     }
