@@ -104,6 +104,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                 text = when (state.error) {
                     SecretSantaError.NameAlreadyAdded -> stringResource(R.string.error_name_already_added)
                     SecretSantaError.NeedMoreParticipants -> stringResource(R.string.error_need_more_participants)
+                    null -> ""
                 },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,

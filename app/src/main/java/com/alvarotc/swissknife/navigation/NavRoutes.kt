@@ -1,7 +1,11 @@
 package com.alvarotc.swissknife.navigation
 
 sealed class NavRoutes(val route: String) {
+    data object Splash : NavRoutes("splash")
+
     data object Home : NavRoutes("home")
+
+    data object Settings : NavRoutes("settings")
 
     data object CoinFlip : NavRoutes("coin_flip")
 

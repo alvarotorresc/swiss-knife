@@ -27,6 +27,7 @@ import com.alvarotc.swissknife.ui.screens.DiceRollScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
+import com.alvarotc.swissknife.ui.screens.SplashScreen
 import com.alvarotc.swissknife.ui.theme.DarkBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -45,11 +46,13 @@ fun SwissKnifeApp() {
             else -> stringResource(R.string.app_name)
         }
 
-    val showBack = currentRoute != NavRoutes.Home.route
+    val showBack = currentRoute != NavRoutes.Home.route && currentRoute != NavRoutes.Splash.route
+    val showTopBar = currentRoute != NavRoutes.Splash.route
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            if (showTopBar) {
+                CenterAlignedTopAppBar(
                 title = { Text(title) },
                 navigationIcon = {
                     if (showBack) {
@@ -67,13 +70,14 @@ fun SwissKnifeApp() {
                         titleContentColor = Color.White,
                         navigationIconContentColor = Color.White,
                     ),
-            )
+                )
+            }
         },
         containerColor = DarkBackground,
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = NavRoutes.Home.route,
+            startDestination = NavRoutes.Splash.route,
             modifier = Modifier.padding(innerPadding),
             enterTransition = {
                 slideIntoContainer(
@@ -100,6 +104,15 @@ fun SwissKnifeApp() {
                 )
             },
         ) {
+            composable(NavRoutes.Splash.route) {
+                SplashScreen(
+                    onNavigateToHome = {
+                        navController.navigate(NavRoutes.Home.route) {
+                            popUpTo(NavRoutes.Splash.route) { inclusive = true }
+                        }
+                    },
+                )
+            }
             composable(NavRoutes.Home.route) {
                 HomeScreen(
                     onNavigate = { route -> navController.navigate(route) },

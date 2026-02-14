@@ -95,6 +95,7 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
                 text = when (state.error) {
                     RandomNumberError.InvalidNumbers -> stringResource(R.string.error_valid_numbers)
                     RandomNumberError.MinNotLessThanMax -> stringResource(R.string.error_min_less_than_max)
+                    null -> ""
                 },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
