@@ -26,6 +26,7 @@ import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
+import com.alvarotc.swissknife.ui.screens.RandomListScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
@@ -46,6 +47,7 @@ fun SwissKnifeApp() {
             NavRoutes.DiceRoll.route -> stringResource(R.string.tool_dice_roll)
             NavRoutes.RandomNumber.route -> stringResource(R.string.tool_random_number)
             NavRoutes.SecretSanta.route -> stringResource(R.string.tool_secret_santa)
+            NavRoutes.RandomList.route -> stringResource(R.string.tool_random_list)
             else -> stringResource(R.string.app_name)
         }
 
@@ -146,6 +148,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.SecretSanta.route) {
                 SecretSantaScreen()
+            }
+            composable(NavRoutes.RandomList.route) {
+                RandomListScreen()
             }
         }
     }

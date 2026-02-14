@@ -11,6 +11,7 @@
     <string name="tool_dice_roll">Dados</string>
     <string name="tool_random_number">Número Aleatorio</string>
     <string name="tool_secret_santa">Amigo Invisible</string>
+    <string name="tool_random_list">Aleatorio de Lista</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -50,6 +51,15 @@
     <string name="cancel">Cancelar</string>
     <string name="error_name_already_added">Nombre ya añadido</string>
     <string name="error_need_more_participants">Se necesitan al menos 3 participantes</string>
+
+    <!-- Random List -->
+    <string name="item">Elemento</string>
+    <string name="items_count">%d elementos</string>
+    <string name="pick">Elegir</string>
+    <string name="picked">Elegido:</string>
+    <string name="new_pick">Nueva Elección</string>
+    <string name="error_item_already_added">Elemento ya añadido</string>
+    <string name="error_need_more_items">Se necesitan al menos 2 elementos</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>
