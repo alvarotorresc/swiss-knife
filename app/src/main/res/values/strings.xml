@@ -19,6 +19,7 @@
     <string name="tool_unit_converter">Unit Converter</string>
     <string name="tool_level">Level</string>
     <string name="tool_fortune_wheel">Fortune Wheel</string>
+    <string name="tool_finger_picker">Finger Picker</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -120,6 +121,13 @@
     <string name="winner_is">Winner:</string>
     <string name="spin">Spin</string>
     <string name="new_spin">New Spin</string>
+
+    <!-- Finger Picker -->
+    <string name="number_of_winners">Winners</string>
+    <string name="place_fingers">Place your fingers on screen</string>
+    <string name="pick_winners">Pick Winners</string>
+    <string name="winner_selected">Winner Selected!</string>
+    <string name="winners_selected">Winners Selected!</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>

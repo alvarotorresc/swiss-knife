@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.ControlCamera
 import androidx.compose.material.icons.filled.Exposure
+import androidx.compose.material.icons.filled.FrontHand
 import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Layers
@@ -35,6 +36,7 @@ import com.alvarotc.swissknife.ui.components.ToolCard
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentCounter
 import com.alvarotc.swissknife.ui.theme.AccentDice
+import com.alvarotc.swissknife.ui.theme.AccentFinger
 import com.alvarotc.swissknife.ui.theme.AccentLevel
 import com.alvarotc.swissknife.ui.theme.AccentList
 import com.alvarotc.swissknife.ui.theme.AccentPassword
@@ -121,6 +123,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Filled.ControlCamera,
                 accentColor = AccentWheel,
                 route = NavRoutes.FortuneWheel.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_finger_picker,
+                icon = Icons.Filled.FrontHand,
+                accentColor = AccentFinger,
+                route = NavRoutes.FingerPicker.route,
             ),
         )
 

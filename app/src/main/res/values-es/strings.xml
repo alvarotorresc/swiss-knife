@@ -19,6 +19,7 @@
     <string name="tool_unit_converter">Conversor de Unidades</string>
     <string name="tool_level">Nivel</string>
     <string name="tool_fortune_wheel">Ruleta de la Fortuna</string>
+    <string name="tool_finger_picker">Selector de Dedos</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -120,6 +121,13 @@
     <string name="winner_is">Ganador:</string>
     <string name="spin">Girar</string>
     <string name="new_spin">Nueva Tirada</string>
+
+    <!-- Finger Picker -->
+    <string name="number_of_winners">Ganadores</string>
+    <string name="place_fingers">Coloca tus dedos en la pantalla</string>
+    <string name="pick_winners">Elegir Ganadores</string>
+    <string name="winner_selected">¡Ganador Seleccionado!</string>
+    <string name="winners_selected">¡Ganadores Seleccionados!</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

@@ -26,6 +26,7 @@ import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
 import com.alvarotc.swissknife.ui.screens.CounterScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
+import com.alvarotc.swissknife.ui.screens.FingerPickerScreen
 import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.LevelScreen
@@ -62,6 +63,7 @@ fun SwissKnifeApp() {
             NavRoutes.UnitConverter.route -> stringResource(R.string.tool_unit_converter)
             NavRoutes.Level.route -> stringResource(R.string.tool_level)
             NavRoutes.FortuneWheel.route -> stringResource(R.string.tool_fortune_wheel)
+            NavRoutes.FingerPicker.route -> stringResource(R.string.tool_finger_picker)
             else -> stringResource(R.string.app_name)
         }
 
@@ -186,6 +188,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.FortuneWheel.route) {
                 FortuneWheelScreen()
+            }
+            composable(NavRoutes.FingerPicker.route) {
+                FingerPickerScreen()
             }
         }
     }
