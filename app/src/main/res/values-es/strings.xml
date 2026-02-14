@@ -14,6 +14,7 @@
     <string name="tool_random_list">Aleatorio de Lista</string>
     <string name="tool_password_generator">Generador de Contraseñas</string>
     <string name="tool_counter">Contador</string>
+    <string name="tool_timer">Temporizador</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -75,6 +76,14 @@
     <!-- Counter -->
     <string name="increment">Incrementar</string>
     <string name="decrement">Decrementar</string>
+
+    <!-- Timer -->
+    <string name="stopwatch">Cronómetro</string>
+    <string name="countdown">Cuenta Atrás</string>
+    <string name="minutes_short">Min</string>
+    <string name="seconds_short">Seg</string>
+    <string name="start">Iniciar</string>
+    <string name="pause">Pausar</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

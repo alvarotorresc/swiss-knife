@@ -33,6 +33,7 @@ import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
+import com.alvarotc.swissknife.ui.screens.TimerScreen
 import com.alvarotc.swissknife.ui.theme.DarkBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -52,6 +53,7 @@ fun SwissKnifeApp() {
             NavRoutes.RandomList.route -> stringResource(R.string.tool_random_list)
             NavRoutes.PasswordGenerator.route -> stringResource(R.string.tool_password_generator)
             NavRoutes.Counter.route -> stringResource(R.string.tool_counter)
+            NavRoutes.Timer.route -> stringResource(R.string.tool_timer)
             else -> stringResource(R.string.app_name)
         }
 
@@ -161,6 +163,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.Counter.route) {
                 CounterScreen()
+            }
+            composable(NavRoutes.Timer.route) {
+                TimerScreen()
             }
         }
     }
