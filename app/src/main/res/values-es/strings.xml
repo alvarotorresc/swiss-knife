@@ -50,4 +50,12 @@
     <string name="cancel">Cancelar</string>
     <string name="error_name_already_added">Nombre ya añadido</string>
     <string name="error_need_more_participants">Se necesitan al menos 3 participantes</string>
+
+    <!-- Settings -->
+    <string name="settings_language">Idioma</string>
+    <string name="settings_about">Acerca de</string>
+    <string name="settings_version">Versión</string>
+    <string name="settings_developer">Desarrollador</string>
+    <string name="settings_privacy">Privacidad</string>
+    <string name="settings_privacy_description">Esta aplicación no recopila, almacena ni comparte datos personales. Todos los datos se almacenan localmente en tu dispositivo y nunca salen de él.</string>
 </resources>

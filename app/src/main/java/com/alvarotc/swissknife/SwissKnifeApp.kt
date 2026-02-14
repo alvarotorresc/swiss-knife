@@ -5,6 +5,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ import com.alvarotc.swissknife.ui.screens.DiceRollScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
+import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
 import com.alvarotc.swissknife.ui.theme.DarkBackground
 
@@ -39,6 +41,7 @@ fun SwissKnifeApp() {
 
     val title =
         when (currentRoute) {
+            NavRoutes.Settings.route -> stringResource(R.string.settings)
             NavRoutes.CoinFlip.route -> stringResource(R.string.tool_coin_flip)
             NavRoutes.DiceRoll.route -> stringResource(R.string.tool_dice_roll)
             NavRoutes.RandomNumber.route -> stringResource(R.string.tool_random_number)
@@ -64,11 +67,22 @@ fun SwissKnifeApp() {
                         }
                     }
                 },
+                actions = {
+                    if (currentRoute == NavRoutes.Home.route) {
+                        IconButton(onClick = { navController.navigate(NavRoutes.Settings.route) }) {
+                            Icon(
+                                imageVector = Icons.Filled.Settings,
+                                contentDescription = stringResource(R.string.settings),
+                            )
+                        }
+                    }
+                },
                 colors =
                     TopAppBarDefaults.centerAlignedTopAppBarColors(
                         containerColor = DarkBackground,
                         titleContentColor = Color.White,
                         navigationIconContentColor = Color.White,
+                        actionIconContentColor = Color.White,
                     ),
                 )
             }
@@ -117,6 +131,9 @@ fun SwissKnifeApp() {
                 HomeScreen(
                     onNavigate = { route -> navController.navigate(route) },
                 )
+            }
+            composable(NavRoutes.Settings.route) {
+                SettingsScreen()
             }
             composable(NavRoutes.CoinFlip.route) {
                 CoinFlipScreen()
