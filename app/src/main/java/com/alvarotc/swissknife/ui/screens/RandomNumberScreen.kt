@@ -25,13 +25,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 import com.alvarotc.swissknife.ui.theme.DarkOutline
 import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.RandomNumberViewModel
+import com.alvarotc.swissknife.viewmodel.RandomNumberError
 
 @Composable
 fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
@@ -65,7 +68,7 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
             OutlinedTextField(
                 value = state.minText,
                 onValueChange = { viewModel.setMin(it) },
-                label = { Text("Min") },
+                label = { Text(stringResource(R.string.min)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 modifier = Modifier.width(140.dp),
@@ -76,7 +79,7 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
             OutlinedTextField(
                 value = state.maxText,
                 onValueChange = { viewModel.setMax(it) },
-                label = { Text("Max") },
+                label = { Text(stringResource(R.string.max)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 singleLine = true,
                 modifier = Modifier.width(140.dp),
@@ -89,7 +92,10 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
         if (state.error != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = state.error!!,
+                text = when (state.error) {
+                    RandomNumberError.InvalidNumbers -> stringResource(R.string.error_valid_numbers)
+                    RandomNumberError.MinNotLessThanMax -> stringResource(R.string.error_min_less_than_max)
+                },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
             )
@@ -118,7 +124,7 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
             colors = ButtonDefaults.buttonColors(containerColor = AccentRandom),
         ) {
             Text(
-                text = "Generate",
+                text = stringResource(R.string.generate),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,

@@ -6,11 +6,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
+sealed class RandomNumberError {
+    data object InvalidNumbers : RandomNumberError()
+    data object MinNotLessThanMax : RandomNumberError()
+}
+
 data class RandomNumberUiState(
     val minText: String = "1",
     val maxText: String = "100",
     val result: Int? = null,
-    val error: String? = null,
+    val error: RandomNumberError? = null,
 )
 
 class RandomNumberViewModel : ViewModel() {
@@ -31,10 +36,10 @@ class RandomNumberViewModel : ViewModel() {
 
         when {
             min == null || max == null -> {
-                _uiState.update { it.copy(error = "Enter valid numbers") }
+                _uiState.update { it.copy(error = RandomNumberError.InvalidNumbers) }
             }
             min >= max -> {
-                _uiState.update { it.copy(error = "Min must be less than Max") }
+                _uiState.update { it.copy(error = RandomNumberError.MinNotLessThanMax) }
             }
             else -> {
                 val result = (min..max).random()

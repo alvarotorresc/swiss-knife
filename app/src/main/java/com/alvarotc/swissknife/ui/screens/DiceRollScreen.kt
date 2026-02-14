@@ -25,8 +25,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.components.DiceFace
 import com.alvarotc.swissknife.ui.theme.AccentDice
 import com.alvarotc.swissknife.ui.theme.AccentDiceContainer
@@ -48,7 +50,7 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
     ) {
         // Dice count selector
         Text(
-            text = "Number of dice",
+            text = stringResource(R.string.number_of_dice),
             color = DarkOnSurfaceVariant,
             fontSize = 14.sp,
         )
@@ -90,7 +92,7 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
             if (state.results.size > 1) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    text = "Total: ${state.results.sum()}",
+                    text = stringResource(R.string.total, state.results.sum()),
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color.White,
@@ -98,7 +100,7 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
             }
         } else {
             Text(
-                text = "Tap to roll",
+                text = stringResource(R.string.tap_to_roll),
                 fontSize = 18.sp,
                 color = DarkOnSurfaceVariant,
             )
@@ -118,7 +120,7 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
             colors = ButtonDefaults.buttonColors(containerColor = AccentDice),
         ) {
             Text(
-                text = if (state.isRolling) "Rolling..." else "Roll",
+                text = if (state.isRolling) stringResource(R.string.rolling) else stringResource(R.string.roll),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.White,

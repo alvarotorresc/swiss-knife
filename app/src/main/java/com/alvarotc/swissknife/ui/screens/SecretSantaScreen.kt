@@ -38,14 +38,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.AccentSantaContainer
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 import com.alvarotc.swissknife.ui.theme.DarkOutline
 import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.SecretSantaViewModel
+import com.alvarotc.swissknife.viewmodel.SecretSantaError
 
 @Composable
 fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
@@ -79,7 +82,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
             OutlinedTextField(
                 value = state.nameInput,
                 onValueChange = { viewModel.setNameInput(it) },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.name)) },
                 singleLine = true,
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
@@ -89,7 +92,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
             IconButton(onClick = { viewModel.addParticipant() }) {
                 Icon(
                     imageVector = Icons.Filled.Add,
-                    contentDescription = "Add",
+                    contentDescription = stringResource(R.string.add),
                     tint = AccentSanta,
                 )
             }
@@ -98,7 +101,10 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
         // Error
         if (state.error != null) {
             Text(
-                text = state.error!!,
+                text = when (state.error) {
+                    SecretSantaError.NameAlreadyAdded -> stringResource(R.string.error_name_already_added)
+                    SecretSantaError.NeedMoreParticipants -> stringResource(R.string.error_need_more_participants)
+                },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
                 modifier = Modifier.padding(top = 4.dp),
@@ -109,7 +115,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
 
         // Participants count
         Text(
-            text = "${state.participants.size} participants",
+            text = stringResource(R.string.participants_count, state.participants.size),
             color = DarkOnSurfaceVariant,
             fontSize = 13.sp,
         )
@@ -143,7 +149,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                             IconButton(onClick = { viewModel.removeParticipant(name) }) {
                                 Icon(
                                     imageVector = Icons.Filled.Close,
-                                    contentDescription = "Remove",
+                                    contentDescription = stringResource(R.string.remove),
                                     tint = DarkOnSurfaceVariant,
                                 )
                             }
@@ -205,7 +211,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                 colors = ButtonDefaults.buttonColors(containerColor = AccentSanta),
             ) {
                 Text(
-                    text = "Draw",
+                    text = stringResource(R.string.draw),
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.White,
@@ -223,7 +229,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                     colors = ButtonDefaults.buttonColors(containerColor = AccentSanta),
                 ) {
                     Text(
-                        text = "Reveal Next",
+                        text = stringResource(R.string.reveal_next),
                         fontSize = 18.sp,
                         fontWeight = FontWeight.SemiBold,
                         color = Color.White,
@@ -243,7 +249,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                                     putExtra(Intent.EXTRA_TEXT, viewModel.buildShareText())
                                 }
                             context.startActivity(
-                                Intent.createChooser(shareIntent, "Share assignments"),
+                                Intent.createChooser(shareIntent, context.getString(R.string.share_assignments)),
                             )
                         },
                         modifier =
@@ -254,11 +260,11 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                     ) {
                         Icon(
                             imageVector = Icons.Filled.Share,
-                            contentDescription = "Share",
+                            contentDescription = stringResource(R.string.share),
                             tint = AccentSanta,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Share", color = AccentSanta)
+                        Text(stringResource(R.string.share), color = AccentSanta)
                     }
                     Button(
                         onClick = { viewModel.reset() },
@@ -270,7 +276,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                         colors = ButtonDefaults.buttonColors(containerColor = AccentSanta),
                     ) {
                         Text(
-                            text = "New Draw",
+                            text = stringResource(R.string.new_draw),
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White,
                         )
@@ -280,7 +286,7 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
 
             if (state.revealedCount < state.assignments.size) {
                 TextButton(onClick = { viewModel.reset() }) {
-                    Text("Cancel", color = DarkOnSurfaceVariant)
+                    Text(stringResource(R.string.cancel), color = DarkOnSurfaceVariant)
                 }
             }
         }

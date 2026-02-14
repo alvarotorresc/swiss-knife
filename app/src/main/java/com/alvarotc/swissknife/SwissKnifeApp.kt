@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -37,11 +38,11 @@ fun SwissKnifeApp() {
 
     val title =
         when (currentRoute) {
-            NavRoutes.CoinFlip.route -> "Coin Flip"
-            NavRoutes.DiceRoll.route -> "Dice Roll"
-            NavRoutes.RandomNumber.route -> "Random Number"
-            NavRoutes.SecretSanta.route -> "Secret Santa"
-            else -> "Swiss Knife"
+            NavRoutes.CoinFlip.route -> stringResource(R.string.tool_coin_flip)
+            NavRoutes.DiceRoll.route -> stringResource(R.string.tool_dice_roll)
+            NavRoutes.RandomNumber.route -> stringResource(R.string.tool_random_number)
+            NavRoutes.SecretSanta.route -> stringResource(R.string.tool_secret_santa)
+            else -> stringResource(R.string.app_name)
         }
 
     val showBack = currentRoute != NavRoutes.Home.route
@@ -55,7 +56,7 @@ fun SwissKnifeApp() {
                         IconButton(onClick = { navController.popBackStack() }) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = "Back",
+                                contentDescription = stringResource(R.string.back),
                             )
                         }
                     }

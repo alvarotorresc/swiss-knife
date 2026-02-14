@@ -1,4 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Swiss Knife</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
+    <string name="settings">Settings</string>
+
+    <!-- Tool names -->
+    <string name="tool_coin_flip">Coin Flip</string>
+    <string name="tool_dice_roll">Dice Roll</string>
+    <string name="tool_random_number">Random Number</string>
+    <string name="tool_secret_santa">Secret Santa</string>
+
+    <!-- Home Screen -->
+    <string name="pick_a_tool">Pick a tool</string>
+
+    <!-- Coin Flip -->
+    <string name="heads">Heads</string>
+    <string name="tails">Tails</string>
+    <string name="tap_to_flip">Tap to flip</string>
+    <string name="flips">Flips</string>
+    <string name="flip">Flip</string>
+    <string name="reset">Reset</string>
+
+    <!-- Dice Roll -->
+    <string name="number_of_dice">Number of dice</string>
+    <string name="total">Total: %d</string>
+    <string name="tap_to_roll">Tap to roll</string>
+    <string name="rolling">Rolling…</string>
+    <string name="roll">Roll</string>
+
+    <!-- Random Number -->
+    <string name="min">Min</string>
+    <string name="max">Max</string>
+    <string name="generate">Generate</string>
+    <string name="error_valid_numbers">Enter valid numbers</string>
+    <string name="error_min_less_than_max">Min must be less than Max</string>
+
+    <!-- Secret Santa -->
+    <string name="name">Name</string>
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+    <string name="participants_count">%d participants</string>
+    <string name="draw">Draw</string>
+    <string name="reveal_next">Reveal Next</string>
+    <string name="share">Share</string>
+    <string name="share_assignments">Share assignments</string>
+    <string name="new_draw">New Draw</string>
+    <string name="cancel">Cancel</string>
+    <string name="error_name_already_added">Name already added</string>
+    <string name="error_need_more_participants">Need at least 3 participants</string>
 </resources>

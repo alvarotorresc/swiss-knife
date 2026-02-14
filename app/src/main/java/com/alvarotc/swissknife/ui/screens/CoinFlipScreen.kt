@@ -31,8 +31,10 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentCoinContainer
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
@@ -90,9 +92,9 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
         Text(
             text =
                 when (state.result) {
-                    CoinSide.HEADS -> "Heads"
-                    CoinSide.TAILS -> "Tails"
-                    null -> "Tap to flip"
+                    CoinSide.HEADS -> stringResource(R.string.heads)
+                    CoinSide.TAILS -> stringResource(R.string.tails)
+                    null -> stringResource(R.string.tap_to_flip)
                 },
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
@@ -110,9 +112,9 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                         .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
-                StatItem("Flips", state.totalFlips.toString())
-                StatItem("Heads", state.headsCount.toString())
-                StatItem("Tails", state.tailsCount.toString())
+                StatItem(stringResource(R.string.flips), state.totalFlips.toString())
+                StatItem(stringResource(R.string.heads), state.headsCount.toString())
+                StatItem(stringResource(R.string.tails), state.tailsCount.toString())
             }
         }
 
@@ -130,7 +132,7 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
             colors = ButtonDefaults.buttonColors(containerColor = AccentCoin),
         ) {
             Text(
-                text = "Flip",
+                text = stringResource(R.string.flip),
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold,
                 color = Color.Black,
@@ -142,7 +144,7 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 flipTrigger = 0
                 viewModel.reset()
             }) {
-                Text("Reset", color = DarkOnSurfaceVariant)
+                Text(stringResource(R.string.reset), color = DarkOnSurfaceVariant)
             }
         }
     }
