@@ -17,6 +17,7 @@
     <string name="tool_timer">Temporizador</string>
     <string name="tool_tip_calculator">Calculadora de Propinas</string>
     <string name="tool_unit_converter">Conversor de Unidades</string>
+    <string name="tool_level">Nivel</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -106,6 +107,11 @@
     <string name="swap">Intercambiar</string>
     <string name="value">Valor</string>
     <string name="result">Resultado</string>
+
+    <!-- Level -->
+    <string name="sensor_not_available">Acelerómetro no disponible</string>
+    <string name="level_perfect">¡Nivelado!</string>
+    <string name="level_adjust">Ajusta el dispositivo</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

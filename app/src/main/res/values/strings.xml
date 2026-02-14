@@ -17,6 +17,7 @@
     <string name="tool_timer">Timer</string>
     <string name="tool_tip_calculator">Tip Calculator</string>
     <string name="tool_unit_converter">Unit Converter</string>
+    <string name="tool_level">Level</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -106,6 +107,11 @@
     <string name="swap">Swap</string>
     <string name="value">Value</string>
     <string name="result">Result</string>
+
+    <!-- Level -->
+    <string name="sensor_not_available">Accelerometer not available</string>
+    <string name="level_perfect">Level!</string>
+    <string name="level_adjust">Adjust device</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>

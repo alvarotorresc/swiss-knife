@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.Exposure
 import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.Key
+import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.SwapHoriz
@@ -33,6 +34,7 @@ import com.alvarotc.swissknife.ui.components.ToolCard
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentCounter
 import com.alvarotc.swissknife.ui.theme.AccentDice
+import com.alvarotc.swissknife.ui.theme.AccentLevel
 import com.alvarotc.swissknife.ui.theme.AccentList
 import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRandom
@@ -105,6 +107,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Filled.SwapHoriz,
                 accentColor = AccentUnitConv,
                 route = NavRoutes.UnitConverter.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_level,
+                icon = Icons.Filled.Layers,
+                accentColor = AccentLevel,
+                route = NavRoutes.Level.route,
             ),
         )
 

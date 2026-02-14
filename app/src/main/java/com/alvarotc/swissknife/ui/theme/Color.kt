@@ -30,6 +30,10 @@ val AccentCounter = Color(0xFF26A69A) // Teal
 val AccentTimer = Color(0xFFAB47BC) // Purple
 val AccentTipCalc = Color(0xFF5C6BC0) // Indigo
 val AccentUnitConv = Color(0xFFEC407A) // Pink
+val AccentLevel = Color(0xFF8D6E63) // Brown
+val AccentWheel = Color(0xFFFFCA28) // Yellow
+val AccentFinger = Color(0xFF42A5F5) // Blue
+val AccentQR = Color(0xFF78909C) // Blue Grey
 
 // Tool accent containers (muted for dark backgrounds)
 val AccentCoinContainer = Color(0xFF3E2E00)
@@ -42,3 +46,7 @@ val AccentCounterContainer = Color(0xFF0A2E2A)
 val AccentTimerContainer = Color(0xFF2E1A3E)
 val AccentTipCalcContainer = Color(0xFF1A1E3E)
 val AccentUnitConvContainer = Color(0xFF3E1028)
+val AccentLevelContainer = Color(0xFF2E2418)
+val AccentWheelContainer = Color(0xFF3E3200)
+val AccentFingerContainer = Color(0xFF0A283E)
+val AccentQRContainer = Color(0xFF1E2428)
