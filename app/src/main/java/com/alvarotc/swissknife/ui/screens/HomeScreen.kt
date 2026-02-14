@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Exposure
 import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Numbers
+import androidx.compose.material.icons.filled.Payments
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Toll
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.AccentTimer
+import com.alvarotc.swissknife.ui.theme.AccentTipCalc
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 
 @Composable
@@ -89,6 +91,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Filled.Timer,
                 accentColor = AccentTimer,
                 route = NavRoutes.Timer.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_tip_calculator,
+                icon = Icons.Filled.Payments,
+                accentColor = AccentTipCalc,
+                route = NavRoutes.TipCalculator.route,
             ),
         )
 

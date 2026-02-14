@@ -15,6 +15,7 @@
     <string name="tool_password_generator">Generador de Contraseñas</string>
     <string name="tool_counter">Contador</string>
     <string name="tool_timer">Temporizador</string>
+    <string name="tool_tip_calculator">Calculadora de Propinas</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -84,6 +85,15 @@
     <string name="seconds_short">Seg</string>
     <string name="start">Iniciar</string>
     <string name="pause">Pausar</string>
+
+    <!-- Tip Calculator -->
+    <string name="bill_amount">Importe de la Cuenta</string>
+    <string name="tip_percent">Propina: %d%%</string>
+    <string name="split_between">Dividir entre</string>
+    <string name="people_count">%d personas</string>
+    <string name="tip_amount">Propina</string>
+    <string name="total_amount">Total</string>
+    <string name="per_person">Por Persona</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

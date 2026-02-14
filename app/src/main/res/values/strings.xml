@@ -15,6 +15,7 @@
     <string name="tool_password_generator">Password Generator</string>
     <string name="tool_counter">Counter</string>
     <string name="tool_timer">Timer</string>
+    <string name="tool_tip_calculator">Tip Calculator</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -84,6 +85,15 @@
     <string name="seconds_short">Sec</string>
     <string name="start">Start</string>
     <string name="pause">Pause</string>
+
+    <!-- Tip Calculator -->
+    <string name="bill_amount">Bill Amount</string>
+    <string name="tip_percent">Tip: %d%%</string>
+    <string name="split_between">Split between</string>
+    <string name="people_count">%d people</string>
+    <string name="tip_amount">Tip</string>
+    <string name="total_amount">Total</string>
+    <string name="per_person">Per Person</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>

@@ -22,4 +22,6 @@ sealed class NavRoutes(val route: String) {
     data object Counter : NavRoutes("counter")
 
     data object Timer : NavRoutes("timer")
+
+    data object TipCalculator : NavRoutes("tip_calculator")
 }
