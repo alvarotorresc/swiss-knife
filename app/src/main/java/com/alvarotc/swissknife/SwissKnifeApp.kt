@@ -24,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
+import com.alvarotc.swissknife.ui.screens.CounterScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
@@ -50,6 +51,7 @@ fun SwissKnifeApp() {
             NavRoutes.SecretSanta.route -> stringResource(R.string.tool_secret_santa)
             NavRoutes.RandomList.route -> stringResource(R.string.tool_random_list)
             NavRoutes.PasswordGenerator.route -> stringResource(R.string.tool_password_generator)
+            NavRoutes.Counter.route -> stringResource(R.string.tool_counter)
             else -> stringResource(R.string.app_name)
         }
 
@@ -156,6 +158,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.PasswordGenerator.route) {
                 PasswordGeneratorScreen()
+            }
+            composable(NavRoutes.Counter.route) {
+                CounterScreen()
             }
         }
     }

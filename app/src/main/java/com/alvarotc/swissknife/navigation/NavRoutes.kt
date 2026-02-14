@@ -18,4 +18,6 @@ sealed class NavRoutes(val route: String) {
     data object RandomList : NavRoutes("random_list")
 
     data object PasswordGenerator : NavRoutes("password_generator")
+
+    data object Counter : NavRoutes("counter")
 }

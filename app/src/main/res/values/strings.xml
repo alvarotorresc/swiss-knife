@@ -13,6 +13,7 @@
     <string name="tool_secret_santa">Secret Santa</string>
     <string name="tool_random_list">Random from List</string>
     <string name="tool_password_generator">Password Generator</string>
+    <string name="tool_counter">Counter</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -70,6 +71,10 @@
     <string name="symbols">Symbols (!@#$...)</string>
     <string name="copy">Copy</string>
     <string name="error_select_at_least_one">Select at least one character type</string>
+
+    <!-- Counter -->
+    <string name="increment">Increment</string>
+    <string name="decrement">Decrement</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>

@@ -13,6 +13,7 @@
     <string name="tool_secret_santa">Amigo Invisible</string>
     <string name="tool_random_list">Aleatorio de Lista</string>
     <string name="tool_password_generator">Generador de Contraseñas</string>
+    <string name="tool_counter">Contador</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -70,6 +71,10 @@
     <string name="symbols">Símbolos (!@#$...)</string>
     <string name="copy">Copiar</string>
     <string name="error_select_at_least_one">Selecciona al menos un tipo de carácter</string>
+
+    <!-- Counter -->
+    <string name="increment">Incrementar</string>
+    <string name="decrement">Decrementar</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>
