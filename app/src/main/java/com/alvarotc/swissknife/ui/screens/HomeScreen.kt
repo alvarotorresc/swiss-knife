@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.FormatListBulleted
+import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Numbers
 import androidx.compose.material.icons.filled.Toll
 import androidx.compose.material3.Text
@@ -28,6 +29,7 @@ import com.alvarotc.swissknife.ui.components.ToolCard
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentDice
 import com.alvarotc.swissknife.ui.theme.AccentList
+import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
@@ -65,6 +67,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Filled.FormatListBulleted,
                 accentColor = AccentList,
                 route = NavRoutes.RandomList.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_password_generator,
+                icon = Icons.Filled.Key,
+                accentColor = AccentPassword,
+                route = NavRoutes.PasswordGenerator.route,
             ),
         )
 

@@ -12,6 +12,7 @@
     <string name="tool_random_number">Número Aleatorio</string>
     <string name="tool_secret_santa">Amigo Invisible</string>
     <string name="tool_random_list">Aleatorio de Lista</string>
+    <string name="tool_password_generator">Generador de Contraseñas</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -60,6 +61,15 @@
     <string name="new_pick">Nueva Elección</string>
     <string name="error_item_already_added">Elemento ya añadido</string>
     <string name="error_need_more_items">Se necesitan al menos 2 elementos</string>
+
+    <!-- Password Generator -->
+    <string name="length_value">Longitud: %d</string>
+    <string name="uppercase">Mayúsculas (A-Z)</string>
+    <string name="lowercase">Minúsculas (a-z)</string>
+    <string name="numbers_label">Números (0-9)</string>
+    <string name="symbols">Símbolos (!@#$...)</string>
+    <string name="copy">Copiar</string>
+    <string name="error_select_at_least_one">Selecciona al menos un tipo de carácter</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

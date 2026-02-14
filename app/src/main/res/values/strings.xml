@@ -12,6 +12,7 @@
     <string name="tool_random_number">Random Number</string>
     <string name="tool_secret_santa">Secret Santa</string>
     <string name="tool_random_list">Random from List</string>
+    <string name="tool_password_generator">Password Generator</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -60,6 +61,15 @@
     <string name="new_pick">New Pick</string>
     <string name="error_item_already_added">Item already added</string>
     <string name="error_need_more_items">Need at least 2 items</string>
+
+    <!-- Password Generator -->
+    <string name="length_value">Length: %d</string>
+    <string name="uppercase">Uppercase (A-Z)</string>
+    <string name="lowercase">Lowercase (a-z)</string>
+    <string name="numbers_label">Numbers (0-9)</string>
+    <string name="symbols">Symbols (!@#$...)</string>
+    <string name="copy">Copy</string>
+    <string name="error_select_at_least_one">Select at least one character type</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>
