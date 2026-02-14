@@ -35,6 +35,7 @@ import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
 import com.alvarotc.swissknife.ui.screens.TimerScreen
 import com.alvarotc.swissknife.ui.screens.TipCalculatorScreen
+import com.alvarotc.swissknife.ui.screens.UnitConverterScreen
 import com.alvarotc.swissknife.ui.theme.DarkBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +57,7 @@ fun SwissKnifeApp() {
             NavRoutes.Counter.route -> stringResource(R.string.tool_counter)
             NavRoutes.Timer.route -> stringResource(R.string.tool_timer)
             NavRoutes.TipCalculator.route -> stringResource(R.string.tool_tip_calculator)
+            NavRoutes.UnitConverter.route -> stringResource(R.string.tool_unit_converter)
             else -> stringResource(R.string.app_name)
         }
 
@@ -171,6 +173,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.TipCalculator.route) {
                 TipCalculatorScreen()
+            }
+            composable(NavRoutes.UnitConverter.route) {
+                UnitConverterScreen()
             }
         }
     }

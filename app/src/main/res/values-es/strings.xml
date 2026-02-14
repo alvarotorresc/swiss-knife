@@ -16,6 +16,7 @@
     <string name="tool_counter">Contador</string>
     <string name="tool_timer">Temporizador</string>
     <string name="tool_tip_calculator">Calculadora de Propinas</string>
+    <string name="tool_unit_converter">Conversor de Unidades</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -94,6 +95,17 @@
     <string name="tip_amount">Propina</string>
     <string name="total_amount">Total</string>
     <string name="per_person">Por Persona</string>
+
+    <!-- Unit Converter -->
+    <string name="category_length">Longitud</string>
+    <string name="category_weight">Peso</string>
+    <string name="category_temperature">Temperatura</string>
+    <string name="category_volume">Volumen</string>
+    <string name="from">Desde</string>
+    <string name="to">Hasta</string>
+    <string name="swap">Intercambiar</string>
+    <string name="value">Valor</string>
+    <string name="result">Resultado</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>
