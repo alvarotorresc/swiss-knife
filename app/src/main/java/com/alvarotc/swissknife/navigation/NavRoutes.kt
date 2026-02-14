@@ -28,4 +28,6 @@ sealed class NavRoutes(val route: String) {
     data object UnitConverter : NavRoutes("unit_converter")
 
     data object Level : NavRoutes("level")
+
+    data object FortuneWheel : NavRoutes("fortune_wheel")
 }

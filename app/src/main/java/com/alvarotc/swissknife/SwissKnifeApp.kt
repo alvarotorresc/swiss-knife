@@ -26,6 +26,7 @@ import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
 import com.alvarotc.swissknife.ui.screens.CounterScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
+import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.LevelScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
@@ -60,6 +61,7 @@ fun SwissKnifeApp() {
             NavRoutes.TipCalculator.route -> stringResource(R.string.tool_tip_calculator)
             NavRoutes.UnitConverter.route -> stringResource(R.string.tool_unit_converter)
             NavRoutes.Level.route -> stringResource(R.string.tool_level)
+            NavRoutes.FortuneWheel.route -> stringResource(R.string.tool_fortune_wheel)
             else -> stringResource(R.string.app_name)
         }
 
@@ -181,6 +183,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.Level.route) {
                 LevelScreen()
+            }
+            composable(NavRoutes.FortuneWheel.route) {
+                FortuneWheelScreen()
             }
         }
     }

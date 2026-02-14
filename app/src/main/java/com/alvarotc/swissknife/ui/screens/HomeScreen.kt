@@ -11,6 +11,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Casino
+import androidx.compose.material.icons.filled.ControlCamera
 import androidx.compose.material.icons.filled.Exposure
 import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.Key
@@ -42,6 +43,7 @@ import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.AccentTimer
 import com.alvarotc.swissknife.ui.theme.AccentTipCalc
 import com.alvarotc.swissknife.ui.theme.AccentUnitConv
+import com.alvarotc.swissknife.ui.theme.AccentWheel
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 
 @Composable
@@ -113,6 +115,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Filled.Layers,
                 accentColor = AccentLevel,
                 route = NavRoutes.Level.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_fortune_wheel,
+                icon = Icons.Filled.ControlCamera,
+                accentColor = AccentWheel,
+                route = NavRoutes.FortuneWheel.route,
             ),
         )
 
