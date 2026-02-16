@@ -1,5 +1,6 @@
 package com.alvarotc.swissknife
 
+import com.alvarotc.swissknife.viewmodel.SecretSantaError
 import com.alvarotc.swissknife.viewmodel.SecretSantaViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -52,7 +53,7 @@ class SecretSantaViewModelTest {
         vm.setNameInput("alice")
         vm.addParticipant()
         assertEquals(1, vm.uiState.value.participants.size)
-        assertEquals("Name already added", vm.uiState.value.error)
+        assertEquals(SecretSantaError.NameAlreadyAdded, vm.uiState.value.error)
     }
 
     @Test

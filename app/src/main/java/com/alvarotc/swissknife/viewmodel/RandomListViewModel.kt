@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.update
 
 sealed class RandomListError {
     data object ItemAlreadyAdded : RandomListError()
+
     data object NeedMoreItems : RandomListError()
 }
 

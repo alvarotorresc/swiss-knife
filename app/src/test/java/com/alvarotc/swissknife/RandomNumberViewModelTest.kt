@@ -1,5 +1,6 @@
 package com.alvarotc.swissknife
 
+import com.alvarotc.swissknife.viewmodel.RandomNumberError
 import com.alvarotc.swissknife.viewmodel.RandomNumberViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
@@ -46,7 +47,7 @@ class RandomNumberViewModelTest {
         vm.setMin("50")
         vm.setMax("10")
         vm.generate()
-        assertEquals("Min must be less than Max", vm.uiState.value.error)
+        assertEquals(RandomNumberError.MinNotLessThanMax, vm.uiState.value.error)
     }
 
     @Test
@@ -55,7 +56,7 @@ class RandomNumberViewModelTest {
         vm.setMin("abc")
         vm.setMax("100")
         vm.generate()
-        assertEquals("Enter valid numbers", vm.uiState.value.error)
+        assertEquals(RandomNumberError.InvalidNumbers, vm.uiState.value.error)
     }
 
     @Test

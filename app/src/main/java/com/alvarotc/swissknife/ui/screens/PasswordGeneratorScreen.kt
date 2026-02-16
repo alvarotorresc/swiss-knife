@@ -17,7 +17,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
@@ -107,10 +106,11 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
         if (state.error != null) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = when (state.error) {
-                    PasswordError.NoCharacterTypeSelected -> stringResource(R.string.error_select_at_least_one)
-                    null -> ""
-                },
+                text =
+                    when (state.error) {
+                        PasswordError.NoCharacterTypeSelected -> stringResource(R.string.error_select_at_least_one)
+                        null -> ""
+                    },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
             )

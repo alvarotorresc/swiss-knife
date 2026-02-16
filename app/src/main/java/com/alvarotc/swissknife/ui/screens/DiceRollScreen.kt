@@ -22,19 +22,21 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.components.DiceFace
+import com.alvarotc.swissknife.ui.components.PolyDiceFace
 import com.alvarotc.swissknife.ui.theme.AccentDice
 import com.alvarotc.swissknife.ui.theme.AccentDiceContainer
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.DiceRollViewModel
+import com.alvarotc.swissknife.viewmodel.DiceType
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -48,6 +50,35 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        // Dice type selector
+        Text(
+            text = stringResource(R.string.dice_type),
+            color = DarkOnSurfaceVariant,
+            fontSize = 14.sp,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        FlowRow(
+            horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.CenterHorizontally),
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            DiceType.entries.forEach { type ->
+                FilterChip(
+                    selected = state.diceType == type,
+                    onClick = { viewModel.setDiceType(type) },
+                    label = { Text(type.label) },
+                    colors =
+                        FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = AccentDiceContainer,
+                            selectedLabelColor = AccentDice,
+                            containerColor = DarkSurfaceVariant,
+                            labelColor = DarkOnSurfaceVariant,
+                        ),
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         // Dice count selector
         Text(
             text = stringResource(R.string.number_of_dice),
@@ -81,11 +112,20 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
+                val diceSize = if (state.diceCount <= 2) 100.dp else 80.dp
                 state.results.forEach { value ->
-                    DiceFace(
-                        value = value,
-                        modifier = Modifier.size(if (state.diceCount <= 2) 100.dp else 80.dp),
-                    )
+                    if (state.diceType == DiceType.D6) {
+                        DiceFace(
+                            value = value,
+                            modifier = Modifier.size(diceSize),
+                        )
+                    } else {
+                        PolyDiceFace(
+                            value = value,
+                            diceType = state.diceType,
+                            modifier = Modifier.size(diceSize),
+                        )
+                    }
                 }
             }
 

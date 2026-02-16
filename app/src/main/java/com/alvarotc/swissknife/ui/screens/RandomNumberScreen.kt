@@ -21,11 +21,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
@@ -33,8 +33,8 @@ import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 import com.alvarotc.swissknife.ui.theme.DarkOutline
 import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
-import com.alvarotc.swissknife.viewmodel.RandomNumberViewModel
 import com.alvarotc.swissknife.viewmodel.RandomNumberError
+import com.alvarotc.swissknife.viewmodel.RandomNumberViewModel
 
 @Composable
 fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
@@ -92,11 +92,12 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
         if (state.error != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = when (state.error) {
-                    RandomNumberError.InvalidNumbers -> stringResource(R.string.error_valid_numbers)
-                    RandomNumberError.MinNotLessThanMax -> stringResource(R.string.error_min_less_than_max)
-                    null -> ""
-                },
+                text =
+                    when (state.error) {
+                        RandomNumberError.InvalidNumbers -> stringResource(R.string.error_valid_numbers)
+                        RandomNumberError.MinNotLessThanMax -> stringResource(R.string.error_min_less_than_max)
+                        null -> ""
+                    },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
             )

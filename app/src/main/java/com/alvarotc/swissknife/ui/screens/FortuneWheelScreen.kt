@@ -11,9 +11,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
@@ -23,17 +25,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Surface
+import androidx.compose.material3.SuggestionChip
+import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -69,126 +74,122 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
         modifier =
             Modifier
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        if (state.items.isEmpty() || state.winner != null) {
-            // Input mode
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth(),
+        // Input row
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            OutlinedTextField(
+                value = state.itemInput,
+                onValueChange = { viewModel.setItemInput(it) },
+                label = { Text(stringResource(R.string.option)) },
+                singleLine = true,
+                modifier = Modifier.weight(1f),
+                shape = RoundedCornerShape(12.dp),
+                colors = textFieldColors,
+                enabled = !state.isSpinning,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            IconButton(
+                onClick = { viewModel.addItem() },
+                enabled = !state.isSpinning,
             ) {
-                OutlinedTextField(
-                    value = state.itemInput,
-                    onValueChange = { viewModel.setItemInput(it) },
-                    label = { Text(stringResource(R.string.option)) },
-                    singleLine = true,
-                    modifier = Modifier.weight(1f),
-                    shape = RoundedCornerShape(12.dp),
-                    colors = textFieldColors,
-                    enabled = !state.isSpinning,
+                Icon(
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = stringResource(R.string.add),
+                    tint = AccentWheel,
                 )
-                Spacer(modifier = Modifier.width(8.dp))
-                IconButton(onClick = { viewModel.addItem() }, enabled = !state.isSpinning) {
-                    Icon(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = stringResource(R.string.add),
-                        tint = AccentWheel,
-                    )
-                }
             }
+        }
 
-            if (state.error != null) {
-                Text(
-                    text = when (state.error) {
+        // Error
+        if (state.error != null) {
+            Text(
+                text =
+                    when (state.error) {
                         FortuneWheelError.ItemAlreadyAdded -> stringResource(R.string.error_item_already_added)
                         FortuneWheelError.NeedMoreItems -> stringResource(R.string.error_need_more_items)
                         null -> ""
                     },
-                    color = Color(0xFFEF5350),
-                    fontSize = 13.sp,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-            }
+                color = Color(0xFFEF5350),
+                fontSize = 13.sp,
+                modifier = Modifier.padding(top = 4.dp),
+            )
+        }
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Items list
-            LazyColumn(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
+        // Chips
+        if (state.items.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                itemsIndexed(state.items) { _, item ->
-                    Surface(
-                        color = DarkSurfaceVariant,
-                        shape = RoundedCornerShape(12.dp),
-                    ) {
-                        Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(horizontal = 16.dp, vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                text = item,
-                                color = Color.White,
-                                modifier = Modifier.weight(1f),
-                            )
-                            IconButton(onClick = { viewModel.removeItem(item) }) {
+                items(state.items) { item ->
+                    SuggestionChip(
+                        onClick = { if (!state.isSpinning) viewModel.removeItem(item) },
+                        label = { Text(item) },
+                        icon = {
+                            if (!state.isSpinning) {
                                 Icon(
                                     imageVector = Icons.Filled.Close,
                                     contentDescription = stringResource(R.string.remove),
-                                    tint = DarkOnSurfaceVariant,
+                                    modifier = Modifier.size(16.dp),
                                 )
                             }
-                        }
-                    }
+                        },
+                        colors =
+                            SuggestionChipDefaults.suggestionChipColors(
+                                containerColor = DarkSurfaceVariant,
+                                labelColor = Color.White,
+                                iconContentColor = DarkOnSurfaceVariant,
+                            ),
+                    )
                 }
             }
-        } else {
-            // Wheel display
-            Spacer(modifier = Modifier.height(32.dp))
+        }
 
-            WheelCanvas(
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Wheel
+        if (state.items.size >= 2) {
+            MinimalistWheelCanvas(
                 items = state.items,
                 rotation = state.rotation,
-                modifier = Modifier.size(300.dp),
+                modifier = Modifier.size(280.dp),
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Text(
-                text = stringResource(R.string.spin_the_wheel),
-                color = DarkOnSurfaceVariant,
-                fontSize = 14.sp,
-            )
-        }
+            // Winner
+            if (state.winner != null) {
+                Text(
+                    text = stringResource(R.string.winner_is),
+                    color = DarkOnSurfaceVariant,
+                    fontSize = 16.sp,
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = state.winner ?: "",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = AccentWheel,
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Result
-        if (state.winner != null) {
-            Text(
-                text = stringResource(R.string.winner_is),
-                color = DarkOnSurfaceVariant,
-                fontSize = 16.sp,
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = state.winner ?: "",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = AccentWheel,
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-        }
-
-        // Action buttons
-        if (state.winner == null && state.items.isNotEmpty()) {
             Button(
-                onClick = { viewModel.spin() },
-                enabled = !state.isSpinning && state.items.size >= 2,
+                onClick = {
+                    if (state.winner != null) {
+                        viewModel.clearWinner()
+                    } else {
+                        viewModel.spin()
+                    }
+                },
+                enabled = !state.isSpinning,
                 modifier =
                     Modifier
                         .fillMaxWidth()
@@ -197,44 +198,35 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                 colors = ButtonDefaults.buttonColors(containerColor = AccentWheel),
             ) {
                 Text(
-                    text = stringResource(R.string.spin),
+                    text =
+                        if (state.winner != null) {
+                            stringResource(R.string.new_spin)
+                        } else {
+                            stringResource(R.string.spin)
+                        },
                     fontSize = 18.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = Color.Black,
                 )
             }
-        }
-
-        if (state.winner != null) {
-            Button(
-                onClick = { viewModel.reset() },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AccentWheel),
-            ) {
-                Text(
-                    text = stringResource(R.string.new_spin),
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black,
-                )
-            }
-            TextButton(onClick = { viewModel.reset() }) {
-                Text(stringResource(R.string.cancel), color = DarkOnSurfaceVariant)
-            }
+        } else {
+            Text(
+                text = stringResource(R.string.spin_the_wheel),
+                color = DarkOnSurfaceVariant,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(top = 48.dp),
+            )
         }
     }
 }
 
 @Composable
-private fun WheelCanvas(
+private fun MinimalistWheelCanvas(
     items: List<String>,
     rotation: Float,
     modifier: Modifier = Modifier,
 ) {
-    val colors =
+    val segmentColors =
         listOf(
             Color(0xFFEF5350),
             Color(0xFF42A5F5),
@@ -242,35 +234,94 @@ private fun WheelCanvas(
             Color(0xFFFFC107),
             Color(0xFFAB47BC),
             Color(0xFF26A69A),
+            Color(0xFFFF7043),
+            Color(0xFFEC407A),
         )
 
     Canvas(modifier = modifier) {
         val sweepAngle = 360f / items.size
+        val radius = size.minDimension / 2f
+        val center = Offset(size.width / 2f, size.height / 2f)
 
-        rotate(rotation) {
-            items.forEachIndexed { index, _ ->
+        // Dark circle background
+        drawCircle(
+            color = Color(0xFF1A1A1A),
+            radius = radius,
+            center = center,
+        )
+
+        rotate(rotation, pivot = center) {
+            items.forEachIndexed { index, item ->
+                val startAngle = index * sweepAngle
+                val color = segmentColors[index % segmentColors.size]
+
+                // Colored arc on the outer edge
                 drawArc(
-                    color = colors[index % colors.size],
-                    startAngle = index * sweepAngle,
-                    sweepAngle = sweepAngle,
-                    useCenter = true,
-                    topLeft = Offset.Zero,
-                    size = Size(size.width, size.height),
+                    color = color,
+                    startAngle = startAngle + 1f,
+                    sweepAngle = sweepAngle - 2f,
+                    useCenter = false,
+                    style = Stroke(width = 12.dp.toPx(), cap = StrokeCap.Butt),
                 )
+
+                // Divider lines from center
+                val lineAngle = Math.toRadians(startAngle.toDouble())
+                val endX = (center.x + radius * kotlin.math.cos(lineAngle)).toFloat()
+                val endY = (center.y + radius * kotlin.math.sin(lineAngle)).toFloat()
+                drawLine(
+                    color = Color(0xFF333333),
+                    start = center,
+                    end = Offset(endX, endY),
+                    strokeWidth = 1.5.dp.toPx(),
+                )
+
+                // Text label
+                val textAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
+                val textRadius = radius * 0.55f
+                val textX = (center.x + textRadius * kotlin.math.cos(textAngle)).toFloat()
+                val textY = (center.y + textRadius * kotlin.math.sin(textAngle)).toFloat()
+
+                drawContext.canvas.nativeCanvas.apply {
+                    val paint =
+                        android.graphics.Paint().apply {
+                            this.color = color.toArgb()
+                            textAlign = android.graphics.Paint.Align.CENTER
+                            textSize = 13.dp.toPx()
+                            isAntiAlias = true
+                            isFakeBoldText = true
+                        }
+                    val label = if (item.length > 10) item.take(9) + "…" else item
+                    drawText(label, textX, textY + paint.textSize / 3, paint)
+                }
             }
         }
 
-        // Pointer at top
-        val pointerSize = 30f
+        // Outer ring border
+        drawCircle(
+            color = Color(0xFF333333),
+            radius = radius,
+            center = center,
+            style = Stroke(width = 2.dp.toPx()),
+        )
+
+        // Pointer triangle at top
+        val pointerSize = 14.dp.toPx()
         drawPath(
             path =
                 androidx.compose.ui.graphics.Path().apply {
-                    moveTo(size.width / 2, 0f)
-                    lineTo(size.width / 2 - pointerSize / 2, pointerSize)
-                    lineTo(size.width / 2 + pointerSize / 2, pointerSize)
+                    moveTo(center.x, center.y - radius - 6.dp.toPx())
+                    lineTo(center.x - pointerSize / 2, center.y - radius + pointerSize)
+                    lineTo(center.x + pointerSize / 2, center.y - radius + pointerSize)
                     close()
                 },
-            color = Color.White,
+            color = AccentWheel,
+        )
+
+        // Center dot
+        drawCircle(
+            color = Color(0xFF333333),
+            radius = 6.dp.toPx(),
+            center = center,
         )
     }
 }

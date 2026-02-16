@@ -10,6 +10,7 @@ data class Assignment(val giver: String, val receiver: String)
 
 sealed class SecretSantaError {
     data object NameAlreadyAdded : SecretSantaError()
+
     data object NeedMoreParticipants : SecretSantaError()
 }
 

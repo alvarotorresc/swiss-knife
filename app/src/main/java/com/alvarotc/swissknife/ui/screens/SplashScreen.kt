@@ -39,17 +39,17 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
         // Logo slide-in animation
         logoOffset.animateTo(
             targetValue = 0f,
-            animationSpec = tween(durationMillis = 800),
+            animationSpec = tween(durationMillis = 600),
         )
 
         // Text fade-in animation
         textAlpha.animateTo(
             targetValue = 1f,
-            animationSpec = tween(durationMillis = 600),
+            animationSpec = tween(durationMillis = 400),
         )
 
         // Wait and navigate
-        delay(2000)
+        delay(600)
         onNavigateToHome()
     }
 

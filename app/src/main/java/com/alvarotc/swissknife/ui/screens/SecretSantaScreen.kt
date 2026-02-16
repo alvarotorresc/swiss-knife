@@ -35,10 +35,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
@@ -47,8 +47,8 @@ import com.alvarotc.swissknife.ui.theme.AccentSantaContainer
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 import com.alvarotc.swissknife.ui.theme.DarkOutline
 import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
-import com.alvarotc.swissknife.viewmodel.SecretSantaViewModel
 import com.alvarotc.swissknife.viewmodel.SecretSantaError
+import com.alvarotc.swissknife.viewmodel.SecretSantaViewModel
 
 @Composable
 fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
@@ -101,11 +101,12 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
         // Error
         if (state.error != null) {
             Text(
-                text = when (state.error) {
-                    SecretSantaError.NameAlreadyAdded -> stringResource(R.string.error_name_already_added)
-                    SecretSantaError.NeedMoreParticipants -> stringResource(R.string.error_need_more_participants)
-                    null -> ""
-                },
+                text =
+                    when (state.error) {
+                        SecretSantaError.NameAlreadyAdded -> stringResource(R.string.error_name_already_added)
+                        SecretSantaError.NeedMoreParticipants -> stringResource(R.string.error_need_more_participants)
+                        null -> ""
+                    },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
                 modifier = Modifier.padding(top = 4.dp),

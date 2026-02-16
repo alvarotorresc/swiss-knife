@@ -10,12 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Remove
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -24,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -133,6 +129,7 @@ fun FingerPickerScreen(viewModel: FingerPickerViewModel = viewModel()) {
                     },
             contentAlignment = Alignment.Center,
         ) {
+            // Countdown display
             if (state.isCountingDown) {
                 Text(
                     text = state.countdown.toString(),
@@ -148,10 +145,17 @@ fun FingerPickerScreen(viewModel: FingerPickerViewModel = viewModel()) {
                 )
             }
 
-            // Draw fingers
+            // Draw finger circles
             Canvas(modifier = Modifier.fillMaxSize()) {
                 state.fingers.values.forEach { finger ->
-                    val alpha = if (finger.isWinner) 1f else if (state.winners.isNotEmpty()) 0.3f else 1f
+                    val alpha =
+                        if (finger.isWinner) {
+                            1f
+                        } else if (state.winners.isNotEmpty()) {
+                            0.2f
+                        } else {
+                            0.8f
+                        }
                     val radius = if (finger.isWinner) 80.dp.toPx() else 60.dp.toPx()
 
                     drawCircle(
@@ -165,26 +169,8 @@ fun FingerPickerScreen(viewModel: FingerPickerViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Action buttons
-        if (state.winners.isEmpty()) {
-            Button(
-                onClick = { viewModel.startCountdown() },
-                enabled = !state.isCountingDown && state.fingers.isNotEmpty(),
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AccentFinger),
-            ) {
-                Text(
-                    text = stringResource(R.string.pick_winners),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
-                )
-            }
-        } else {
+        // Status / Result
+        if (state.winners.isNotEmpty()) {
             Text(
                 text =
                     if (state.winners.size == 1) {

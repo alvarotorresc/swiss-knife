@@ -93,11 +93,12 @@ fun RandomListScreen(viewModel: RandomListViewModel = viewModel()) {
         // Error
         if (state.error != null) {
             Text(
-                text = when (state.error) {
-                    RandomListError.ItemAlreadyAdded -> stringResource(R.string.error_item_already_added)
-                    RandomListError.NeedMoreItems -> stringResource(R.string.error_need_more_items)
-                    null -> ""
-                },
+                text =
+                    when (state.error) {
+                        RandomListError.ItemAlreadyAdded -> stringResource(R.string.error_item_already_added)
+                        RandomListError.NeedMoreItems -> stringResource(R.string.error_need_more_items)
+                        null -> ""
+                    },
                 color = Color(0xFFEF5350),
                 fontSize = 13.sp,
                 modifier = Modifier.padding(top = 4.dp),

@@ -29,6 +29,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentLevel
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
+import com.alvarotc.swissknife.ui.theme.DarkOutline
+import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.LevelViewModel
 import kotlin.math.min
 
@@ -82,7 +84,7 @@ fun LevelScreen(viewModel: LevelViewModel = viewModel()) {
                     } else {
                         stringResource(R.string.level_adjust)
                     },
-                color = if (state.isLevel) AccentLevel else Color.White,
+                color = if (state.isLevel) AccentLevel else DarkOnSurfaceVariant,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -94,39 +96,68 @@ fun LevelScreen(viewModel: LevelViewModel = viewModel()) {
                 val canvasWidth = size.width
                 val canvasHeight = size.height
                 val radius = min(canvasWidth, canvasHeight) / 2
+                val center = Offset(canvasWidth / 2, canvasHeight / 2)
+                val ringColor = if (state.isLevel) AccentLevel else DarkOutline
 
-                // Outer circle
+                // Outer circle (dark fill + border)
                 drawCircle(
-                    color = if (state.isLevel) AccentLevel else Color.Gray,
+                    color = DarkSurfaceVariant,
                     radius = radius,
-                    style = Stroke(width = 4.dp.toPx()),
+                    center = center,
+                )
+                drawCircle(
+                    color = ringColor,
+                    radius = radius,
+                    style = Stroke(width = 2.dp.toPx()),
+                    center = center,
+                )
+
+                // Inner guide rings
+                drawCircle(
+                    color = DarkOutline,
+                    radius = radius * 0.6f,
+                    style = Stroke(width = 1.dp.toPx()),
+                    center = center,
+                )
+                drawCircle(
+                    color = DarkOutline,
+                    radius = radius * 0.3f,
+                    style = Stroke(width = 1.dp.toPx()),
+                    center = center,
                 )
 
                 // Center crosshair
-                val crosshairSize = 20.dp.toPx()
+                val crosshairSize = 16.dp.toPx()
                 drawLine(
-                    color = Color.Gray,
-                    start = Offset(canvasWidth / 2 - crosshairSize, canvasHeight / 2),
-                    end = Offset(canvasWidth / 2 + crosshairSize, canvasHeight / 2),
-                    strokeWidth = 2.dp.toPx(),
+                    color = DarkOutline,
+                    start = Offset(center.x - crosshairSize, center.y),
+                    end = Offset(center.x + crosshairSize, center.y),
+                    strokeWidth = 1.dp.toPx(),
                 )
                 drawLine(
-                    color = Color.Gray,
-                    start = Offset(canvasWidth / 2, canvasHeight / 2 - crosshairSize),
-                    end = Offset(canvasWidth / 2, canvasHeight / 2 + crosshairSize),
-                    strokeWidth = 2.dp.toPx(),
+                    color = DarkOutline,
+                    start = Offset(center.x, center.y - crosshairSize),
+                    end = Offset(center.x, center.y + crosshairSize),
+                    strokeWidth = 1.dp.toPx(),
                 )
 
-                // Bubble (affected by tilt)
+                // Bubble
                 val maxOffset = radius * 0.7f
-                val bubbleX = canvasWidth / 2 + (state.roll * maxOffset / 10f)
-                val bubbleY = canvasHeight / 2 + (state.pitch * maxOffset / 10f)
-                val bubbleRadius = 40.dp.toPx()
+                val bubbleX = center.x + (state.roll * maxOffset / 10f)
+                val bubbleY = center.y + (state.pitch * maxOffset / 10f)
+                val bubbleRadius = 36.dp.toPx()
+                val bubbleColor = if (state.isLevel) AccentLevel else Color.White
 
                 drawCircle(
-                    color = if (state.isLevel) AccentLevel else Color.White,
+                    color = bubbleColor.copy(alpha = 0.15f),
                     radius = bubbleRadius,
                     center = Offset(bubbleX, bubbleY),
+                )
+                drawCircle(
+                    color = bubbleColor,
+                    radius = bubbleRadius,
+                    center = Offset(bubbleX, bubbleY),
+                    style = Stroke(width = 3.dp.toPx()),
                 )
             }
 

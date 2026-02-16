@@ -51,21 +51,23 @@ class PasswordGeneratorViewModel : ViewModel() {
 
     fun generate() {
         val state = _uiState.value
-        val charset = buildString {
-            if (state.includeUppercase) append(uppercaseChars)
-            if (state.includeLowercase) append(lowercaseChars)
-            if (state.includeNumbers) append(numberChars)
-            if (state.includeSymbols) append(symbolChars)
-        }
+        val charset =
+            buildString {
+                if (state.includeUppercase) append(uppercaseChars)
+                if (state.includeLowercase) append(lowercaseChars)
+                if (state.includeNumbers) append(numberChars)
+                if (state.includeSymbols) append(symbolChars)
+            }
 
         if (charset.isEmpty()) {
             _uiState.update { it.copy(error = PasswordError.NoCharacterTypeSelected) }
             return
         }
 
-        val password = (1..state.length)
-            .map { charset.random() }
-            .joinToString("")
+        val password =
+            (1..state.length)
+                .map { charset.random() }
+                .joinToString("")
 
         _uiState.update { it.copy(password = password, error = null) }
     }

@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -178,7 +177,11 @@ fun UnitConverterScreen(viewModel: UnitConverterViewModel = viewModel()) {
                 Text(
                     text =
                         if (result != null) {
-                            String.format(Locale.US, "%.4f", result)
+                            if (result == result.toLong().toDouble()) {
+                                result.toLong().toString()
+                            } else {
+                                String.format(Locale.US, "%.4f", result).trimEnd('0')
+                            }
                         } else {
                             "—"
                         },

@@ -1,7 +1,9 @@
 package com.alvarotc.swissknife.ui.screens
 
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,8 +16,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Construction
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,16 +33,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentCoinContainer
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
+import com.alvarotc.swissknife.ui.theme.DarkOutline
+import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.CoinFlipViewModel
 import com.alvarotc.swissknife.viewmodel.CoinSide
 
@@ -48,8 +56,8 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
     var flipTrigger by remember { mutableIntStateOf(0) }
 
     val rotation by animateFloatAsState(
-        targetValue = if (state.isFlipping) flipTrigger * 360f else flipTrigger * 360f,
-        animationSpec = tween(durationMillis = 600),
+        targetValue = flipTrigger * 720f,
+        animationSpec = tween(durationMillis = 800, easing = FastOutSlowInEasing),
         finishedListener = { viewModel.onAnimationFinished() },
         label = "coinFlip",
     )
@@ -67,23 +75,63 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
         Surface(
             modifier =
                 Modifier
-                    .size(160.dp)
-                    .graphicsLayer { rotationX = rotation },
+                    .size(180.dp)
+                    .graphicsLayer {
+                        rotationX = rotation
+                        cameraDistance = 14f * density
+                    },
             shape = CircleShape,
-            color = if (state.result == CoinSide.HEADS) AccentCoin else AccentCoinContainer,
+            color =
+                when (state.result) {
+                    CoinSide.HEADS -> AccentCoin
+                    CoinSide.TAILS -> AccentCoinContainer
+                    null -> DarkSurfaceVariant
+                },
         ) {
-            Box(contentAlignment = Alignment.Center) {
-                Text(
-                    text =
-                        when (state.result) {
-                            CoinSide.HEADS -> "H"
-                            CoinSide.TAILS -> "T"
-                            null -> "?"
-                        },
-                    fontSize = 56.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = if (state.result == CoinSide.HEADS) Color.Black else AccentCoin,
-                )
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .border(
+                            width = 3.dp,
+                            color =
+                                when (state.result) {
+                                    CoinSide.HEADS -> AccentCoin.copy(alpha = 0.6f)
+                                    CoinSide.TAILS -> AccentCoin.copy(alpha = 0.3f)
+                                    null -> DarkOutline
+                                },
+                            shape = CircleShape,
+                        ),
+            ) {
+                when (state.result) {
+                    CoinSide.HEADS -> {
+                        Icon(
+                            imageVector = Icons.Filled.Construction,
+                            contentDescription = stringResource(R.string.heads),
+                            tint = Color.Black,
+                            modifier = Modifier.size(80.dp),
+                        )
+                    }
+                    CoinSide.TAILS -> {
+                        Text(
+                            text = "Swiss\nKnife",
+                            color = AccentCoin,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            lineHeight = 28.sp,
+                        )
+                    }
+                    null -> {
+                        Text(
+                            text = "?",
+                            fontSize = 56.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = DarkOnSurfaceVariant,
+                        )
+                    }
+                }
             }
         }
 

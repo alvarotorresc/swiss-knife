@@ -34,6 +34,7 @@
     <string name="reset">Reset</string>
 
     <!-- Dice Roll -->
+    <string name="dice_type">Dice type</string>
     <string name="number_of_dice">Number of dice</string>
     <string name="total">Total: %d</string>
     <string name="tap_to_roll">Tap to roll</string>

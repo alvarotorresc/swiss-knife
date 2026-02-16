@@ -11,15 +11,15 @@
     <string name="tool_dice_roll">Dados</string>
     <string name="tool_random_number">Número Aleatorio</string>
     <string name="tool_secret_santa">Amigo Invisible</string>
-    <string name="tool_random_list">Aleatorio de Lista</string>
-    <string name="tool_password_generator">Generador de Contraseñas</string>
+    <string name="tool_random_list">Lista Aleatoria</string>
+    <string name="tool_password_generator">Contraseñas</string>
     <string name="tool_counter">Contador</string>
     <string name="tool_timer">Temporizador</string>
-    <string name="tool_tip_calculator">Calculadora de Propinas</string>
-    <string name="tool_unit_converter">Conversor de Unidades</string>
+    <string name="tool_tip_calculator">Propinas</string>
+    <string name="tool_unit_converter">Conversor</string>
     <string name="tool_level">Nivel</string>
-    <string name="tool_fortune_wheel">Ruleta de la Fortuna</string>
-    <string name="tool_finger_picker">Selector de Dedos</string>
+    <string name="tool_fortune_wheel">Ruleta</string>
+    <string name="tool_finger_picker">Selector Dedos</string>
     <string name="tool_qr">Generador QR</string>
 
     <!-- Home Screen -->
@@ -34,6 +34,7 @@
     <string name="reset">Reiniciar</string>
 
     <!-- Dice Roll -->
+    <string name="dice_type">Tipo de dado</string>
     <string name="number_of_dice">Número de dados</string>
     <string name="total">Total: %d</string>
     <string name="tap_to_roll">Toca para tirar</string>

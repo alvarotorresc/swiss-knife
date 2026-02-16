@@ -86,7 +86,18 @@ fun SettingsScreen(viewModel: SettingsViewModel = viewModel()) {
             Column(modifier = Modifier.padding(16.dp)) {
                 InfoRow(stringResource(R.string.settings_version), BuildConfig.VERSION_NAME)
                 Spacer(modifier = Modifier.height(12.dp))
-                InfoRow(stringResource(R.string.settings_developer), "Álvaro TC")
+                ClickableInfoRow(
+                    label = stringResource(R.string.settings_developer),
+                    value = "alvarotc.com",
+                    onClick = {
+                        val intent =
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://alvarotc.com"),
+                            )
+                        context.startActivity(intent)
+                    },
+                )
                 Spacer(modifier = Modifier.height(12.dp))
                 ClickableInfoRow(
                     label = "GitHub",

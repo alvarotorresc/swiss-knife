@@ -12,6 +12,7 @@ import kotlin.random.Random
 
 sealed class FortuneWheelError {
     data object ItemAlreadyAdded : FortuneWheelError()
+
     data object NeedMoreItems : FortuneWheelError()
 }
 
@@ -69,27 +70,32 @@ class FortuneWheelViewModel : ViewModel() {
         }
 
         viewModelScope.launch {
+            val initialRotation = _uiState.value.rotation
             _uiState.update { it.copy(isSpinning = true, winner = null, error = null) }
 
             val spins = Random.nextInt(5, 8)
-            val targetRotation = spins * 360f + Random.nextFloat() * 360f
+            val totalSpin = spins * 360f + Random.nextFloat() * 360f
 
-            var currentRotation = _uiState.value.rotation
             val duration = 3000L
             val steps = 60
             val stepDuration = duration / steps
 
+            var currentRotation = initialRotation
+
             repeat(steps) { step ->
                 val progress = (step + 1).toFloat() / steps
                 val easedProgress = 1f - (1f - progress) * (1f - progress) * (1f - progress)
-                currentRotation = _uiState.value.rotation + (targetRotation * easedProgress)
+                currentRotation = initialRotation + totalSpin * easedProgress
                 _uiState.update { it.copy(rotation = currentRotation % 360f) }
                 delay(stepDuration)
             }
 
+            // Pointer is at top (270° in arc coordinates)
+            // Find which segment is under the pointer
             val finalRotation = currentRotation % 360f
             val degreesPerItem = 360f / items.size
-            val winnerIndex = ((360f - finalRotation) / degreesPerItem).toInt() % items.size
+            val pointerAngle = ((270f - finalRotation) % 360f + 360f) % 360f
+            val winnerIndex = (pointerAngle / degreesPerItem).toInt() % items.size
 
             _uiState.update {
                 it.copy(
@@ -99,6 +105,10 @@ class FortuneWheelViewModel : ViewModel() {
                 )
             }
         }
+    }
+
+    fun clearWinner() {
+        _uiState.update { it.copy(winner = null) }
     }
 
     fun reset() {

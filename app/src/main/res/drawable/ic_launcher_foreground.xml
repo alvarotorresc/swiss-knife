@@ -4,14 +4,51 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Swiss knife blade shape -->
+
+    <!-- Main blade (silver, extending upward from right pivot) -->
     <path
-        android:fillColor="#90CAF9"
-        android:pathData="M54,30 L62,54 L54,78 L46,54 Z" />
+        android:fillColor="#ECEFF1"
+        android:pathData="M69,50 L77,50 L75,30 C74.5,27.5 71.5,27.5 71,30 Z" />
+    <!-- Blade edge -->
+    <path
+        android:fillColor="#B0BEC5"
+        android:pathData="M73.5,28.5 L77,50 L75,50 L72,29.5 Z" />
+
+    <!-- Small tool (extending upward-left from left pivot) -->
+    <path
+        android:fillColor="#ECEFF1"
+        android:pathData="M33,50 L37,50 L41,38 L37,37 Z" />
+
+    <!-- Handle body (red) -->
+    <path
+        android:fillColor="#E53935"
+        android:pathData="M28,50 C24,50 24,54 24,54 L24,62 C24,66 28,66 28,66 L80,66 C84,66 84,62 84,62 L84,54 C84,50 80,50 80,50 Z" />
+    <!-- Handle lower half (darker red for depth) -->
+    <path
+        android:fillColor="#C62828"
+        android:pathData="M24,58 L84,58 L84,62 C84,66 80,66 80,66 L28,66 C24,66 24,62 24,62 Z" />
+
+    <!-- Right pivot rivet -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M73,58 m-3,0 a3,3 0 1,0 6,0 a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#546E7A"
+        android:pathData="M73,58 m-1.5,0 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0" />
+
+    <!-- Left pivot rivet -->
+    <path
+        android:fillColor="#37474F"
+        android:pathData="M35,58 m-2.5,0 a2.5,2.5 0 1,0 5,0 a2.5,2.5 0 1,0 -5,0" />
+    <path
+        android:fillColor="#546E7A"
+        android:pathData="M35,58 m-1.2,0 a1.2,1.2 0 1,0 2.4,0 a1.2,1.2 0 1,0 -2.4,0" />
+
+    <!-- Swiss cross emblem -->
     <path
         android:fillColor="#FFFFFF"
-        android:pathData="M42,46 L54,42 L66,46 L54,50 Z" />
+        android:pathData="M49,55.5 L59,55.5 L59,60.5 L49,60.5 Z" />
     <path
-        android:fillColor="#90CAF9"
-        android:pathData="M48,54 L54,48 L60,54 L54,60 Z" />
+        android:fillColor="#FFFFFF"
+        android:pathData="M52,52.5 L56,52.5 L56,63.5 L52,63.5 Z" />
 </vector>

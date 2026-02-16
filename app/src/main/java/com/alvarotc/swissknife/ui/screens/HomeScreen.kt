@@ -13,8 +13,8 @@ import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.ControlCamera
 import androidx.compose.material.icons.filled.Exposure
-import androidx.compose.material.icons.filled.FrontHand
 import androidx.compose.material.icons.filled.FormatListBulleted
+import androidx.compose.material.icons.filled.FrontHand
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Numbers
@@ -160,7 +160,7 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            items(tools) { tool ->
+            items(tools, key = { it.route }) { tool ->
                 ToolCard(
                     title = stringResource(tool.titleResId),
                     icon = tool.icon,

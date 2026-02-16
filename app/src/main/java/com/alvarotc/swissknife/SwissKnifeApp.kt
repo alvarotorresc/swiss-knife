@@ -1,7 +1,8 @@
 package com.alvarotc.swissknife
 
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -30,8 +31,8 @@ import com.alvarotc.swissknife.ui.screens.FingerPickerScreen
 import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.LevelScreen
-import com.alvarotc.swissknife.ui.screens.QRToolScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
+import com.alvarotc.swissknife.ui.screens.QRToolScreen
 import com.alvarotc.swissknife.ui.screens.RandomListScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
@@ -76,34 +77,34 @@ fun SwissKnifeApp() {
         topBar = {
             if (showTopBar) {
                 CenterAlignedTopAppBar(
-                title = { Text(title) },
-                navigationIcon = {
-                    if (showBack) {
-                        IconButton(onClick = { navController.popBackStack() }) {
-                            Icon(
-                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                                contentDescription = stringResource(R.string.back),
-                            )
+                    title = { Text(title) },
+                    navigationIcon = {
+                        if (showBack) {
+                            IconButton(onClick = { navController.popBackStack() }) {
+                                Icon(
+                                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                    contentDescription = stringResource(R.string.back),
+                                )
+                            }
                         }
-                    }
-                },
-                actions = {
-                    if (currentRoute == NavRoutes.Home.route) {
-                        IconButton(onClick = { navController.navigate(NavRoutes.Settings.route) }) {
-                            Icon(
-                                imageVector = Icons.Filled.Settings,
-                                contentDescription = stringResource(R.string.settings),
-                            )
+                    },
+                    actions = {
+                        if (currentRoute == NavRoutes.Home.route) {
+                            IconButton(onClick = { navController.navigate(NavRoutes.Settings.route) }) {
+                                Icon(
+                                    imageVector = Icons.Filled.Settings,
+                                    contentDescription = stringResource(R.string.settings),
+                                )
+                            }
                         }
-                    }
-                },
-                colors =
-                    TopAppBarDefaults.centerAlignedTopAppBarColors(
-                        containerColor = DarkBackground,
-                        titleContentColor = Color.White,
-                        navigationIconContentColor = Color.White,
-                        actionIconContentColor = Color.White,
-                    ),
+                    },
+                    colors =
+                        TopAppBarDefaults.centerAlignedTopAppBarColors(
+                            containerColor = DarkBackground,
+                            titleContentColor = Color.White,
+                            navigationIconContentColor = Color.White,
+                            actionIconContentColor = Color.White,
+                        ),
                 )
             }
         },
@@ -113,30 +114,10 @@ fun SwissKnifeApp() {
             navController = navController,
             startDestination = NavRoutes.Splash.route,
             modifier = Modifier.padding(innerPadding),
-            enterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start,
-                    tween(300),
-                )
-            },
-            exitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Start,
-                    tween(300),
-                )
-            },
-            popEnterTransition = {
-                slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.End,
-                    tween(300),
-                )
-            },
-            popExitTransition = {
-                slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.End,
-                    tween(300),
-                )
-            },
+            enterTransition = { fadeIn(tween(300)) },
+            exitTransition = { fadeOut(tween(300)) },
+            popEnterTransition = { fadeIn(tween(300)) },
+            popExitTransition = { fadeOut(tween(300)) },
         ) {
             composable(NavRoutes.Splash.route) {
                 SplashScreen(

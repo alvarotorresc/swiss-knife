@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.update
 
 sealed class RandomNumberError {
     data object InvalidNumbers : RandomNumberError()
+
     data object MinNotLessThanMax : RandomNumberError()
 }
 
