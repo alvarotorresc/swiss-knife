@@ -1,11 +1,11 @@
 package com.alvarotc.swissknife.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
@@ -140,34 +140,32 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
             ),
         )
 
-    Column(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
         modifier =
             Modifier
                 .fillMaxSize()
                 .padding(horizontal = 24.dp),
+        contentPadding = PaddingValues(bottom = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
-        Text(
-            text = stringResource(R.string.pick_a_tool),
-            color = DarkOnSurfaceVariant,
-            fontSize = 14.sp,
-            fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(top = 8.dp, bottom = 20.dp),
-        )
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            contentPadding = PaddingValues(bottom = 24.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-        ) {
-            items(tools, key = { it.route }) { tool ->
-                ToolCard(
-                    title = stringResource(tool.titleResId),
-                    icon = tool.icon,
-                    accentColor = tool.accentColor,
-                    onClick = { onNavigate(tool.route) },
-                )
-            }
+        item(span = { GridItemSpan(2) }) {
+            Text(
+                text = stringResource(R.string.pick_a_tool),
+                color = DarkOnSurfaceVariant,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
+            )
+        }
+        items(tools, key = { it.route }) { tool ->
+            ToolCard(
+                title = stringResource(tool.titleResId),
+                icon = tool.icon,
+                accentColor = tool.accentColor,
+                onClick = { onNavigate(tool.route) },
+            )
         }
     }
 }
