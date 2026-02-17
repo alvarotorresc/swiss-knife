@@ -5,6 +5,14 @@ plugins {
     alias(libs.plugins.ktlint)
 }
 
+import java.util.Properties
+
+val signingPropsFile = rootProject.file("signing.properties")
+val signingProps = Properties()
+if (signingPropsFile.exists()) {
+    signingProps.load(signingPropsFile.inputStream())
+}
+
 android {
     namespace = "com.alvarotc.swissknife"
     compileSdk = 35
@@ -17,10 +25,20 @@ android {
         versionName = "0.2.0"
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = rootProject.file(signingProps.getProperty("storeFile", ""))
+            storePassword = signingProps.getProperty("storePassword", "")
+            keyAlias = signingProps.getProperty("keyAlias", "")
+            keyPassword = signingProps.getProperty("keyPassword", "")
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
