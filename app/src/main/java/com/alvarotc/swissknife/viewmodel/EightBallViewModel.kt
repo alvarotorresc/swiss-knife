@@ -16,7 +16,7 @@ data class EightBallUiState(
 )
 
 class EightBallViewModel : ViewModel() {
-    private val answers =
+    val answers =
         listOf(
             "It is certain",
             "Without a doubt",

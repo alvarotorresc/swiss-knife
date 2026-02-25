@@ -45,6 +45,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
 // Indices: 0–8 positive, 9–12 neutral, 13–19 negative
+// Indices: 0–8 positive, 9–13 neutral, 14–19 negative
 private fun answerColor(
     answer: String,
     answers: List<String>,
@@ -52,34 +53,10 @@ private fun answerColor(
     val index = answers.indexOf(answer)
     return when {
         index in 0..8 -> Color(0xFF4ADE80) // green — positive
-        index in 9..12 -> Color(0xFFFBBF24) // yellow — neutral
+        index in 9..13 -> Color(0xFFFBBF24) // yellow — neutral
         else -> Color(0xFFF87171) // red — negative
     }
 }
-
-private val eightBallAnswers =
-    listOf(
-        "It is certain",
-        "Without a doubt",
-        "Yes definitely",
-        "You may rely on it",
-        "As I see it yes",
-        "Most likely",
-        "Outlook good",
-        "Yes",
-        "Signs point to yes",
-        "Reply hazy try again",
-        "Ask again later",
-        "Better not tell you now",
-        "Cannot predict now",
-        "Concentrate and ask again",
-        "Don't count on it",
-        "My reply is no",
-        "My sources say no",
-        "Outlook not so good",
-        "Very doubtful",
-        "No way",
-    )
 
 @Composable
 fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
@@ -194,7 +171,7 @@ fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
                             Text(
                                 text = answer,
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = answerColor(answer, eightBallAnswers),
+                                color = answerColor(answer, viewModel.answers),
                                 textAlign = TextAlign.Center,
                                 modifier =
                                     Modifier
@@ -256,7 +233,7 @@ fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
             Text(
                 text =
                     if (state.answer != null) {
-                        stringResource(R.string.ask) + " Again"
+                        stringResource(R.string.ask_again)
                     } else {
                         stringResource(R.string.ask)
                     },

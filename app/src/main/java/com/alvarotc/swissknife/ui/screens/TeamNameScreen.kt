@@ -112,7 +112,7 @@ fun TeamNameScreen(viewModel: TeamNameViewModel = viewModel()) {
 
         if (state.history.isNotEmpty()) {
             Text(
-                text = "Previous names",
+                text = stringResource(R.string.previous_names),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier =
@@ -171,7 +171,7 @@ fun TeamNameScreen(viewModel: TeamNameViewModel = viewModel()) {
             Text(
                 text =
                     if (state.isGenerating) {
-                        "Generating..."
+                        stringResource(R.string.generating)
                     } else {
                         stringResource(R.string.generate_name)
                     },

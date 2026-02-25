@@ -63,6 +63,9 @@ class LotteryViewModel : ViewModel() {
             count > maxNumber -> {
                 _uiState.update { it.copy(error = LotteryError.CountExceedsRange) }
             }
+            maxNumber > 999 -> {
+                _uiState.update { it.copy(error = LotteryError.InvalidNumbers) }
+            }
             else -> {
                 val numbers = (1..maxNumber).toMutableList()
                 numbers.shuffle()

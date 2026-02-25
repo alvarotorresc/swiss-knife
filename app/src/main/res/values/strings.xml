@@ -137,6 +137,7 @@
     <string name="ask_a_question">Ask a question</string>
     <string name="shake_to_answer">Shake to ask</string>
     <string name="ask">Ask</string>
+    <string name="ask_again">Ask Again</string>
 
     <!-- Random Color -->
     <string name="generate_color">Generate Color</string>
@@ -145,6 +146,8 @@
     <!-- Team Name Generator -->
     <string name="generate_name">Generate Name</string>
     <string name="team_name_result">Your team name:</string>
+    <string name="previous_names">Previous names</string>
+    <string name="generating">Generating…</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>
