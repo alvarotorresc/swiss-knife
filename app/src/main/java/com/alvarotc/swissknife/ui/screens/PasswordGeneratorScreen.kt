@@ -15,11 +15,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.outlined.ContentCopy
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Slider
 import androidx.compose.material3.SliderDefaults
 import androidx.compose.material3.Surface
@@ -30,19 +31,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
-import com.alvarotc.swissknife.ui.theme.AccentPassword
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.PasswordError
 import com.alvarotc.swissknife.viewmodel.PasswordGeneratorViewModel
 
@@ -57,12 +52,10 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
                 .fillMaxSize()
                 .padding(24.dp),
     ) {
-        // Length slider
         Text(
             text = stringResource(R.string.length_value, state.length),
-            color = Color.White,
-            fontSize = 16.sp,
-            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.titleSmall,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Slider(
@@ -72,15 +65,14 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
             steps = 55,
             colors =
                 SliderDefaults.colors(
-                    thumbColor = AccentPassword,
-                    activeTrackColor = AccentPassword,
-                    inactiveTrackColor = DarkSurfaceVariant,
+                    thumbColor = MaterialTheme.colorScheme.primary,
+                    activeTrackColor = MaterialTheme.colorScheme.primary,
+                    inactiveTrackColor = MaterialTheme.colorScheme.surfaceVariant,
                 ),
         )
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Character type switches
         SwitchOption(
             label = stringResource(R.string.uppercase),
             checked = state.includeUppercase,
@@ -105,7 +97,6 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
             onCheckedChange = { viewModel.toggleSymbols() },
         )
 
-        // Error
         if (state.error != null) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
@@ -114,17 +105,16 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
                         PasswordError.NoCharacterTypeSelected -> stringResource(R.string.error_select_at_least_one)
                         null -> ""
                     },
-                color = Color(0xFFEF5350),
-                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Password display
         if (state.password != null) {
             Surface(
-                color = DarkSurfaceVariant,
+                color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(12.dp),
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -134,8 +124,8 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
                 ) {
                     Text(
                         text = state.password ?: "",
-                        color = Color.White,
-                        fontSize = 16.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodyLarge,
                         fontFamily = FontFamily.Monospace,
                         modifier = Modifier.weight(1f),
                     )
@@ -153,9 +143,9 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
                         },
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.ContentCopy,
+                            imageVector = Icons.Outlined.ContentCopy,
                             contentDescription = stringResource(R.string.copy),
-                            tint = AccentPassword,
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -163,21 +153,22 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
             Spacer(modifier = Modifier.height(16.dp))
         }
 
-        // Generate button
         Button(
             onClick = { viewModel.generate() },
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = AccentPassword),
+            shape = RoundedCornerShape(12.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.generate),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
     }
@@ -195,8 +186,8 @@ private fun SwitchOption(
     ) {
         Text(
             text = label,
-            color = Color.White,
-            fontSize = 16.sp,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.weight(1f),
         )
         Switch(
@@ -204,10 +195,10 @@ private fun SwitchOption(
             onCheckedChange = onCheckedChange,
             colors =
                 SwitchDefaults.colors(
-                    checkedThumbColor = AccentPassword,
-                    checkedTrackColor = AccentPassword.copy(alpha = 0.5f),
-                    uncheckedThumbColor = DarkOnSurfaceVariant,
-                    uncheckedTrackColor = DarkSurfaceVariant,
+                    checkedThumbColor = MaterialTheme.colorScheme.onPrimary,
+                    checkedTrackColor = MaterialTheme.colorScheme.primary,
+                    uncheckedThumbColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    uncheckedTrackColor = MaterialTheme.colorScheme.surfaceVariant,
                 ),
         )
     }
