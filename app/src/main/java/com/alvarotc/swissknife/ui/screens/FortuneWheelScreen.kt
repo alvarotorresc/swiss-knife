@@ -17,12 +17,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.SuggestionChip
@@ -40,16 +41,11 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentWheel
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
-import com.alvarotc.swissknife.ui.theme.DarkOutline
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.FortuneWheelError
 import com.alvarotc.swissknife.viewmodel.FortuneWheelViewModel
 
@@ -59,15 +55,15 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
 
     val textFieldColors =
         OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = DarkOutline,
-            focusedBorderColor = AccentWheel,
-            unfocusedLabelColor = DarkOnSurfaceVariant,
-            focusedLabelColor = AccentWheel,
-            cursorColor = AccentWheel,
-            unfocusedTextColor = Color.White,
-            focusedTextColor = Color.White,
-            unfocusedContainerColor = DarkSurfaceVariant,
-            focusedContainerColor = DarkSurfaceVariant,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
         )
 
     Column(
@@ -78,7 +74,6 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Input row
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth(),
@@ -99,14 +94,13 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                 enabled = !state.isSpinning,
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Icons.Outlined.Add,
                     contentDescription = stringResource(R.string.add),
                     tint = AccentWheel,
                 )
             }
         }
 
-        // Error
         if (state.error != null) {
             Text(
                 text =
@@ -115,13 +109,12 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                         FortuneWheelError.NeedMoreItems -> stringResource(R.string.error_need_more_items)
                         null -> ""
                     },
-                color = Color(0xFFEF5350),
-                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp),
             )
         }
 
-        // Chips
         if (state.items.isNotEmpty()) {
             Spacer(modifier = Modifier.height(12.dp))
             LazyRow(
@@ -135,7 +128,7 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                         icon = {
                             if (!state.isSpinning) {
                                 Icon(
-                                    imageVector = Icons.Filled.Close,
+                                    imageVector = Icons.Outlined.Close,
                                     contentDescription = stringResource(R.string.remove),
                                     modifier = Modifier.size(16.dp),
                                 )
@@ -143,9 +136,9 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                         },
                         colors =
                             SuggestionChipDefaults.suggestionChipColors(
-                                containerColor = DarkSurfaceVariant,
-                                labelColor = Color.White,
-                                iconContentColor = DarkOnSurfaceVariant,
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                                labelColor = MaterialTheme.colorScheme.onSurface,
+                                iconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                             ),
                     )
                 }
@@ -154,7 +147,6 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // Wheel
         if (state.items.size >= 2) {
             MinimalistWheelCanvas(
                 items = state.items,
@@ -164,18 +156,16 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Winner
             if (state.winner != null) {
                 Text(
                     text = stringResource(R.string.winner_is),
-                    color = DarkOnSurfaceVariant,
-                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = MaterialTheme.typography.bodyLarge,
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = state.winner ?: "",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.headlineLarge,
                     color = AccentWheel,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -194,8 +184,11 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                     Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AccentWheel),
+                shape = RoundedCornerShape(12.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
             ) {
                 Text(
                     text =
@@ -204,16 +197,15 @@ fun FortuneWheelScreen(viewModel: FortuneWheelViewModel = viewModel()) {
                         } else {
                             stringResource(R.string.spin)
                         },
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.Black,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         } else {
             Text(
                 text = stringResource(R.string.spin_the_wheel),
-                color = DarkOnSurfaceVariant,
-                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(top = 48.dp),
             )
         }
@@ -228,24 +220,26 @@ private fun MinimalistWheelCanvas(
 ) {
     val segmentColors =
         listOf(
-            Color(0xFFEF5350),
-            Color(0xFF42A5F5),
-            Color(0xFF66BB6A),
-            Color(0xFFFFC107),
-            Color(0xFFAB47BC),
-            Color(0xFF26A69A),
-            Color(0xFFFF7043),
-            Color(0xFFEC407A),
+            Color(0xFFF43F5E),
+            Color(0xFF3B82F6),
+            Color(0xFF22C55E),
+            Color(0xFFFBBF24),
+            Color(0xFF8B5CF6),
+            Color(0xFF14B8A6),
+            Color(0xFFFB923C),
+            Color(0xFFEC4899),
         )
+
+    val surfaceColor = MaterialTheme.colorScheme.surface
+    val outlineColor = MaterialTheme.colorScheme.outline
 
     Canvas(modifier = modifier) {
         val sweepAngle = 360f / items.size
         val radius = size.minDimension / 2f
         val center = Offset(size.width / 2f, size.height / 2f)
 
-        // Dark circle background
         drawCircle(
-            color = Color(0xFF1A1A1A),
+            color = surfaceColor,
             radius = radius,
             center = center,
         )
@@ -255,7 +249,6 @@ private fun MinimalistWheelCanvas(
                 val startAngle = index * sweepAngle
                 val color = segmentColors[index % segmentColors.size]
 
-                // Colored arc on the outer edge
                 drawArc(
                     color = color,
                     startAngle = startAngle + 1f,
@@ -264,18 +257,16 @@ private fun MinimalistWheelCanvas(
                     style = Stroke(width = 12.dp.toPx(), cap = StrokeCap.Butt),
                 )
 
-                // Divider lines from center
                 val lineAngle = Math.toRadians(startAngle.toDouble())
                 val endX = (center.x + radius * kotlin.math.cos(lineAngle)).toFloat()
                 val endY = (center.y + radius * kotlin.math.sin(lineAngle)).toFloat()
                 drawLine(
-                    color = Color(0xFF333333),
+                    color = outlineColor,
                     start = center,
                     end = Offset(endX, endY),
                     strokeWidth = 1.5.dp.toPx(),
                 )
 
-                // Text label
                 val textAngle = Math.toRadians((startAngle + sweepAngle / 2).toDouble())
                 val textRadius = radius * 0.55f
                 val textX = (center.x + textRadius * kotlin.math.cos(textAngle)).toFloat()
@@ -290,21 +281,19 @@ private fun MinimalistWheelCanvas(
                             isAntiAlias = true
                             isFakeBoldText = true
                         }
-                    val label = if (item.length > 10) item.take(9) + "…" else item
+                    val label = if (item.length > 10) item.take(9) + "\u2026" else item
                     drawText(label, textX, textY + paint.textSize / 3, paint)
                 }
             }
         }
 
-        // Outer ring border
         drawCircle(
-            color = Color(0xFF333333),
+            color = outlineColor,
             radius = radius,
             center = center,
             style = Stroke(width = 2.dp.toPx()),
         )
 
-        // Pointer triangle at top
         val pointerSize = 14.dp.toPx()
         drawPath(
             path =
@@ -317,9 +306,8 @@ private fun MinimalistWheelCanvas(
             color = AccentWheel,
         )
 
-        // Center dot
         drawCircle(
-            color = Color(0xFF333333),
+            color = outlineColor,
             radius = 6.dp.toPx(),
             center = center,
         )
