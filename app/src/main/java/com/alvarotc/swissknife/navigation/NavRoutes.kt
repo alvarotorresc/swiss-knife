@@ -34,6 +34,4 @@ sealed class NavRoutes(val route: String) {
     data object EightBall : NavRoutes("eight_ball")
 
     data object RandomColor : NavRoutes("random_color")
-
-    data object TeamNameGenerator : NavRoutes("team_name_generator")
 }

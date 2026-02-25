@@ -40,7 +40,6 @@ import com.alvarotc.swissknife.ui.screens.RockPaperScissorsScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
-import com.alvarotc.swissknife.ui.screens.TeamNameScreen
 import com.alvarotc.swissknife.ui.screens.TimerScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +66,6 @@ fun SwissKnifeApp() {
             NavRoutes.Lottery.route -> stringResource(R.string.tool_lottery)
             NavRoutes.EightBall.route -> stringResource(R.string.tool_eight_ball)
             NavRoutes.RandomColor.route -> stringResource(R.string.tool_random_color)
-            NavRoutes.TeamNameGenerator.route -> stringResource(R.string.tool_team_name)
             else -> stringResource(R.string.app_name)
         }
 
@@ -183,9 +181,6 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.RandomColor.route) {
                 RandomColorScreen()
-            }
-            composable(NavRoutes.TeamNameGenerator.route) {
-                TeamNameScreen()
             }
         }
     }

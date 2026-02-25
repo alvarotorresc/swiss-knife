@@ -17,7 +17,6 @@ import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.FrontHand
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Key
-import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.Psychology
@@ -43,7 +42,6 @@ import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRPS
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
-import com.alvarotc.swissknife.ui.theme.AccentTeamName
 import com.alvarotc.swissknife.ui.theme.AccentTimer
 import com.alvarotc.swissknife.ui.theme.AccentWheel
 
@@ -134,12 +132,6 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Outlined.Palette,
                 accentColor = AccentColor,
                 route = NavRoutes.RandomColor.route,
-            ),
-            ToolItem(
-                titleResId = R.string.tool_team_name,
-                icon = Icons.Outlined.Label,
-                accentColor = AccentTeamName,
-                route = NavRoutes.TeamNameGenerator.route,
             ),
         )
 
