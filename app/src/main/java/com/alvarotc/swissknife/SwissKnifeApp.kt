@@ -25,22 +25,16 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
-import com.alvarotc.swissknife.ui.screens.CounterScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
 import com.alvarotc.swissknife.ui.screens.FingerPickerScreen
 import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
-import com.alvarotc.swissknife.ui.screens.LevelScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
-import com.alvarotc.swissknife.ui.screens.QRToolScreen
 import com.alvarotc.swissknife.ui.screens.RandomListScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
-import com.alvarotc.swissknife.ui.screens.TimerScreen
-import com.alvarotc.swissknife.ui.screens.TipCalculatorScreen
-import com.alvarotc.swissknife.ui.screens.UnitConverterScreen
 import com.alvarotc.swissknife.ui.theme.DarkBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,14 +53,8 @@ fun SwissKnifeApp() {
             NavRoutes.SecretSanta.route -> stringResource(R.string.tool_secret_santa)
             NavRoutes.RandomList.route -> stringResource(R.string.tool_random_list)
             NavRoutes.PasswordGenerator.route -> stringResource(R.string.tool_password_generator)
-            NavRoutes.Counter.route -> stringResource(R.string.tool_counter)
-            NavRoutes.Timer.route -> stringResource(R.string.tool_timer)
-            NavRoutes.TipCalculator.route -> stringResource(R.string.tool_tip_calculator)
-            NavRoutes.UnitConverter.route -> stringResource(R.string.tool_unit_converter)
-            NavRoutes.Level.route -> stringResource(R.string.tool_level)
             NavRoutes.FortuneWheel.route -> stringResource(R.string.tool_fortune_wheel)
             NavRoutes.FingerPicker.route -> stringResource(R.string.tool_finger_picker)
-            NavRoutes.QRTool.route -> stringResource(R.string.tool_qr)
             else -> stringResource(R.string.app_name)
         }
 
@@ -154,29 +142,11 @@ fun SwissKnifeApp() {
             composable(NavRoutes.PasswordGenerator.route) {
                 PasswordGeneratorScreen()
             }
-            composable(NavRoutes.Counter.route) {
-                CounterScreen()
-            }
-            composable(NavRoutes.Timer.route) {
-                TimerScreen()
-            }
-            composable(NavRoutes.TipCalculator.route) {
-                TipCalculatorScreen()
-            }
-            composable(NavRoutes.UnitConverter.route) {
-                UnitConverterScreen()
-            }
-            composable(NavRoutes.Level.route) {
-                LevelScreen()
-            }
             composable(NavRoutes.FortuneWheel.route) {
                 FortuneWheelScreen()
             }
             composable(NavRoutes.FingerPicker.route) {
                 FingerPickerScreen()
-            }
-            composable(NavRoutes.QRTool.route) {
-                QRToolScreen()
             }
         }
     }

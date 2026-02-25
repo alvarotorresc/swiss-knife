@@ -19,19 +19,7 @@ sealed class NavRoutes(val route: String) {
 
     data object PasswordGenerator : NavRoutes("password_generator")
 
-    data object Counter : NavRoutes("counter")
-
-    data object Timer : NavRoutes("timer")
-
-    data object TipCalculator : NavRoutes("tip_calculator")
-
-    data object UnitConverter : NavRoutes("unit_converter")
-
-    data object Level : NavRoutes("level")
-
     data object FortuneWheel : NavRoutes("fortune_wheel")
 
     data object FingerPicker : NavRoutes("finger_picker")
-
-    data object QRTool : NavRoutes("qr_tool")
 }

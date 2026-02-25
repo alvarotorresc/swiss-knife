@@ -12,16 +12,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CardGiftcard
 import androidx.compose.material.icons.filled.Casino
 import androidx.compose.material.icons.filled.ControlCamera
-import androidx.compose.material.icons.filled.Exposure
 import androidx.compose.material.icons.filled.FormatListBulleted
 import androidx.compose.material.icons.filled.FrontHand
 import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.Layers
 import androidx.compose.material.icons.filled.Numbers
-import androidx.compose.material.icons.filled.Payments
-import androidx.compose.material.icons.filled.QrCode2
-import androidx.compose.material.icons.filled.SwapHoriz
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.filled.Toll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,18 +29,12 @@ import com.alvarotc.swissknife.model.ToolItem
 import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.components.ToolCard
 import com.alvarotc.swissknife.ui.theme.AccentCoin
-import com.alvarotc.swissknife.ui.theme.AccentCounter
 import com.alvarotc.swissknife.ui.theme.AccentDice
 import com.alvarotc.swissknife.ui.theme.AccentFinger
-import com.alvarotc.swissknife.ui.theme.AccentLevel
 import com.alvarotc.swissknife.ui.theme.AccentList
 import com.alvarotc.swissknife.ui.theme.AccentPassword
-import com.alvarotc.swissknife.ui.theme.AccentQR
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
-import com.alvarotc.swissknife.ui.theme.AccentTimer
-import com.alvarotc.swissknife.ui.theme.AccentTipCalc
-import com.alvarotc.swissknife.ui.theme.AccentUnitConv
 import com.alvarotc.swissknife.ui.theme.AccentWheel
 import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 
@@ -85,42 +73,6 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 route = NavRoutes.RandomList.route,
             ),
             ToolItem(
-                titleResId = R.string.tool_password_generator,
-                icon = Icons.Filled.Key,
-                accentColor = AccentPassword,
-                route = NavRoutes.PasswordGenerator.route,
-            ),
-            ToolItem(
-                titleResId = R.string.tool_counter,
-                icon = Icons.Filled.Exposure,
-                accentColor = AccentCounter,
-                route = NavRoutes.Counter.route,
-            ),
-            ToolItem(
-                titleResId = R.string.tool_timer,
-                icon = Icons.Filled.Timer,
-                accentColor = AccentTimer,
-                route = NavRoutes.Timer.route,
-            ),
-            ToolItem(
-                titleResId = R.string.tool_tip_calculator,
-                icon = Icons.Filled.Payments,
-                accentColor = AccentTipCalc,
-                route = NavRoutes.TipCalculator.route,
-            ),
-            ToolItem(
-                titleResId = R.string.tool_unit_converter,
-                icon = Icons.Filled.SwapHoriz,
-                accentColor = AccentUnitConv,
-                route = NavRoutes.UnitConverter.route,
-            ),
-            ToolItem(
-                titleResId = R.string.tool_level,
-                icon = Icons.Filled.Layers,
-                accentColor = AccentLevel,
-                route = NavRoutes.Level.route,
-            ),
-            ToolItem(
                 titleResId = R.string.tool_fortune_wheel,
                 icon = Icons.Filled.ControlCamera,
                 accentColor = AccentWheel,
@@ -133,10 +85,10 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 route = NavRoutes.FingerPicker.route,
             ),
             ToolItem(
-                titleResId = R.string.tool_qr,
-                icon = Icons.Filled.QrCode2,
-                accentColor = AccentQR,
-                route = NavRoutes.QRTool.route,
+                titleResId = R.string.tool_password_generator,
+                icon = Icons.Filled.Key,
+                accentColor = AccentPassword,
+                route = NavRoutes.PasswordGenerator.route,
             ),
         )
 
