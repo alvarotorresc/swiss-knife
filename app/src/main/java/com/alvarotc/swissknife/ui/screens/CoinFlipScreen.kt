@@ -1,7 +1,8 @@
 package com.alvarotc.swissknife.ui.screens
 
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -16,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Construction
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -26,13 +25,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -43,6 +48,7 @@ import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentCoinContainer
 import com.alvarotc.swissknife.viewmodel.CoinFlipViewModel
 import com.alvarotc.swissknife.viewmodel.CoinSide
+import kotlinx.coroutines.launch
 
 @Composable
 fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
@@ -50,12 +56,86 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
 
     var flipTrigger by remember { mutableIntStateOf(0) }
 
-    val rotation by animateFloatAsState(
-        targetValue = flipTrigger * 720f,
-        animationSpec = tween(durationMillis = 800, easing = FastOutSlowInEasing),
-        finishedListener = { viewModel.onAnimationFinished() },
-        label = "coinFlip",
-    )
+    // All animation driven by Animatables for full control
+    val coinScale = remember { Animatable(1f) }
+    val coinOffsetY = remember { Animatable(0f) }
+    val coinRotationX = remember { Animatable(0f) }
+    val glintProgress = remember { Animatable(0f) }
+
+    LaunchedEffect(flipTrigger) {
+        if (flipTrigger == 0) return@LaunchedEffect
+
+        glintProgress.snapTo(0f)
+
+        // Phase 1: Shrink and rise — like thumb launching the coin
+        coinScale.snapTo(1f)
+        coinOffsetY.snapTo(0f)
+        coinRotationX.snapTo(0f)
+
+        // Shrink as if pressed by thumb
+        coinScale.animateTo(0.6f, animationSpec = tween(150))
+
+        // Launch upward while spinning fast
+        launch {
+            coinRotationX.animateTo(
+                // 5 full rotations
+                targetValue = 1800f,
+                animationSpec = tween(durationMillis = 1000),
+            )
+        }
+        launch {
+            coinScale.animateTo(0.75f, animationSpec = tween(500))
+        }
+
+        // Rise
+        coinOffsetY.animateTo(
+            targetValue = -200f,
+            animationSpec = tween(durationMillis = 400),
+        )
+
+        // Fall down
+        coinOffsetY.animateTo(
+            targetValue = 20f,
+            animationSpec = tween(durationMillis = 500),
+        )
+
+        // Impact bounce
+        launch {
+            coinScale.animateTo(
+                targetValue = 1.15f,
+                animationSpec = tween(80),
+            )
+            coinScale.animateTo(
+                targetValue = 1f,
+                animationSpec =
+                    spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMedium,
+                    ),
+            )
+        }
+        coinOffsetY.animateTo(
+            targetValue = 0f,
+            animationSpec =
+                spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessMediumLow,
+                ),
+        )
+
+        // Animation done — signal ViewModel
+        viewModel.onAnimationFinished()
+
+        // Metallic glint sweep on reveal
+        glintProgress.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 400),
+        )
+    }
+
+    // Only show the actual result when NOT flipping
+    val showResult = !state.isFlipping && state.result != null
+    val visibleResult = if (showResult) state.result else null
 
     Column(
         modifier =
@@ -71,12 +151,15 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 Modifier
                     .size(180.dp)
                     .graphicsLayer {
-                        rotationX = rotation
-                        cameraDistance = 14f * density
+                        rotationX = coinRotationX.value
+                        translationY = coinOffsetY.value
+                        scaleX = coinScale.value
+                        scaleY = coinScale.value
+                        cameraDistance = 16f * density
                     },
             shape = CircleShape,
             color =
-                when (state.result) {
+                when (visibleResult) {
                     CoinSide.HEADS -> AccentCoin
                     CoinSide.TAILS -> AccentCoinContainer
                     null -> MaterialTheme.colorScheme.surfaceVariant
@@ -90,21 +173,39 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                         .border(
                             width = 3.dp,
                             color =
-                                when (state.result) {
+                                when (visibleResult) {
                                     CoinSide.HEADS -> AccentCoin.copy(alpha = 0.6f)
                                     CoinSide.TAILS -> AccentCoin.copy(alpha = 0.3f)
                                     null -> MaterialTheme.colorScheme.outline
                                 },
                             shape = CircleShape,
-                        ),
+                        )
+                        .drawBehind {
+                            if (glintProgress.value in 0.01f..0.99f) {
+                                val sweepX = size.width * glintProgress.value
+                                drawRect(
+                                    brush =
+                                        Brush.linearGradient(
+                                            colors =
+                                                listOf(
+                                                    Color.Transparent,
+                                                    Color.White.copy(alpha = 0.4f),
+                                                    Color.Transparent,
+                                                ),
+                                            start = Offset(sweepX - 60f, 0f),
+                                            end = Offset(sweepX + 60f, size.height),
+                                        ),
+                                )
+                            }
+                        },
             ) {
-                when (state.result) {
+                when (visibleResult) {
                     CoinSide.HEADS -> {
                         Icon(
-                            imageVector = Icons.Outlined.Construction,
+                            painter = painterResource(R.drawable.ic_launcher_foreground),
                             contentDescription = stringResource(R.string.heads),
-                            tint = MaterialTheme.colorScheme.onBackground,
-                            modifier = Modifier.size(80.dp),
+                            tint = Color.Unspecified,
+                            modifier = Modifier.size(120.dp),
                         )
                     }
                     CoinSide.TAILS -> {
@@ -130,10 +231,11 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
 
         Text(
             text =
-                when (state.result) {
-                    CoinSide.HEADS -> stringResource(R.string.heads)
-                    CoinSide.TAILS -> stringResource(R.string.tails)
-                    null -> stringResource(R.string.tap_to_flip)
+                when {
+                    state.isFlipping -> stringResource(R.string.flipping)
+                    state.result == CoinSide.HEADS -> stringResource(R.string.heads)
+                    state.result == CoinSide.TAILS -> stringResource(R.string.tails)
+                    else -> stringResource(R.string.tap_to_flip)
                 },
             style = MaterialTheme.typography.headlineSmall,
             color = MaterialTheme.colorScheme.onBackground,
@@ -141,18 +243,19 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        if (state.totalFlips > 0) {
-            Row(
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-            ) {
-                StatItem(stringResource(R.string.flips), state.totalFlips.toString())
-                StatItem(stringResource(R.string.heads), state.headsCount.toString())
-                StatItem(stringResource(R.string.tails), state.tailsCount.toString())
-            }
+        // Always reserve space for stats to prevent layout shift
+        val showStats = state.totalFlips > 0 && !state.isFlipping
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp)
+                    .graphicsLayer { alpha = if (showStats) 1f else 0f },
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            StatItem(stringResource(R.string.flips), state.totalFlips.toString())
+            StatItem(stringResource(R.string.heads), state.headsCount.toString())
+            StatItem(stringResource(R.string.tails), state.tailsCount.toString())
         }
 
         Button(
@@ -160,6 +263,7 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 flipTrigger++
                 viewModel.flip()
             },
+            enabled = !state.isFlipping,
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -177,16 +281,18 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
             )
         }
 
-        if (state.totalFlips > 0) {
-            TextButton(onClick = {
+        TextButton(
+            onClick = {
                 flipTrigger = 0
                 viewModel.reset()
-            }) {
-                Text(
-                    text = stringResource(R.string.reset),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            },
+            enabled = showStats,
+            modifier = Modifier.graphicsLayer { alpha = if (showStats) 1f else 0f },
+        ) {
+            Text(
+                text = stringResource(R.string.reset),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

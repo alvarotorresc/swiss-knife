@@ -4,9 +4,13 @@ import com.alvarotc.swissknife.viewmodel.DiceRollViewModel
 import com.alvarotc.swissknife.viewmodel.DiceType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 
 class DiceRollViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun `initial state has D6 1 die and no results`() {
         val vm = DiceRollViewModel()

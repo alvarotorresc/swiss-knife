@@ -22,7 +22,9 @@ data class FortuneWheelUiState(
     val isSpinning: Boolean = false,
     val rotation: Float = 0f,
     val winner: String? = null,
+    val winnerIndex: Int = -1,
     val error: FortuneWheelError? = null,
+    val showConfetti: Boolean = false,
 )
 
 class FortuneWheelViewModel : ViewModel() {
@@ -46,7 +48,9 @@ class FortuneWheelViewModel : ViewModel() {
                         items = it.items + item,
                         itemInput = "",
                         winner = null,
+                        winnerIndex = -1,
                         error = null,
+                        showConfetti = false,
                     )
                 }
             }
@@ -58,6 +62,8 @@ class FortuneWheelViewModel : ViewModel() {
             it.copy(
                 items = it.items - item,
                 winner = null,
+                winnerIndex = -1,
+                showConfetti = false,
             )
         }
     }
@@ -71,28 +77,34 @@ class FortuneWheelViewModel : ViewModel() {
 
         viewModelScope.launch {
             val initialRotation = _uiState.value.rotation
-            _uiState.update { it.copy(isSpinning = true, winner = null, error = null) }
+            _uiState.update {
+                it.copy(isSpinning = true, winner = null, winnerIndex = -1, error = null, showConfetti = false)
+            }
 
-            val spins = Random.nextInt(5, 8)
+            // More spins = feels faster and more dramatic
+            val spins = Random.nextInt(8, 12)
             val totalSpin = spins * 360f + Random.nextFloat() * 360f
 
-            val duration = 3000L
-            val steps = 60
+            val duration = 4000L
+            val steps = 120
             val stepDuration = duration / steps
 
             var currentRotation = initialRotation
 
             repeat(steps) { step ->
                 val progress = (step + 1).toFloat() / steps
-                val easedProgress = 1f - (1f - progress) * (1f - progress) * (1f - progress)
+                // Quintic ease-out: very fast start, smooth deceleration, no overshoot
+                val t = 1f - progress
+                val easedProgress = 1f - t * t * t * t * t
                 currentRotation = initialRotation + totalSpin * easedProgress
                 _uiState.update { it.copy(rotation = currentRotation % 360f) }
                 delay(stepDuration)
             }
 
-            // Pointer is at top (270° in arc coordinates)
-            // Find which segment is under the pointer
+            // No overshoot — just settle cleanly
             val finalRotation = currentRotation % 360f
+
+            // Determine winner
             val degreesPerItem = 360f / items.size
             val pointerAngle = ((270f - finalRotation) % 360f + 360f) % 360f
             val winnerIndex = (pointerAngle / degreesPerItem).toInt() % items.size
@@ -100,15 +112,17 @@ class FortuneWheelViewModel : ViewModel() {
             _uiState.update {
                 it.copy(
                     isSpinning = false,
-                    rotation = finalRotation,
+                    rotation = ((finalRotation % 360f) + 360f) % 360f,
                     winner = items[winnerIndex],
+                    winnerIndex = winnerIndex,
+                    showConfetti = true,
                 )
             }
         }
     }
 
     fun clearWinner() {
-        _uiState.update { it.copy(winner = null) }
+        _uiState.update { it.copy(winner = null, winnerIndex = -1, showConfetti = false) }
     }
 
     fun reset() {

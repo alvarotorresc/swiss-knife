@@ -6,6 +6,11 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.os.Build
 import android.os.PersistableBundle
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -33,7 +38,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -45,6 +53,19 @@ import com.alvarotc.swissknife.viewmodel.PasswordGeneratorViewModel
 fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+
+    // Blinking cursor
+    val infiniteTransition = rememberInfiniteTransition(label = "cursor")
+    val cursorAlpha by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0f,
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(500),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "cursorAlpha",
+    )
 
     Column(
         modifier =
@@ -63,6 +84,7 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
             onValueChange = { viewModel.setLength(it.toInt()) },
             valueRange = 8f..64f,
             steps = 55,
+            enabled = !state.isGenerating,
             colors =
                 SliderDefaults.colors(
                     thumbColor = MaterialTheme.colorScheme.primary,
@@ -77,24 +99,28 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
             label = stringResource(R.string.uppercase),
             checked = state.includeUppercase,
             onCheckedChange = { viewModel.toggleUppercase() },
+            enabled = !state.isGenerating,
         )
         Spacer(modifier = Modifier.height(12.dp))
         SwitchOption(
             label = stringResource(R.string.lowercase),
             checked = state.includeLowercase,
             onCheckedChange = { viewModel.toggleLowercase() },
+            enabled = !state.isGenerating,
         )
         Spacer(modifier = Modifier.height(12.dp))
         SwitchOption(
             label = stringResource(R.string.numbers_label),
             checked = state.includeNumbers,
             onCheckedChange = { viewModel.toggleNumbers() },
+            enabled = !state.isGenerating,
         )
         Spacer(modifier = Modifier.height(12.dp))
         SwitchOption(
             label = stringResource(R.string.symbols),
             checked = state.includeSymbols,
             onCheckedChange = { viewModel.toggleSymbols() },
+            enabled = !state.isGenerating,
         )
 
         if (state.error != null) {
@@ -112,7 +138,10 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
 
         Spacer(modifier = Modifier.weight(1f))
 
-        if (state.password != null) {
+        val displayPw = state.displayPassword
+        val revealedChars = state.revealedChars
+
+        if (displayPw != null) {
             Surface(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(12.dp),
@@ -122,31 +151,59 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
                     modifier = Modifier.padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    Text(
-                        text = state.password ?: "",
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.bodyLarge,
-                        fontFamily = FontFamily.Monospace,
-                        modifier = Modifier.weight(1f),
-                    )
-                    IconButton(
-                        onClick = {
-                            val clipboard =
-                                context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip = ClipData.newPlainText("", state.password)
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                clip.description.extras = PersistableBundle().apply {
-                                    putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+                    if (state.isGenerating) {
+                        // Typewriter display with revealed vs scrambled
+                        val annotatedText =
+                            buildAnnotatedString {
+                                // Revealed chars in accent color
+                                withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
+                                    append(displayPw.substring(0, revealedChars.coerceAtMost(displayPw.length)))
+                                }
+                                // Remaining scrambled chars
+                                if (revealedChars < displayPw.length) {
+                                    withStyle(SpanStyle(color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f))) {
+                                        append(displayPw.substring(revealedChars))
+                                    }
+                                }
+                                // Blinking cursor
+                                withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary.copy(alpha = cursorAlpha))) {
+                                    append("\u2588")
                                 }
                             }
-                            clipboard.setPrimaryClip(clip)
-                        },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.ContentCopy,
-                            contentDescription = stringResource(R.string.copy),
-                            tint = MaterialTheme.colorScheme.primary,
+                        Text(
+                            text = annotatedText,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontFamily = FontFamily.Monospace,
+                            modifier = Modifier.weight(1f),
                         )
+                    } else {
+                        Text(
+                            text = displayPw,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            style = MaterialTheme.typography.bodyLarge,
+                            fontFamily = FontFamily.Monospace,
+                            modifier = Modifier.weight(1f),
+                        )
+                        IconButton(
+                            onClick = {
+                                val clipboard =
+                                    context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                val clip = ClipData.newPlainText("", state.password)
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                    clip.description.extras =
+                                        PersistableBundle().apply {
+                                            putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+                                        }
+                                }
+                                clipboard.setPrimaryClip(clip)
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.ContentCopy,
+                                contentDescription = stringResource(R.string.copy),
+                                tint = MaterialTheme.colorScheme.primary,
+                            )
+                        }
                     }
                 }
             }
@@ -155,6 +212,7 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
 
         Button(
             onClick = { viewModel.generate() },
+            enabled = !state.isGenerating,
             modifier =
                 Modifier
                     .fillMaxWidth()
@@ -179,6 +237,7 @@ private fun SwitchOption(
     label: String,
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -193,6 +252,7 @@ private fun SwitchOption(
         Switch(
             checked = checked,
             onCheckedChange = onCheckedChange,
+            enabled = enabled,
             colors =
                 SwitchDefaults.colors(
                     checkedThumbColor = MaterialTheme.colorScheme.onPrimary,

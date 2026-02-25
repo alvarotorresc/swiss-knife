@@ -5,9 +5,13 @@ import com.alvarotc.swissknife.viewmodel.FortuneWheelViewModel
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 
 class FortuneWheelViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun `initial state is empty`() {
         val vm = FortuneWheelViewModel()

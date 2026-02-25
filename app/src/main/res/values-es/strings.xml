@@ -25,6 +25,7 @@
     <string name="tap_to_flip">Toca para lanzar</string>
     <string name="flips">Lanzamientos</string>
     <string name="flip">Lanzar</string>
+    <string name="flipping">Lanzando…</string>
     <string name="reset">Reiniciar</string>
 
     <!-- Dice Roll -->
@@ -60,6 +61,7 @@
     <string name="item">Elemento</string>
     <string name="items_count">%d elementos</string>
     <string name="pick">Elegir</string>
+    <string name="picking">Eligiendo…</string>
     <string name="picked">Elegido:</string>
     <string name="new_pick">Nueva Elección</string>
     <string name="error_item_already_added">Elemento ya añadido</string>

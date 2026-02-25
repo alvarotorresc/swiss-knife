@@ -18,11 +18,14 @@ enum class DiceType(val sides: Int, val label: String) {
     D20(20, "D20"),
 }
 
+enum class DiceAnimPhase { IDLE, SHAKING, THROWING, LANDING }
+
 data class DiceRollUiState(
     val diceType: DiceType = DiceType.D6,
     val diceCount: Int = 1,
     val results: List<Int> = emptyList(),
     val isRolling: Boolean = false,
+    val animPhase: DiceAnimPhase = DiceAnimPhase.IDLE,
 )
 
 class DiceRollViewModel : ViewModel() {
@@ -44,15 +47,29 @@ class DiceRollViewModel : ViewModel() {
         viewModelScope.launch {
             val count = _uiState.value.diceCount
             val sides = _uiState.value.diceType.sides
-            // Rapid random cycle animation
+
+            // Phase 1: Shake — rapid random values, short intervals
+            _uiState.update { it.copy(animPhase = DiceAnimPhase.SHAKING) }
             repeat(8) {
+                val tempResults = List(count) { (1..sides).random() }
+                _uiState.update { it.copy(results = tempResults) }
+                delay(40L)
+            }
+
+            // Phase 2: Throw — dice go up
+            _uiState.update { it.copy(animPhase = DiceAnimPhase.THROWING) }
+            repeat(5) {
                 val tempResults = List(count) { (1..sides).random() }
                 _uiState.update { it.copy(results = tempResults) }
                 delay(60L)
             }
-            // Final result
+
+            // Phase 3: Land — final result with bounce
             val finalResults = List(count) { (1..sides).random() }
-            _uiState.update { it.copy(results = finalResults, isRolling = false) }
+            _uiState.update { it.copy(animPhase = DiceAnimPhase.LANDING, results = finalResults) }
+            delay(500L)
+
+            _uiState.update { it.copy(isRolling = false, animPhase = DiceAnimPhase.IDLE) }
         }
     }
 }

@@ -1,10 +1,13 @@
 package com.alvarotc.swissknife.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 sealed class RandomListError {
     data object ItemAlreadyAdded : RandomListError()
@@ -17,6 +20,8 @@ data class RandomListUiState(
     val items: List<String> = emptyList(),
     val result: String? = null,
     val error: RandomListError? = null,
+    val isPicking: Boolean = false,
+    val highlightedIndex: Int = -1,
 )
 
 class RandomListViewModel : ViewModel() {
@@ -62,8 +67,37 @@ class RandomListViewModel : ViewModel() {
             _uiState.update { it.copy(error = RandomListError.NeedMoreItems) }
             return
         }
+
         val picked = items.random()
-        _uiState.update { it.copy(result = picked, error = null) }
+        val pickedIndex = items.indexOf(picked)
+
+        _uiState.update { it.copy(isPicking = true, error = null) }
+
+        viewModelScope.launch {
+            // Fast cycling through items
+            var currentIndex = 0
+            val totalCycles = items.size * 3 + pickedIndex
+            var delayMs = 50L
+
+            for (i in 0 until totalCycles) {
+                currentIndex = i % items.size
+                _uiState.update { it.copy(highlightedIndex = currentIndex) }
+                delay(delayMs)
+                // Decelerate in the last cycle
+                if (i > totalCycles - items.size) {
+                    delayMs += 30L
+                }
+            }
+
+            // Land on the picked item
+            _uiState.update {
+                it.copy(
+                    highlightedIndex = pickedIndex,
+                    result = picked,
+                    isPicking = false,
+                )
+            }
+        }
     }
 
     fun reset() {

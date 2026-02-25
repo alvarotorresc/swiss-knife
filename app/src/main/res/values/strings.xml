@@ -25,6 +25,7 @@
     <string name="tap_to_flip">Tap to flip</string>
     <string name="flips">Flips</string>
     <string name="flip">Flip</string>
+    <string name="flipping">Flipping…</string>
     <string name="reset">Reset</string>
 
     <!-- Dice Roll -->
@@ -60,6 +61,7 @@
     <string name="item">Item</string>
     <string name="items_count">%d items</string>
     <string name="pick">Pick</string>
+    <string name="picking">Picking…</string>
     <string name="picked">Picked:</string>
     <string name="new_pick">New Pick</string>
     <string name="error_item_already_added">Item already added</string>

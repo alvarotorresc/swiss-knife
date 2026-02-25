@@ -2,7 +2,12 @@ package com.alvarotc.swissknife.ui.screens
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +20,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Close
@@ -36,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -81,6 +89,8 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                 modifier = Modifier.weight(1f),
                 shape = RoundedCornerShape(12.dp),
                 colors = textFieldColors,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { viewModel.addParticipant() }),
             )
             Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = { viewModel.addParticipant() }) {
@@ -152,7 +162,29 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                 itemsIndexed(state.assignments) { index, assignment ->
                     AnimatedVisibility(
                         visible = index < state.revealedCount,
-                        enter = fadeIn(),
+                        enter =
+                            slideInHorizontally(
+                                initialOffsetX = { fullWidth -> fullWidth * 2 },
+                                animationSpec =
+                                    spring(
+                                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                                        stiffness = Spring.StiffnessMediumLow,
+                                    ),
+                            ) +
+                                scaleIn(
+                                    initialScale = 0.6f,
+                                    animationSpec =
+                                        spring(
+                                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                                            stiffness = Spring.StiffnessMediumLow,
+                                        ),
+                                ) +
+                                fadeIn(
+                                    animationSpec =
+                                        tween(
+                                            durationMillis = 200,
+                                        ),
+                                ),
                     ) {
                         Surface(
                             color = AccentSantaContainer,

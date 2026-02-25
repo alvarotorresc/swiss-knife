@@ -2,13 +2,21 @@ package com.alvarotc.swissknife
 
 import com.alvarotc.swissknife.viewmodel.RandomListError
 import com.alvarotc.swissknife.viewmodel.RandomListViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class RandomListViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun `initial state is empty`() {
         val vm = RandomListViewModel()
@@ -77,17 +85,19 @@ class RandomListViewModelTest {
     }
 
     @Test
-    fun `pick selects an item from the list`() {
-        val vm = RandomListViewModel()
-        vm.setItemInput("Apple")
-        vm.addItem()
-        vm.setItemInput("Banana")
-        vm.addItem()
-        vm.pick()
-        val result = vm.uiState.value.result
-        assertNotNull(result)
-        assertTrue(result in listOf("Apple", "Banana"))
-    }
+    fun `pick selects an item from the list`() =
+        runTest {
+            val vm = RandomListViewModel()
+            vm.setItemInput("Apple")
+            vm.addItem()
+            vm.setItemInput("Banana")
+            vm.addItem()
+            vm.pick()
+            advanceUntilIdle()
+            val result = vm.uiState.value.result
+            assertNotNull(result)
+            assertTrue(result in listOf("Apple", "Banana"))
+        }
 
     @Test
     fun `reset clears all state`() {
@@ -96,7 +106,6 @@ class RandomListViewModelTest {
         vm.addItem()
         vm.setItemInput("Banana")
         vm.addItem()
-        vm.pick()
         vm.reset()
         val state = vm.uiState.value
         assertTrue(state.items.isEmpty())

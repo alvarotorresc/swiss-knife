@@ -1,11 +1,14 @@
 package com.alvarotc.swissknife.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.security.SecureRandom
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.security.SecureRandom
 
 sealed class PasswordError {
     data object NoCharacterTypeSelected : PasswordError()
@@ -18,6 +21,9 @@ data class PasswordGeneratorUiState(
     val includeNumbers: Boolean = true,
     val includeSymbols: Boolean = false,
     val password: String? = null,
+    val displayPassword: String? = null,
+    val revealedChars: Int = 0,
+    val isGenerating: Boolean = false,
     val error: PasswordError? = null,
 )
 
@@ -71,6 +77,56 @@ class PasswordGeneratorViewModel : ViewModel() {
                 .map { charset[secureRandom.nextInt(charset.length)] }
                 .joinToString("")
 
-        _uiState.update { it.copy(password = password, error = null) }
+        _uiState.update {
+            it.copy(
+                password = password,
+                displayPassword = "",
+                revealedChars = 0,
+                isGenerating = true,
+                error = null,
+            )
+        }
+
+        viewModelScope.launch {
+            // Typewriter reveal character by character
+            for (i in 1..password.length) {
+                // Before revealing the real char, show random chars cycling
+                repeat(2) {
+                    val revealed = password.substring(0, i - 1)
+                    val randomChar = charset[secureRandom.nextInt(charset.length)]
+                    val remaining =
+                        buildString {
+                            repeat(password.length - i) { append(charset[secureRandom.nextInt(charset.length)]) }
+                        }
+                    _uiState.update {
+                        it.copy(
+                            displayPassword = revealed + randomChar + remaining,
+                            revealedChars = i - 1,
+                        )
+                    }
+                    delay(20L)
+                }
+                // Lock the real character
+                _uiState.update {
+                    it.copy(
+                        displayPassword =
+                            password.substring(0, i) +
+                                buildString {
+                                    repeat(password.length - i) { append(charset[secureRandom.nextInt(charset.length)]) }
+                                },
+                        revealedChars = i,
+                    )
+                }
+                delay(30L)
+            }
+
+            _uiState.update {
+                it.copy(
+                    displayPassword = password,
+                    revealedChars = password.length,
+                    isGenerating = false,
+                )
+            }
+        }
     }
 }
