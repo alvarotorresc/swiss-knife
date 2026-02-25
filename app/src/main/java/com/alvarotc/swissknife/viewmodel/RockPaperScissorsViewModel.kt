@@ -10,12 +10,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 enum class RPSChoice(val emoji: String) {
-    ROCK("🪨"),
-    PAPER("📄"),
-    SCISSORS("✂️"),
+    ROCK("✊"),
+    PAPER("✋"),
+    SCISSORS("✌️"),
 }
 
 enum class RPSResult { WIN, LOSE, DRAW }
+
+enum class RPSMode { CPU, LOCAL }
 
 data class RPSScore(
     val wins: Int = 0,
@@ -24,10 +26,12 @@ data class RPSScore(
 )
 
 data class RPSUiState(
+    val mode: RPSMode = RPSMode.CPU,
     val playerChoice: RPSChoice? = null,
-    val cpuChoice: RPSChoice? = null,
+    val opponentChoice: RPSChoice? = null,
     val result: RPSResult? = null,
     val isRevealing: Boolean = false,
+    val isWaitingForP2: Boolean = false,
     val score: RPSScore = RPSScore(),
 )
 
@@ -35,10 +39,42 @@ class RockPaperScissorsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(RPSUiState())
     val uiState: StateFlow<RPSUiState> = _uiState.asStateFlow()
 
-    fun play(choice: RPSChoice) {
-        if (_uiState.value.isRevealing) return
+    fun setMode(mode: RPSMode) {
+        _uiState.update {
+            RPSUiState(mode = mode)
+        }
+    }
 
-        _uiState.update { it.copy(playerChoice = choice, cpuChoice = null, result = null, isRevealing = true) }
+    fun play(choice: RPSChoice) {
+        val state = _uiState.value
+        if (state.isRevealing || state.isWaitingForP2) return
+
+        when (state.mode) {
+            RPSMode.CPU -> playCpu(choice)
+            RPSMode.LOCAL -> playLocal(choice)
+        }
+    }
+
+    fun confirmHandoff() {
+        _uiState.update { it.copy(isWaitingForP2 = false) }
+    }
+
+    fun reset() {
+        _uiState.update {
+            it.copy(
+                playerChoice = null,
+                opponentChoice = null,
+                result = null,
+                isRevealing = false,
+                isWaitingForP2 = false,
+            )
+        }
+    }
+
+    private fun playCpu(choice: RPSChoice) {
+        _uiState.update {
+            it.copy(playerChoice = choice, opponentChoice = null, result = null, isRevealing = true)
+        }
 
         viewModelScope.launch {
             delay(800L)
@@ -48,33 +84,64 @@ class RockPaperScissorsViewModel : ViewModel() {
 
             _uiState.update { state ->
                 state.copy(
-                    cpuChoice = cpuChoice,
+                    opponentChoice = cpuChoice,
                     result = result,
                     isRevealing = false,
-                    score =
-                        when (result) {
-                            RPSResult.WIN -> state.score.copy(wins = state.score.wins + 1)
-                            RPSResult.LOSE -> state.score.copy(losses = state.score.losses + 1)
-                            RPSResult.DRAW -> state.score.copy(draws = state.score.draws + 1)
-                        },
+                    score = updateScore(state.score, result),
                 )
             }
         }
     }
 
-    fun reset() {
-        _uiState.update { it.copy(playerChoice = null, cpuChoice = null, result = null, isRevealing = false) }
+    private fun playLocal(choice: RPSChoice) {
+        val state = _uiState.value
+
+        if (state.playerChoice == null) {
+            _uiState.update {
+                it.copy(playerChoice = choice, isWaitingForP2 = true)
+            }
+        } else {
+            val p1Choice = state.playerChoice
+            _uiState.update {
+                it.copy(opponentChoice = null, isRevealing = true, isWaitingForP2 = false)
+            }
+
+            viewModelScope.launch {
+                delay(800L)
+
+                val result = determineResult(p1Choice, choice)
+
+                _uiState.update { s ->
+                    s.copy(
+                        opponentChoice = choice,
+                        result = result,
+                        isRevealing = false,
+                        score = updateScore(s.score, result),
+                    )
+                }
+            }
+        }
     }
 
-    private fun determineResult(
+    private fun updateScore(
+        score: RPSScore,
+        result: RPSResult,
+    ): RPSScore =
+        when (result) {
+            RPSResult.WIN -> score.copy(wins = score.wins + 1)
+            RPSResult.LOSE -> score.copy(losses = score.losses + 1)
+            RPSResult.DRAW -> score.copy(draws = score.draws + 1)
+        }
+
+    internal fun determineResult(
         player: RPSChoice,
-        cpu: RPSChoice,
+        opponent: RPSChoice,
     ): RPSResult =
         when {
-            player == cpu -> RPSResult.DRAW
-            player == RPSChoice.ROCK && cpu == RPSChoice.SCISSORS -> RPSResult.WIN
-            player == RPSChoice.PAPER && cpu == RPSChoice.ROCK -> RPSResult.WIN
-            player == RPSChoice.SCISSORS && cpu == RPSChoice.PAPER -> RPSResult.WIN
+            player == opponent -> RPSResult.DRAW
+            player == RPSChoice.ROCK && opponent == RPSChoice.SCISSORS -> RPSResult.WIN
+            player == RPSChoice.PAPER && opponent == RPSChoice.ROCK -> RPSResult.WIN
+            player == RPSChoice.SCISSORS && opponent == RPSChoice.PAPER -> RPSResult.WIN
             else -> RPSResult.LOSE
         }
 }

@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +41,7 @@ import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentRPS
 import com.alvarotc.swissknife.ui.theme.AccentRPSContainer
 import com.alvarotc.swissknife.viewmodel.RPSChoice
+import com.alvarotc.swissknife.viewmodel.RPSMode
 import com.alvarotc.swissknife.viewmodel.RPSResult
 import com.alvarotc.swissknife.viewmodel.RockPaperScissorsViewModel
 import kotlinx.coroutines.delay
@@ -55,112 +58,207 @@ fun RockPaperScissorsScreen(viewModel: RockPaperScissorsViewModel = viewModel())
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+        // Mode selector chips
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            RPSMode.entries.forEach { mode ->
+                FilterChip(
+                    selected = state.mode == mode,
+                    onClick = { viewModel.setMode(mode) },
+                    label = {
+                        Text(
+                            when (mode) {
+                                RPSMode.CPU -> stringResource(R.string.vs_cpu)
+                                RPSMode.LOCAL -> stringResource(R.string.vs_friend)
+                            },
+                        )
+                    },
+                    enabled = state.playerChoice == null && !state.isRevealing,
+                    colors =
+                        FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = AccentRPSContainer,
+                            selectedLabelColor = AccentRPS,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        ),
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
         // Score bar
         ScoreBar(
             wins = state.score.wins,
             draws = state.score.draws,
             losses = state.score.losses,
+            isLocal = state.mode == RPSMode.LOCAL,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Center area: player vs CPU
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            // Player choice
-            ChoiceDisplay(
-                emoji = state.playerChoice?.emoji ?: "?",
-                isShaking = false,
-                modifier = Modifier.size(100.dp),
-            )
+        if (state.isWaitingForP2) {
+            // Handoff screen
+            HandoffScreen(onReady = { viewModel.confirmHandoff() })
+        } else {
+            // Center area: player vs opponent
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                // Player 1 choice — hidden in LOCAL mode until result
+                val p1Emoji =
+                    if (state.mode == RPSMode.LOCAL && state.result == null) {
+                        "?"
+                    } else {
+                        state.playerChoice?.emoji ?: "?"
+                    }
+                ChoiceDisplay(
+                    emoji = p1Emoji,
+                    isShaking = state.mode == RPSMode.LOCAL && state.isRevealing,
+                    modifier = Modifier.size(100.dp),
+                )
 
+                Text(
+                    text = stringResource(R.string.vs),
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+
+                // Opponent choice — shakes during reveal
+                ChoiceDisplay(
+                    emoji =
+                        if (state.isRevealing || state.opponentChoice == null) {
+                            "?"
+                        } else {
+                            state.opponentChoice!!.emoji
+                        },
+                    isShaking = state.isRevealing,
+                    modifier = Modifier.size(100.dp),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Result text with bounce animation
+            ResultText(result = state.result, mode = state.mode)
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            // Play Again button after result
+            val showPlayAgain = state.result != null
+            Button(
+                onClick = { viewModel.reset() },
+                enabled = showPlayAgain,
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(56.dp)
+                        .graphicsLayer { alpha = if (showPlayAgain) 1f else 0f },
+                shape = RoundedCornerShape(12.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = AccentRPSContainer,
+                    ),
+            ) {
+                Text(
+                    text = stringResource(R.string.play_again),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = AccentRPS,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // Prompt text when idle
+            val showPrompt = state.playerChoice == null && !state.isRevealing
             Text(
-                text = stringResource(R.string.vs),
-                style = MaterialTheme.typography.headlineMedium,
+                text =
+                    if (state.mode == RPSMode.LOCAL) {
+                        stringResource(R.string.player_1_turn)
+                    } else {
+                        stringResource(R.string.choose_your_move)
+                    },
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier =
+                    Modifier
+                        .padding(bottom = 12.dp)
+                        .graphicsLayer { alpha = if (showPrompt) 1f else 0f },
             )
 
-            // CPU choice — shakes during reveal
-            ChoiceDisplay(
-                emoji = if (state.isRevealing || state.cpuChoice == null) "?" else state.cpuChoice!!.emoji,
-                isShaking = state.isRevealing,
-                modifier = Modifier.size(100.dp),
-            )
-        }
+            // Choice buttons
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+            ) {
+                RPSChoice.entries.forEach { choice ->
+                    ChoiceButton(
+                        choice = choice,
+                        enabled = !state.isRevealing && !state.isWaitingForP2 && state.result == null,
+                        isSelected = state.mode == RPSMode.CPU && state.playerChoice == choice && state.result == null,
+                        onClick = { viewModel.play(choice) },
+                    )
+                }
+            }
 
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Result text with bounce animation
-        ResultText(result = state.result)
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        // Play Again button after result — always rendered to avoid layout shift
-        val showPlayAgain = state.result != null
-        Button(
-            onClick = { viewModel.reset() },
-            enabled = showPlayAgain,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .height(56.dp)
-                    .graphicsLayer { alpha = if (showPlayAgain) 1f else 0f },
-            shape = RoundedCornerShape(12.dp),
-            colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = AccentRPSContainer,
-                ),
-        ) {
-            Text(
-                text = stringResource(R.string.play_again),
-                style = MaterialTheme.typography.labelLarge,
-                color = AccentRPS,
-            )
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-
-        // Prompt text when idle — always rendered to avoid layout shift
-        val showPrompt = state.playerChoice == null && !state.isRevealing
-        Text(
-            text = stringResource(R.string.choose_your_move),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier =
-                Modifier
-                    .padding(bottom = 12.dp)
-                    .graphicsLayer { alpha = if (showPrompt) 1f else 0f },
-        )
-
-        // Choice buttons
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly,
-        ) {
-            RPSChoice.entries.forEach { choice ->
-                ChoiceButton(
-                    choice = choice,
-                    enabled = !state.isRevealing,
-                    isSelected = state.playerChoice == choice && state.result == null,
-                    onClick = { viewModel.play(choice) },
+            // Reset score button
+            val showReset = state.score.wins + state.score.losses + state.score.draws > 0
+            TextButton(
+                onClick = { viewModel.reset() },
+                enabled = showReset,
+                modifier = Modifier.graphicsLayer { alpha = if (showReset) 1f else 0f },
+            ) {
+                Text(
+                    text = stringResource(R.string.reset),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
+    }
+}
 
-        // Reset score button
-        val showReset = state.score.wins + state.score.losses + state.score.draws > 0
-        TextButton(
-            onClick = { viewModel.reset() },
-            enabled = showReset,
-            modifier = Modifier.graphicsLayer { alpha = if (showReset) 1f else 0f },
+@Composable
+private fun HandoffScreen(onReady: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.pass_phone),
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(
+            onClick = onReady,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp),
+            shape = RoundedCornerShape(12.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = AccentRPS,
+                ),
         ) {
             Text(
-                text = stringResource(R.string.reset),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                text = stringResource(R.string.ready),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.surface,
             )
         }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Text(
+            text = stringResource(R.string.player_2_turn),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 
@@ -169,6 +267,7 @@ private fun ScoreBar(
     wins: Int,
     draws: Int,
     losses: Int,
+    isLocal: Boolean,
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -182,9 +281,17 @@ private fun ScoreBar(
                     .padding(vertical = 12.dp, horizontal = 16.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            ScoreItem(label = "W", value = wins, color = AccentRPS)
+            ScoreItem(
+                label = if (isLocal) stringResource(R.string.player_1) else "W",
+                value = wins,
+                color = AccentRPS,
+            )
             ScoreItem(label = "D", value = draws, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            ScoreItem(label = "L", value = losses, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            ScoreItem(
+                label = if (isLocal) stringResource(R.string.player_2) else "L",
+                value = losses,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
@@ -252,7 +359,10 @@ private fun ChoiceDisplay(
 }
 
 @Composable
-private fun ResultText(result: RPSResult?) {
+private fun ResultText(
+    result: RPSResult?,
+    mode: RPSMode,
+) {
     val scale = remember { Animatable(0f) }
 
     LaunchedEffect(result) {
@@ -287,10 +397,17 @@ private fun ResultText(result: RPSResult?) {
     ) {
         if (result != null) {
             val (text, color) =
-                when (result) {
-                    RPSResult.WIN -> stringResource(R.string.you_win) to AccentRPS
-                    RPSResult.LOSE -> stringResource(R.string.you_lose) to MaterialTheme.colorScheme.onSurfaceVariant
-                    RPSResult.DRAW -> stringResource(R.string.draw_result) to MaterialTheme.colorScheme.onSurfaceVariant
+                when {
+                    result == RPSResult.DRAW ->
+                        stringResource(R.string.draw_result) to MaterialTheme.colorScheme.onSurfaceVariant
+                    mode == RPSMode.LOCAL && result == RPSResult.WIN ->
+                        stringResource(R.string.player_1_wins) to AccentRPS
+                    mode == RPSMode.LOCAL && result == RPSResult.LOSE ->
+                        stringResource(R.string.player_2_wins) to AccentRPS
+                    result == RPSResult.WIN ->
+                        stringResource(R.string.you_win) to AccentRPS
+                    else ->
+                        stringResource(R.string.you_lose) to MaterialTheme.colorScheme.onSurfaceVariant
                 }
             Text(
                 text = text,
