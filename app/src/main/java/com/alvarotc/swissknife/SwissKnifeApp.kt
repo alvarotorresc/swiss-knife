@@ -26,16 +26,21 @@ import androidx.navigation.compose.rememberNavController
 import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
+import com.alvarotc.swissknife.ui.screens.EightBallScreen
 import com.alvarotc.swissknife.ui.screens.FingerPickerScreen
 import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
 import com.alvarotc.swissknife.ui.screens.GroupGeneratorScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
+import com.alvarotc.swissknife.ui.screens.LotteryScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
+import com.alvarotc.swissknife.ui.screens.RandomColorScreen
 import com.alvarotc.swissknife.ui.screens.RandomListScreen
 import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
+import com.alvarotc.swissknife.ui.screens.RockPaperScissorsScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
+import com.alvarotc.swissknife.ui.screens.TeamNameScreen
 import com.alvarotc.swissknife.ui.screens.TimerScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,6 +63,11 @@ fun SwissKnifeApp() {
             NavRoutes.FingerPicker.route -> stringResource(R.string.tool_finger_picker)
             NavRoutes.Timer.route -> stringResource(R.string.tool_timer)
             NavRoutes.GroupGenerator.route -> stringResource(R.string.tool_group_generator)
+            NavRoutes.RockPaperScissors.route -> stringResource(R.string.tool_rock_paper_scissors)
+            NavRoutes.Lottery.route -> stringResource(R.string.tool_lottery)
+            NavRoutes.EightBall.route -> stringResource(R.string.tool_eight_ball)
+            NavRoutes.RandomColor.route -> stringResource(R.string.tool_random_color)
+            NavRoutes.TeamNameGenerator.route -> stringResource(R.string.tool_team_name)
             else -> stringResource(R.string.app_name)
         }
 
@@ -161,6 +171,21 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.GroupGenerator.route) {
                 GroupGeneratorScreen()
+            }
+            composable(NavRoutes.RockPaperScissors.route) {
+                RockPaperScissorsScreen()
+            }
+            composable(NavRoutes.Lottery.route) {
+                LotteryScreen()
+            }
+            composable(NavRoutes.EightBall.route) {
+                EightBallScreen()
+            }
+            composable(NavRoutes.RandomColor.route) {
+                RandomColorScreen()
+            }
+            composable(NavRoutes.TeamNameGenerator.route) {
+                TeamNameScreen()
             }
         }
     }

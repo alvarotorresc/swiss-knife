@@ -1,0 +1,326 @@
+package com.alvarotc.swissknife.ui.screens
+
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.alvarotc.swissknife.R
+import com.alvarotc.swissknife.ui.theme.AccentRPS
+import com.alvarotc.swissknife.ui.theme.AccentRPSContainer
+import com.alvarotc.swissknife.viewmodel.RPSChoice
+import com.alvarotc.swissknife.viewmodel.RPSResult
+import com.alvarotc.swissknife.viewmodel.RockPaperScissorsViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+
+@Composable
+fun RockPaperScissorsScreen(viewModel: RockPaperScissorsViewModel = viewModel()) {
+    val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    Column(
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        // Score bar
+        ScoreBar(
+            wins = state.score.wins,
+            draws = state.score.draws,
+            losses = state.score.losses,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Center area: player vs CPU
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Player choice
+            ChoiceDisplay(
+                emoji = state.playerChoice?.emoji ?: "?",
+                isShaking = false,
+                modifier = Modifier.size(100.dp),
+            )
+
+            Text(
+                text = stringResource(R.string.vs),
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            // CPU choice — shakes during reveal
+            ChoiceDisplay(
+                emoji = if (state.isRevealing || state.cpuChoice == null) "?" else state.cpuChoice!!.emoji,
+                isShaking = state.isRevealing,
+                modifier = Modifier.size(100.dp),
+            )
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Result text with bounce animation
+        ResultText(result = state.result)
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        // Play Again button after result
+        if (state.result != null) {
+            Button(
+                onClick = { viewModel.reset() },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                shape = RoundedCornerShape(12.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = AccentRPSContainer,
+                    ),
+            ) {
+                Text(
+                    text = stringResource(R.string.play_again),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = AccentRPS,
+                )
+            }
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        // Prompt text when idle
+        if (state.playerChoice == null && !state.isRevealing) {
+            Text(
+                text = stringResource(R.string.choose_your_move),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 12.dp),
+            )
+        }
+
+        // Choice buttons
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            RPSChoice.entries.forEach { choice ->
+                ChoiceButton(
+                    choice = choice,
+                    enabled = !state.isRevealing,
+                    isSelected = state.playerChoice == choice && state.result == null,
+                    onClick = { viewModel.play(choice) },
+                )
+            }
+        }
+
+        // Reset score button
+        val showReset = state.score.wins + state.score.losses + state.score.draws > 0
+        TextButton(
+            onClick = { viewModel.reset() },
+            enabled = showReset,
+            modifier = Modifier.graphicsLayer { alpha = if (showReset) 1f else 0f },
+        ) {
+            Text(
+                text = stringResource(R.string.reset),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ScoreBar(
+    wins: Int,
+    draws: Int,
+    losses: Int,
+) {
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(12.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+    ) {
+        Row(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 12.dp, horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+        ) {
+            ScoreItem(label = "W", value = wins, color = AccentRPS)
+            ScoreItem(label = "D", value = draws, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            ScoreItem(label = "L", value = losses, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun ScoreItem(
+    label: String,
+    value: Int,
+    color: androidx.compose.ui.graphics.Color,
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = value.toString(),
+            style = MaterialTheme.typography.titleLarge,
+            color = color,
+        )
+        Text(
+            text = label,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+@Composable
+private fun ChoiceDisplay(
+    emoji: String,
+    isShaking: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    var shakeX by remember { mutableFloatStateOf(0f) }
+    var shakeY by remember { mutableFloatStateOf(0f) }
+    var shakeRot by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(isShaking) {
+        if (isShaking) {
+            while (isActive) {
+                shakeX = (Math.random().toFloat() - 0.5f) * 24f
+                shakeY = (Math.random().toFloat() - 0.5f) * 16f
+                shakeRot = (Math.random().toFloat() - 0.5f) * 20f
+                delay(30L)
+            }
+        } else {
+            shakeX = 0f
+            shakeY = 0f
+            shakeRot = 0f
+        }
+    }
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier =
+            modifier.graphicsLayer {
+                translationX = if (isShaking) shakeX else 0f
+                translationY = if (isShaking) shakeY else 0f
+                rotationZ = if (isShaking) shakeRot else 0f
+            },
+    ) {
+        Text(
+            text = emoji,
+            style = MaterialTheme.typography.displayMedium,
+            textAlign = TextAlign.Center,
+        )
+    }
+}
+
+@Composable
+private fun ResultText(result: RPSResult?) {
+    val scale = remember { Animatable(0f) }
+
+    LaunchedEffect(result) {
+        if (result != null) {
+            scale.snapTo(0f)
+            scale.animateTo(
+                targetValue = 1.15f,
+                animationSpec = tween(durationMillis = 120),
+            )
+            scale.animateTo(
+                targetValue = 1f,
+                animationSpec =
+                    spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessMedium,
+                    ),
+            )
+        } else {
+            scale.snapTo(0f)
+        }
+    }
+
+    Box(
+        modifier =
+            Modifier
+                .height(48.dp)
+                .graphicsLayer {
+                    scaleX = scale.value
+                    scaleY = scale.value
+                },
+        contentAlignment = Alignment.Center,
+    ) {
+        if (result != null) {
+            val (text, color) =
+                when (result) {
+                    RPSResult.WIN -> stringResource(R.string.you_win) to AccentRPS
+                    RPSResult.LOSE -> stringResource(R.string.you_lose) to MaterialTheme.colorScheme.onSurfaceVariant
+                    RPSResult.DRAW -> stringResource(R.string.draw_result) to MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            Text(
+                text = text,
+                style = MaterialTheme.typography.headlineSmall,
+                color = color,
+                textAlign = TextAlign.Center,
+            )
+        }
+    }
+}
+
+@Composable
+private fun ChoiceButton(
+    choice: RPSChoice,
+    enabled: Boolean,
+    isSelected: Boolean,
+    onClick: () -> Unit,
+) {
+    Button(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier.size(80.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = if (isSelected) AccentRPSContainer else MaterialTheme.colorScheme.surfaceVariant,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+            ),
+    ) {
+        Text(
+            text = choice.emoji,
+            style = MaterialTheme.typography.headlineSmall,
+            textAlign = TextAlign.Center,
+        )
+    }
+}

@@ -11,11 +11,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Casino
+import androidx.compose.material.icons.outlined.Circle
+import androidx.compose.material.icons.outlined.ConfirmationNumber
 import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.FrontHand
 import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material.icons.outlined.Label
 import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.Palette
+import androidx.compose.material.icons.outlined.Psychology
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Toll
 import androidx.compose.runtime.Composable
@@ -27,13 +32,18 @@ import com.alvarotc.swissknife.model.ToolItem
 import com.alvarotc.swissknife.navigation.NavRoutes
 import com.alvarotc.swissknife.ui.components.ToolCard
 import com.alvarotc.swissknife.ui.theme.AccentCoin
+import com.alvarotc.swissknife.ui.theme.AccentColor
 import com.alvarotc.swissknife.ui.theme.AccentDice
+import com.alvarotc.swissknife.ui.theme.AccentEightBall
 import com.alvarotc.swissknife.ui.theme.AccentFinger
 import com.alvarotc.swissknife.ui.theme.AccentGroups
 import com.alvarotc.swissknife.ui.theme.AccentList
+import com.alvarotc.swissknife.ui.theme.AccentLottery
 import com.alvarotc.swissknife.ui.theme.AccentPassword
+import com.alvarotc.swissknife.ui.theme.AccentRPS
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
+import com.alvarotc.swissknife.ui.theme.AccentTeamName
 import com.alvarotc.swissknife.ui.theme.AccentTimer
 import com.alvarotc.swissknife.ui.theme.AccentWheel
 
@@ -100,6 +110,36 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Outlined.Groups,
                 accentColor = AccentGroups,
                 route = NavRoutes.GroupGenerator.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_rock_paper_scissors,
+                icon = Icons.Outlined.Circle,
+                accentColor = AccentRPS,
+                route = NavRoutes.RockPaperScissors.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_lottery,
+                icon = Icons.Outlined.ConfirmationNumber,
+                accentColor = AccentLottery,
+                route = NavRoutes.Lottery.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_eight_ball,
+                icon = Icons.Outlined.Psychology,
+                accentColor = AccentEightBall,
+                route = NavRoutes.EightBall.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_random_color,
+                icon = Icons.Outlined.Palette,
+                accentColor = AccentColor,
+                route = NavRoutes.RandomColor.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_team_name,
+                icon = Icons.Outlined.Label,
+                accentColor = AccentTeamName,
+                route = NavRoutes.TeamNameGenerator.route,
             ),
         )
 
