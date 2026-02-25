@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -130,26 +131,29 @@ fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
             }
         }
 
-        if (state.mode == TimerMode.COUNTDOWN && !state.isRunning && !state.isFinished) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                CounterControl(
-                    label = stringResource(R.string.timer_minutes),
-                    value = state.countdownMinutes,
-                    onIncrement = { viewModel.setCountdownMinutes(state.countdownMinutes + 1) },
-                    onDecrement = { viewModel.setCountdownMinutes(state.countdownMinutes - 1) },
-                )
-                Spacer(modifier = Modifier.width(24.dp))
-                CounterControl(
-                    label = stringResource(R.string.timer_seconds),
-                    value = state.countdownSeconds,
-                    onIncrement = { viewModel.setCountdownSeconds(state.countdownSeconds + 1) },
-                    onDecrement = { viewModel.setCountdownSeconds(state.countdownSeconds - 1) },
-                )
-            }
+        val showCountdownControls =
+            state.mode == TimerMode.COUNTDOWN && !state.isRunning && !state.isFinished
+        Spacer(modifier = Modifier.height(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.graphicsLayer { alpha = if (showCountdownControls) 1f else 0f },
+        ) {
+            CounterControl(
+                label = stringResource(R.string.timer_minutes),
+                value = state.countdownMinutes,
+                enabled = showCountdownControls,
+                onIncrement = { viewModel.setCountdownMinutes(state.countdownMinutes + 1) },
+                onDecrement = { viewModel.setCountdownMinutes(state.countdownMinutes - 1) },
+            )
+            Spacer(modifier = Modifier.width(24.dp))
+            CounterControl(
+                label = stringResource(R.string.timer_seconds),
+                value = state.countdownSeconds,
+                enabled = showCountdownControls,
+                onIncrement = { viewModel.setCountdownSeconds(state.countdownSeconds + 1) },
+                onDecrement = { viewModel.setCountdownSeconds(state.countdownSeconds - 1) },
+            )
         }
 
         Spacer(modifier = Modifier.weight(1f))
@@ -190,14 +194,13 @@ fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
             )
         }
 
-        if (state.isFinished) {
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(
-                text = stringResource(R.string.timer_finished),
-                style = MaterialTheme.typography.titleLarge,
-                color = AccentTimer,
-            )
-        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = stringResource(R.string.timer_finished),
+            style = MaterialTheme.typography.titleLarge,
+            color = AccentTimer,
+            modifier = Modifier.graphicsLayer { alpha = if (state.isFinished) 1f else 0f },
+        )
 
         Spacer(modifier = Modifier.weight(1f))
 
@@ -227,15 +230,18 @@ fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
             )
         }
 
-        if (state.isRunning || state.elapsedMs > 0 || state.isFinished ||
-            state.countdownRemainingMs < state.countdownTotalMs
+        val showReset =
+            state.isRunning || state.elapsedMs > 0 || state.isFinished ||
+                state.countdownRemainingMs < state.countdownTotalMs
+        TextButton(
+            onClick = { viewModel.reset() },
+            enabled = showReset,
+            modifier = Modifier.graphicsLayer { alpha = if (showReset) 1f else 0f },
         ) {
-            TextButton(onClick = { viewModel.reset() }) {
-                Text(
-                    text = stringResource(R.string.reset),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            Text(
+                text = stringResource(R.string.reset),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
@@ -244,6 +250,7 @@ fun TimerScreen(viewModel: TimerViewModel = viewModel()) {
 private fun CounterControl(
     label: String,
     value: Int,
+    enabled: Boolean,
     onIncrement: () -> Unit,
     onDecrement: () -> Unit,
 ) {
@@ -254,7 +261,7 @@ private fun CounterControl(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onDecrement) {
+            IconButton(onClick = onDecrement, enabled = enabled) {
                 Icon(
                     imageVector = Icons.Outlined.Remove,
                     contentDescription = null,
@@ -266,7 +273,7 @@ private fun CounterControl(
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.onBackground,
             )
-            IconButton(onClick = onIncrement) {
+            IconButton(onClick = onIncrement, enabled = enabled) {
                 Icon(
                     imageVector = Icons.Outlined.Add,
                     contentDescription = null,

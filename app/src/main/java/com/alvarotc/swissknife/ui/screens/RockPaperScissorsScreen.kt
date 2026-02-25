@@ -98,38 +98,41 @@ fun RockPaperScissorsScreen(viewModel: RockPaperScissorsViewModel = viewModel())
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Play Again button after result
-        if (state.result != null) {
-            Button(
-                onClick = { viewModel.reset() },
-                modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                shape = RoundedCornerShape(12.dp),
-                colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = AccentRPSContainer,
-                    ),
-            ) {
-                Text(
-                    text = stringResource(R.string.play_again),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = AccentRPS,
-                )
-            }
-            Spacer(modifier = Modifier.height(12.dp))
-        }
-
-        // Prompt text when idle
-        if (state.playerChoice == null && !state.isRevealing) {
+        // Play Again button after result — always rendered to avoid layout shift
+        val showPlayAgain = state.result != null
+        Button(
+            onClick = { viewModel.reset() },
+            enabled = showPlayAgain,
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+                    .graphicsLayer { alpha = if (showPlayAgain) 1f else 0f },
+            shape = RoundedCornerShape(12.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = AccentRPSContainer,
+                ),
+        ) {
             Text(
-                text = stringResource(R.string.choose_your_move),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.padding(bottom = 12.dp),
+                text = stringResource(R.string.play_again),
+                style = MaterialTheme.typography.labelLarge,
+                color = AccentRPS,
             )
         }
+        Spacer(modifier = Modifier.height(12.dp))
+
+        // Prompt text when idle — always rendered to avoid layout shift
+        val showPrompt = state.playerChoice == null && !state.isRevealing
+        Text(
+            text = stringResource(R.string.choose_your_move),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier =
+                Modifier
+                    .padding(bottom = 12.dp)
+                    .graphicsLayer { alpha = if (showPrompt) 1f else 0f },
+        )
 
         // Choice buttons
         Row(
