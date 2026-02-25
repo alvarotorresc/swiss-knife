@@ -16,13 +16,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Close
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -33,20 +34,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.AccentSantaContainer
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
-import com.alvarotc.swissknife.ui.theme.DarkOutline
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.SecretSantaError
 import com.alvarotc.swissknife.viewmodel.SecretSantaViewModel
 
@@ -57,15 +52,15 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
 
     val textFieldColors =
         OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = DarkOutline,
-            focusedBorderColor = AccentSanta,
-            unfocusedLabelColor = DarkOnSurfaceVariant,
-            focusedLabelColor = AccentSanta,
-            cursorColor = AccentSanta,
-            unfocusedTextColor = Color.White,
-            focusedTextColor = Color.White,
-            unfocusedContainerColor = DarkSurfaceVariant,
-            focusedContainerColor = DarkSurfaceVariant,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
         )
 
     Column(
@@ -74,7 +69,6 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                 .fillMaxSize()
                 .padding(24.dp),
     ) {
-        // Name input
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth(),
@@ -91,14 +85,13 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
             Spacer(modifier = Modifier.width(8.dp))
             IconButton(onClick = { viewModel.addParticipant() }) {
                 Icon(
-                    imageVector = Icons.Filled.Add,
+                    imageVector = Icons.Outlined.Add,
                     contentDescription = stringResource(R.string.add),
                     tint = AccentSanta,
                 )
             }
         }
 
-        // Error
         if (state.error != null) {
             Text(
                 text =
@@ -107,33 +100,30 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                         SecretSantaError.NeedMoreParticipants -> stringResource(R.string.error_need_more_participants)
                         null -> ""
                     },
-                color = Color(0xFFEF5350),
-                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(top = 4.dp),
             )
         }
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Participants count
         Text(
             text = stringResource(R.string.participants_count, state.participants.size),
-            color = DarkOnSurfaceVariant,
-            fontSize = 13.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodySmall,
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // Participants list or assignments
         LazyColumn(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
             if (state.assignments.isEmpty()) {
-                // Show participant list
                 itemsIndexed(state.participants) { _, name ->
                     Surface(
-                        color = DarkSurfaceVariant,
+                        color = MaterialTheme.colorScheme.surfaceVariant,
                         shape = RoundedCornerShape(12.dp),
                     ) {
                         Row(
@@ -145,21 +135,20 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                         ) {
                             Text(
                                 text = name,
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 modifier = Modifier.weight(1f),
                             )
                             IconButton(onClick = { viewModel.removeParticipant(name) }) {
                                 Icon(
-                                    imageVector = Icons.Filled.Close,
+                                    imageVector = Icons.Outlined.Close,
                                     contentDescription = stringResource(R.string.remove),
-                                    tint = DarkOnSurfaceVariant,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                                 )
                             }
                         }
                     }
                 }
             } else {
-                // Show assignments (revealed progressively)
                 itemsIndexed(state.assignments) { index, assignment ->
                     AnimatedVisibility(
                         visible = index < state.revealedCount,
@@ -178,18 +167,18 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                             ) {
                                 Text(
                                     text = assignment.giver,
-                                    color = Color.White,
-                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                    style = MaterialTheme.typography.bodyLarge,
                                 )
                                 Text(
-                                    text = "  →  ",
+                                    text = "  \u2192  ",
                                     color = AccentSanta,
-                                    fontWeight = FontWeight.Bold,
+                                    style = MaterialTheme.typography.bodyLarge,
                                 )
                                 Text(
                                     text = assignment.receiver,
                                     color = AccentSanta,
-                                    fontWeight = FontWeight.SemiBold,
+                                    style = MaterialTheme.typography.bodyLarge,
                                 )
                             }
                         }
@@ -200,7 +189,6 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Action buttons
         if (state.assignments.isEmpty()) {
             Button(
                 onClick = { viewModel.draw() },
@@ -209,14 +197,16 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                     Modifier
                         .fillMaxWidth()
                         .height(56.dp),
-                shape = RoundedCornerShape(16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = AccentSanta),
+                shape = RoundedCornerShape(12.dp),
+                colors =
+                    ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                    ),
             ) {
                 Text(
                     text = stringResource(R.string.draw),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = Color.White,
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         } else {
@@ -227,18 +217,19 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                         Modifier
                             .fillMaxWidth()
                             .height(56.dp),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = AccentSanta),
+                    shape = RoundedCornerShape(12.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        ),
                 ) {
                     Text(
                         text = stringResource(R.string.reveal_next),
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = Color.White,
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             } else {
-                // All revealed — show share + reset
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -258,15 +249,18 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                             Modifier
                                 .weight(1f)
                                 .height(56.dp),
-                        shape = RoundedCornerShape(16.dp),
+                        shape = RoundedCornerShape(12.dp),
                     ) {
                         Icon(
-                            imageVector = Icons.Filled.Share,
+                            imageVector = Icons.Outlined.Share,
                             contentDescription = stringResource(R.string.share),
-                            tint = AccentSanta,
+                            tint = MaterialTheme.colorScheme.primary,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text(stringResource(R.string.share), color = AccentSanta)
+                        Text(
+                            text = stringResource(R.string.share),
+                            color = MaterialTheme.colorScheme.primary,
+                        )
                     }
                     Button(
                         onClick = { viewModel.reset() },
@@ -274,13 +268,16 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
                             Modifier
                                 .weight(1f)
                                 .height(56.dp),
-                        shape = RoundedCornerShape(16.dp),
-                        colors = ButtonDefaults.buttonColors(containerColor = AccentSanta),
+                        shape = RoundedCornerShape(12.dp),
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.primary,
+                            ),
                     ) {
                         Text(
                             text = stringResource(R.string.new_draw),
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.White,
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
                 }
@@ -288,7 +285,10 @@ fun SecretSantaScreen(viewModel: SecretSantaViewModel = viewModel()) {
 
             if (state.revealedCount < state.assignments.size) {
                 TextButton(onClick = { viewModel.reset() }) {
-                    Text(stringResource(R.string.cancel), color = DarkOnSurfaceVariant)
+                    Text(
+                        text = stringResource(R.string.cancel),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -20,19 +21,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentRandom
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
-import com.alvarotc.swissknife.ui.theme.DarkOutline
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.RandomNumberError
 import com.alvarotc.swissknife.viewmodel.RandomNumberViewModel
 
@@ -42,15 +37,15 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
 
     val textFieldColors =
         OutlinedTextFieldDefaults.colors(
-            unfocusedBorderColor = DarkOutline,
-            focusedBorderColor = AccentRandom,
-            unfocusedLabelColor = DarkOnSurfaceVariant,
-            focusedLabelColor = AccentRandom,
-            cursorColor = AccentRandom,
-            unfocusedTextColor = Color.White,
-            focusedTextColor = Color.White,
-            unfocusedContainerColor = DarkSurfaceVariant,
-            focusedContainerColor = DarkSurfaceVariant,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+            focusedLabelColor = MaterialTheme.colorScheme.primary,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant,
         )
 
     Column(
@@ -60,7 +55,6 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Range inputs
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
@@ -88,7 +82,6 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
             )
         }
 
-        // Error
         if (state.error != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -98,38 +91,37 @@ fun RandomNumberScreen(viewModel: RandomNumberViewModel = viewModel()) {
                         RandomNumberError.MinNotLessThanMax -> stringResource(R.string.error_min_less_than_max)
                         null -> ""
                     },
-                color = Color(0xFFEF5350),
-                fontSize = 13.sp,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Result
         Text(
-            text = state.result?.toString() ?: "—",
-            fontSize = 72.sp,
-            fontWeight = FontWeight.Bold,
-            color = if (state.result != null) AccentRandom else DarkOnSurfaceVariant,
+            text = state.result?.toString() ?: "\u2014",
+            style = MaterialTheme.typography.displayLarge,
+            color = if (state.result != null) AccentRandom else MaterialTheme.colorScheme.onSurfaceVariant,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Generate button
         Button(
             onClick = { viewModel.generate() },
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = AccentRandom),
+            shape = RoundedCornerShape(12.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.generate),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
     }
