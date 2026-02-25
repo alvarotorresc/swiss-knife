@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.ControlCamera
-import androidx.compose.material.icons.outlined.FormatListBulleted
+import androidx.compose.material.icons.automirrored.outlined.FormatListBulleted
 import androidx.compose.material.icons.outlined.FrontHand
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Numbers
@@ -66,7 +66,7 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
             ),
             ToolItem(
                 titleResId = R.string.tool_random_list,
-                icon = Icons.Outlined.FormatListBulleted,
+                icon = Icons.AutoMirrored.Outlined.FormatListBulleted,
                 accentColor = AccentList,
                 route = NavRoutes.RandomList.route,
             ),

@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.alvarotc.swissknife.R
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(onNavigateToHome: () -> Unit) {
@@ -33,7 +34,7 @@ fun SplashScreen(onNavigateToHome: () -> Unit) {
     val textAlpha = remember { Animatable(0f) }
 
     LaunchedEffect(Unit) {
-        kotlinx.coroutines.launch {
+        launch {
             logoAlpha.animateTo(
                 targetValue = 1f,
                 animationSpec = tween(durationMillis = 500),
