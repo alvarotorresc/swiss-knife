@@ -138,6 +138,28 @@
     <string name="shake_to_answer">Shake to ask</string>
     <string name="ask">Ask</string>
     <string name="ask_again">Ask Again</string>
+    <string-array name="eight_ball_answers">
+        <item>It is certain</item>
+        <item>Without a doubt</item>
+        <item>Yes definitely</item>
+        <item>You may rely on it</item>
+        <item>As I see it yes</item>
+        <item>Most likely</item>
+        <item>Outlook good</item>
+        <item>Yes</item>
+        <item>Signs point to yes</item>
+        <item>Reply hazy try again</item>
+        <item>Ask again later</item>
+        <item>Better not tell you now</item>
+        <item>Cannot predict now</item>
+        <item>Concentrate and ask again</item>
+        <item>Don\'t count on it</item>
+        <item>My reply is no</item>
+        <item>My sources say no</item>
+        <item>Outlook not so good</item>
+        <item>Very doubtful</item>
+        <item>No way</item>
+    </string-array>
 
     <!-- Random Color -->
     <string name="generate_color">Generate Color</string>
@@ -148,6 +170,70 @@
     <string name="team_name_result">Your team name:</string>
     <string name="previous_names">Previous names</string>
     <string name="generating">Generating…</string>
+    <string-array name="team_adjectives">
+        <item>Thunder</item>
+        <item>Shadow</item>
+        <item>Iron</item>
+        <item>Phantom</item>
+        <item>Blazing</item>
+        <item>Cosmic</item>
+        <item>Savage</item>
+        <item>Mystic</item>
+        <item>Atomic</item>
+        <item>Electric</item>
+        <item>Frozen</item>
+        <item>Crimson</item>
+        <item>Golden</item>
+        <item>Stealth</item>
+        <item>Turbo</item>
+        <item>Neon</item>
+        <item>Rapid</item>
+        <item>Silent</item>
+        <item>Inferno</item>
+        <item>Crystal</item>
+        <item>Storm</item>
+        <item>Dark</item>
+        <item>Solar</item>
+        <item>Quantum</item>
+        <item>Venom</item>
+        <item>Noble</item>
+        <item>Rogue</item>
+        <item>Titan</item>
+        <item>Hyper</item>
+        <item>Omega</item>
+    </string-array>
+    <string-array name="team_nouns">
+        <item>Wolves</item>
+        <item>Dragons</item>
+        <item>Hawks</item>
+        <item>Panthers</item>
+        <item>Vipers</item>
+        <item>Knights</item>
+        <item>Titans</item>
+        <item>Falcons</item>
+        <item>Sharks</item>
+        <item>Lions</item>
+        <item>Eagles</item>
+        <item>Cobras</item>
+        <item>Foxes</item>
+        <item>Bears</item>
+        <item>Stallions</item>
+        <item>Raptors</item>
+        <item>Phoenix</item>
+        <item>Spartans</item>
+        <item>Vikings</item>
+        <item>Samurai</item>
+        <item>Ninjas</item>
+        <item>Pirates</item>
+        <item>Raiders</item>
+        <item>Legends</item>
+        <item>Warriors</item>
+        <item>Strikers</item>
+        <item>Rovers</item>
+        <item>Blazers</item>
+        <item>Mavericks</item>
+        <item>Guardians</item>
+    </string-array>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>

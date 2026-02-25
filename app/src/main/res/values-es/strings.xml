@@ -138,6 +138,28 @@
     <string name="shake_to_answer">Agita para preguntar</string>
     <string name="ask">Preguntar</string>
     <string name="ask_again">Preguntar de nuevo</string>
+    <string-array name="eight_ball_answers">
+        <item>Es seguro</item>
+        <item>Sin duda</item>
+        <item>Definitivamente sí</item>
+        <item>Puedes confiar en ello</item>
+        <item>Tal como lo veo, sí</item>
+        <item>Lo más probable</item>
+        <item>Las perspectivas son buenas</item>
+        <item>Sí</item>
+        <item>Las señales dicen que sí</item>
+        <item>Respuesta confusa, intenta de nuevo</item>
+        <item>Pregunta más tarde</item>
+        <item>Mejor no decirte ahora</item>
+        <item>No puedo predecirlo ahora</item>
+        <item>Concéntrate y pregunta de nuevo</item>
+        <item>No cuentes con ello</item>
+        <item>Mi respuesta es no</item>
+        <item>Mis fuentes dicen que no</item>
+        <item>Las perspectivas no son buenas</item>
+        <item>Muy dudoso</item>
+        <item>De ninguna manera</item>
+    </string-array>
 
     <!-- Random Color -->
     <string name="generate_color">Generar Color</string>
@@ -148,6 +170,70 @@
     <string name="team_name_result">Tu nombre de equipo:</string>
     <string name="previous_names">Nombres anteriores</string>
     <string name="generating">Generando…</string>
+    <string-array name="team_adjectives">
+        <item>Trueno</item>
+        <item>Sombra</item>
+        <item>Hierro</item>
+        <item>Fantasma</item>
+        <item>Ardiente</item>
+        <item>Cósmico</item>
+        <item>Salvaje</item>
+        <item>Místico</item>
+        <item>Atómico</item>
+        <item>Eléctrico</item>
+        <item>Helado</item>
+        <item>Carmesí</item>
+        <item>Dorado</item>
+        <item>Sigiloso</item>
+        <item>Turbo</item>
+        <item>Neón</item>
+        <item>Veloz</item>
+        <item>Silencioso</item>
+        <item>Infernal</item>
+        <item>Cristal</item>
+        <item>Tormenta</item>
+        <item>Oscuro</item>
+        <item>Solar</item>
+        <item>Cuántico</item>
+        <item>Veneno</item>
+        <item>Noble</item>
+        <item>Pícaro</item>
+        <item>Titán</item>
+        <item>Híper</item>
+        <item>Omega</item>
+    </string-array>
+    <string-array name="team_nouns">
+        <item>Lobos</item>
+        <item>Dragones</item>
+        <item>Halcones</item>
+        <item>Panteras</item>
+        <item>Víboras</item>
+        <item>Caballeros</item>
+        <item>Titanes</item>
+        <item>Águilas</item>
+        <item>Tiburones</item>
+        <item>Leones</item>
+        <item>Cóndores</item>
+        <item>Cobras</item>
+        <item>Zorros</item>
+        <item>Osos</item>
+        <item>Corceles</item>
+        <item>Raptores</item>
+        <item>Fénix</item>
+        <item>Espartanos</item>
+        <item>Vikingos</item>
+        <item>Samurái</item>
+        <item>Ninjas</item>
+        <item>Piratas</item>
+        <item>Invasores</item>
+        <item>Leyendas</item>
+        <item>Guerreros</item>
+        <item>Delanteros</item>
+        <item>Viajeros</item>
+        <item>Llamas</item>
+        <item>Rebeldes</item>
+        <item>Guardianes</item>
+    </string-array>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

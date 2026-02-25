@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
@@ -44,23 +45,18 @@ import com.alvarotc.swissknife.viewmodel.EightBallViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 
-// Indices: 0–8 positive, 9–12 neutral, 13–19 negative
 // Indices: 0–8 positive, 9–13 neutral, 14–19 negative
-private fun answerColor(
-    answer: String,
-    answers: List<String>,
-): Color {
-    val index = answers.indexOf(answer)
-    return when {
+private fun answerColor(index: Int): Color =
+    when {
         index in 0..8 -> Color(0xFF4ADE80) // green — positive
         index in 9..13 -> Color(0xFFFBBF24) // yellow — neutral
         else -> Color(0xFFF87171) // red — negative
     }
-}
 
 @Composable
 fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val answers = stringArrayResource(R.array.eight_ball_answers)
 
     val textFieldColors =
         OutlinedTextFieldDefaults.colors(
@@ -95,8 +91,8 @@ fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
     // Answer reveal animation
     val answerScale = remember { Animatable(0f) }
 
-    LaunchedEffect(state.answer) {
-        if (state.answer != null) {
+    LaunchedEffect(state.answerIndex) {
+        if (state.answerIndex != null) {
             answerScale.snapTo(0f)
             answerScale.animateTo(
                 targetValue = 1f,
@@ -166,12 +162,12 @@ fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
                                 textAlign = TextAlign.Center,
                             )
                         }
-                        state.answer != null -> {
-                            val answer = state.answer!!
+                        state.answerIndex != null -> {
+                            val index = state.answerIndex!!
                             Text(
-                                text = answer,
+                                text = answers[index],
                                 style = MaterialTheme.typography.bodyMedium,
-                                color = answerColor(answer, viewModel.answers),
+                                color = answerColor(index),
                                 textAlign = TextAlign.Center,
                                 modifier =
                                     Modifier
@@ -213,7 +209,7 @@ fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
 
         Button(
             onClick = {
-                if (state.answer != null) {
+                if (state.answerIndex != null) {
                     viewModel.reset()
                 } else {
                     viewModel.ask()
@@ -232,7 +228,7 @@ fun EightBallScreen(viewModel: EightBallViewModel = viewModel()) {
         ) {
             Text(
                 text =
-                    if (state.answer != null) {
+                    if (state.answerIndex != null) {
                         stringResource(R.string.ask_again)
                     } else {
                         stringResource(R.string.ask)

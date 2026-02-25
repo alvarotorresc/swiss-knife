@@ -16,36 +16,12 @@ class EightBallViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val knownAnswers =
-        listOf(
-            "It is certain",
-            "Without a doubt",
-            "Yes definitely",
-            "You may rely on it",
-            "As I see it yes",
-            "Most likely",
-            "Outlook good",
-            "Yes",
-            "Signs point to yes",
-            "Reply hazy try again",
-            "Ask again later",
-            "Better not tell you now",
-            "Cannot predict now",
-            "Concentrate and ask again",
-            "Don't count on it",
-            "My reply is no",
-            "My sources say no",
-            "Outlook not so good",
-            "Very doubtful",
-            "No way",
-        )
-
     @Test
     fun `initial state has empty question and no answer`() {
         val vm = EightBallViewModel()
         val state = vm.uiState.value
         assertEquals("", state.question)
-        assertNull(state.answer)
+        assertNull(state.answerIndex)
         assertEquals(false, state.isShaking)
     }
 
@@ -64,21 +40,20 @@ class EightBallViewModelTest {
             vm.ask()
             advanceUntilIdle()
             val state = vm.uiState.value
-            assertNotNull(state.answer)
+            assertNotNull(state.answerIndex)
             assertEquals(false, state.isShaking)
         }
 
     @Test
-    fun `ask answer is from known answers list`() =
+    fun `ask answer index is within valid range`() =
         runTest {
             val vm = EightBallViewModel()
             vm.setQuestion("Will I pass?")
             vm.ask()
             advanceUntilIdle()
-            assertTrue(
-                "Answer should be from known list",
-                vm.uiState.value.answer in knownAnswers,
-            )
+            val index = vm.uiState.value.answerIndex
+            assertNotNull(index)
+            assertTrue("Index should be 0-19, got $index", index!! in 0..19)
         }
 
     @Test
@@ -88,7 +63,7 @@ class EightBallViewModelTest {
             vm.setQuestion("   ")
             vm.ask()
             advanceUntilIdle()
-            assertNull(vm.uiState.value.answer)
+            assertNull(vm.uiState.value.answerIndex)
         }
 
     @Test
@@ -97,7 +72,7 @@ class EightBallViewModelTest {
             val vm = EightBallViewModel()
             vm.ask()
             advanceUntilIdle()
-            assertNull(vm.uiState.value.answer)
+            assertNull(vm.uiState.value.answerIndex)
         }
 
     @Test
@@ -106,14 +81,12 @@ class EightBallViewModelTest {
             val vm = EightBallViewModel()
             vm.setQuestion("First question?")
             vm.ask()
-            // While shaking, try to ask again
             assertTrue(vm.uiState.value.isShaking)
             vm.setQuestion("Second question?")
-            vm.ask() // should be ignored
+            vm.ask()
             advanceUntilIdle()
-            // Only the first ask should have completed
             assertEquals("Second question?", vm.uiState.value.question)
-            assertNotNull(vm.uiState.value.answer)
+            assertNotNull(vm.uiState.value.answerIndex)
         }
 
     @Test
@@ -123,7 +96,7 @@ class EightBallViewModelTest {
             vm.setQuestion("Am I shaking?")
             vm.ask()
             assertTrue(vm.uiState.value.isShaking)
-            assertNull(vm.uiState.value.answer) // answer cleared during shake
+            assertNull(vm.uiState.value.answerIndex)
             advanceUntilIdle()
         }
 
@@ -135,7 +108,7 @@ class EightBallViewModelTest {
             vm.ask()
             advanceUntilIdle()
             vm.reset()
-            assertNull(vm.uiState.value.answer)
+            assertNull(vm.uiState.value.answerIndex)
             assertEquals("Test question?", vm.uiState.value.question)
         }
 
@@ -146,13 +119,11 @@ class EightBallViewModelTest {
             vm.setQuestion("First?")
             vm.ask()
             advanceUntilIdle()
-            val first = vm.uiState.value.answer
-            assertNotNull(first)
+            assertNotNull(vm.uiState.value.answerIndex)
 
             vm.ask()
             advanceUntilIdle()
-            val second = vm.uiState.value.answer
-            assertNotNull(second)
+            assertNotNull(vm.uiState.value.answerIndex)
         }
 
     @Test
@@ -160,12 +131,12 @@ class EightBallViewModelTest {
         runTest {
             val vm = EightBallViewModel()
             vm.setQuestion("Varied?")
-            val answers = mutableSetOf<String>()
+            val indices = mutableSetOf<Int>()
             repeat(50) {
                 vm.ask()
                 advanceUntilIdle()
-                vm.uiState.value.answer?.let { answers.add(it) }
+                vm.uiState.value.answerIndex?.let { indices.add(it) }
             }
-            assertTrue("Expected varied answers, got ${answers.size}", answers.size > 1)
+            assertTrue("Expected varied answers, got ${indices.size}", indices.size > 1)
         }
 }
