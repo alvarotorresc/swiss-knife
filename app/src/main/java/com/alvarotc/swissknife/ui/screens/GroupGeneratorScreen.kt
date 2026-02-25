@@ -1,7 +1,11 @@
 package com.alvarotc.swissknife.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -39,8 +43,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -67,6 +76,21 @@ private val GROUP_COLORS =
 @Composable
 fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val adjectives = stringArrayResource(R.array.team_adjectives).toList()
+    val nouns = stringArrayResource(R.array.team_nouns).toList()
+    val nameFormat = stringResource(R.string.team_name_format)
+
+    val infiniteTransition = rememberInfiniteTransition(label = "cursor")
+    val cursorAlpha by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 0f,
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(500),
+                repeatMode = RepeatMode.Reverse,
+            ),
+        label = "cursorAlpha",
+    )
 
     val textFieldColors =
         OutlinedTextFieldDefaults.colors(
@@ -224,11 +248,14 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
                                 ) +
                                     fadeIn(animationSpec = tween(300, delayMillis = groupIndex * 150)),
                         ) {
-                            Text(
-                                text = stringResource(R.string.group_label, groupIndex + 1),
-                                style = MaterialTheme.typography.titleMedium,
-                                color = GROUP_COLORS[groupIndex % GROUP_COLORS.size],
-                                modifier = Modifier.padding(top = if (groupIndex > 0) 12.dp else 0.dp),
+                            GroupHeader(
+                                groupIndex = groupIndex,
+                                groupName = state.groupNames.getOrNull(groupIndex),
+                                isNaming = state.isNaming,
+                                namingGroupIndex = state.namingGroupIndex,
+                                revealedChars = state.revealedChars,
+                                cursorAlpha = cursorAlpha,
+                                groupColor = GROUP_COLORS[groupIndex % GROUP_COLORS.size],
                             )
                         }
                     }
@@ -300,7 +327,7 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
             ) {
                 Button(
                     onClick = { viewModel.generate() },
-                    enabled = !state.isShuffling,
+                    enabled = !state.isShuffling && !state.isNaming,
                     modifier =
                         Modifier
                             .weight(1f)
@@ -317,10 +344,34 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
                         color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
+                Button(
+                    onClick = { viewModel.generateNames(adjectives, nouns, nameFormat) },
+                    enabled = !state.isShuffling && !state.isNaming,
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .height(56.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    colors =
+                        ButtonDefaults.buttonColors(
+                            containerColor = AccentGroupsContainer,
+                        ),
+                ) {
+                    Text(
+                        text =
+                            if (state.isNaming) {
+                                stringResource(R.string.naming_teams)
+                            } else {
+                                stringResource(R.string.name_teams)
+                            },
+                        style = MaterialTheme.typography.labelLarge,
+                        color = AccentGroups,
+                    )
+                }
             }
             TextButton(
                 onClick = { viewModel.reset() },
-                enabled = !state.isShuffling,
+                enabled = !state.isShuffling && !state.isNaming,
             ) {
                 Text(
                     text = stringResource(R.string.reset),
@@ -328,5 +379,60 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun GroupHeader(
+    groupIndex: Int,
+    groupName: String?,
+    isNaming: Boolean,
+    namingGroupIndex: Int,
+    revealedChars: Int,
+    cursorAlpha: Float,
+    groupColor: androidx.compose.ui.graphics.Color,
+) {
+    if (groupName == null) {
+        Text(
+            text = stringResource(R.string.group_label, groupIndex + 1),
+            style = MaterialTheme.typography.titleMedium,
+            color = groupColor,
+            modifier = Modifier.padding(top = if (groupIndex > 0) 12.dp else 0.dp),
+        )
+    } else {
+        val isCurrentlyNaming = isNaming && namingGroupIndex == groupIndex
+        val isFullyRevealed = !isNaming || namingGroupIndex > groupIndex
+
+        val annotatedName =
+            buildAnnotatedString {
+                if (isFullyRevealed) {
+                    withStyle(SpanStyle(color = groupColor)) {
+                        append(groupName)
+                    }
+                } else if (isCurrentlyNaming) {
+                    val revealed = groupName.substring(0, revealedChars.coerceAtMost(groupName.length))
+                    val unrevealed = groupName.substring(revealedChars.coerceAtMost(groupName.length))
+
+                    withStyle(SpanStyle(color = groupColor)) {
+                        append(revealed)
+                    }
+                    withStyle(SpanStyle(color = Color.Transparent)) {
+                        append(unrevealed)
+                    }
+                    withStyle(SpanStyle(color = groupColor.copy(alpha = cursorAlpha))) {
+                        append("\u2588")
+                    }
+                } else {
+                    withStyle(SpanStyle(color = Color.Transparent)) {
+                        append(groupName)
+                    }
+                }
+            }
+
+        Text(
+            text = annotatedName,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(top = if (groupIndex > 0) 12.dp else 0.dp),
+        )
     }
 }

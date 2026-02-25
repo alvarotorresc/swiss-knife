@@ -21,8 +21,6 @@
     <string name="tool_lottery">Sorteo</string>
     <string name="tool_eight_ball">Bola 8 Mágica</string>
     <string name="tool_random_color">Color Aleatorio</string>
-    <string name="tool_team_name">Nombre Equipo</string>
-
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
 
@@ -113,6 +111,9 @@
     <string name="generate_groups">Generar Grupos</string>
     <string name="group_label">Grupo %d</string>
     <string name="error_need_more_for_groups">Se necesitan más personas que grupos</string>
+    <string name="name_teams">Nombrar Equipos</string>
+    <string name="naming_teams">Nombrando…</string>
+    <string name="team_name_format">%2$s %1$s</string>
 
     <!-- Rock Paper Scissors -->
     <string name="rock">Piedra</string>
@@ -124,6 +125,16 @@
     <string name="vs">VS</string>
     <string name="play_again">Jugar de nuevo</string>
     <string name="choose_your_move">Elige tu jugada</string>
+    <string name="vs_cpu">vs CPU</string>
+    <string name="vs_friend">vs Amigo</string>
+    <string name="pass_phone">Pasa el móvil al Jugador 2</string>
+    <string name="ready">Listo</string>
+    <string name="player_1">J1</string>
+    <string name="player_2">J2</string>
+    <string name="player_1_turn">Jugador 1, elige tu jugada</string>
+    <string name="player_2_turn">Jugador 2, elige tu jugada</string>
+    <string name="player_1_wins">¡Jugador 1 Gana!</string>
+    <string name="player_2_wins">¡Jugador 2 Gana!</string>
 
     <!-- Lottery -->
     <string name="how_many_numbers">Cantidad de números</string>
@@ -165,42 +176,38 @@
     <string name="generate_color">Generar Color</string>
     <string name="tap_to_generate">Toca para generar</string>
 
-    <!-- Team Name Generator -->
-    <string name="generate_name">Generar Nombre</string>
-    <string name="team_name_result">Tu nombre de equipo:</string>
-    <string name="previous_names">Nombres anteriores</string>
-    <string name="generating">Generando…</string>
+    <!-- Team Name Arrays -->
     <string-array name="team_adjectives">
-        <item>Trueno</item>
-        <item>Sombra</item>
-        <item>Hierro</item>
-        <item>Fantasma</item>
-        <item>Ardiente</item>
-        <item>Cósmico</item>
-        <item>Salvaje</item>
-        <item>Místico</item>
-        <item>Atómico</item>
-        <item>Eléctrico</item>
-        <item>Helado</item>
+        <item>Ardientes</item>
+        <item>Cósmicos</item>
+        <item>Salvajes</item>
+        <item>Místicos</item>
+        <item>Atómicos</item>
+        <item>Eléctricos</item>
+        <item>Helados</item>
         <item>Carmesí</item>
-        <item>Dorado</item>
-        <item>Sigiloso</item>
-        <item>Turbo</item>
-        <item>Neón</item>
-        <item>Veloz</item>
-        <item>Silencioso</item>
-        <item>Infernal</item>
-        <item>Cristal</item>
-        <item>Tormenta</item>
-        <item>Oscuro</item>
-        <item>Solar</item>
-        <item>Cuántico</item>
-        <item>Veneno</item>
-        <item>Noble</item>
-        <item>Pícaro</item>
-        <item>Titán</item>
-        <item>Híper</item>
-        <item>Omega</item>
+        <item>Dorados</item>
+        <item>Sigilosos</item>
+        <item>Veloces</item>
+        <item>Silenciosos</item>
+        <item>Infernales</item>
+        <item>Oscuros</item>
+        <item>Solares</item>
+        <item>Nobles</item>
+        <item>Inmortales</item>
+        <item>Furiosos</item>
+        <item>Implacables</item>
+        <item>Invictos</item>
+        <item>Temibles</item>
+        <item>Letales</item>
+        <item>Feroces</item>
+        <item>Blindados</item>
+        <item>Eternos</item>
+        <item>Supremos</item>
+        <item>Siniestros</item>
+        <item>Sagrados</item>
+        <item>Rebeldes</item>
+        <item>Legendarios</item>
     </string-array>
     <string-array name="team_nouns">
         <item>Lobos</item>

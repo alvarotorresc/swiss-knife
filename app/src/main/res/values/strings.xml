@@ -21,8 +21,6 @@
     <string name="tool_lottery">Lottery</string>
     <string name="tool_eight_ball">Magic 8-Ball</string>
     <string name="tool_random_color">Random Color</string>
-    <string name="tool_team_name">Team Name</string>
-
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
 
@@ -113,6 +111,9 @@
     <string name="generate_groups">Generate Groups</string>
     <string name="group_label">Group %d</string>
     <string name="error_need_more_for_groups">Need more people than groups</string>
+    <string name="name_teams">Name Teams</string>
+    <string name="naming_teams">Naming…</string>
+    <string name="team_name_format">%1$s %2$s</string>
 
     <!-- Rock Paper Scissors -->
     <string name="rock">Rock</string>
@@ -124,6 +125,16 @@
     <string name="vs">VS</string>
     <string name="play_again">Play Again</string>
     <string name="choose_your_move">Choose your move</string>
+    <string name="vs_cpu">vs CPU</string>
+    <string name="vs_friend">vs Friend</string>
+    <string name="pass_phone">Pass the phone to Player 2</string>
+    <string name="ready">Ready</string>
+    <string name="player_1">P1</string>
+    <string name="player_2">P2</string>
+    <string name="player_1_turn">Player 1, choose your move</string>
+    <string name="player_2_turn">Player 2, choose your move</string>
+    <string name="player_1_wins">Player 1 Wins!</string>
+    <string name="player_2_wins">Player 2 Wins!</string>
 
     <!-- Lottery -->
     <string name="how_many_numbers">How many numbers</string>
@@ -165,11 +176,7 @@
     <string name="generate_color">Generate Color</string>
     <string name="tap_to_generate">Tap to generate</string>
 
-    <!-- Team Name Generator -->
-    <string name="generate_name">Generate Name</string>
-    <string name="team_name_result">Your team name:</string>
-    <string name="previous_names">Previous names</string>
-    <string name="generating">Generating…</string>
+    <!-- Team Name Arrays -->
     <string-array name="team_adjectives">
         <item>Thunder</item>
         <item>Shadow</item>
