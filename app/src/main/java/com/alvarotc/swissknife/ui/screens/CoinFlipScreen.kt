@@ -17,10 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Construction
+import androidx.compose.material.icons.outlined.Construction
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -31,21 +32,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentCoinContainer
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
-import com.alvarotc.swissknife.ui.theme.DarkOutline
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.CoinFlipViewModel
 import com.alvarotc.swissknife.viewmodel.CoinSide
 
@@ -71,7 +66,6 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
     ) {
         Spacer(modifier = Modifier.weight(1f))
 
-        // Coin
         Surface(
             modifier =
                 Modifier
@@ -85,7 +79,7 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 when (state.result) {
                     CoinSide.HEADS -> AccentCoin
                     CoinSide.TAILS -> AccentCoinContainer
-                    null -> DarkSurfaceVariant
+                    null -> MaterialTheme.colorScheme.surfaceVariant
                 },
         ) {
             Box(
@@ -99,7 +93,7 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                                 when (state.result) {
                                     CoinSide.HEADS -> AccentCoin.copy(alpha = 0.6f)
                                     CoinSide.TAILS -> AccentCoin.copy(alpha = 0.3f)
-                                    null -> DarkOutline
+                                    null -> MaterialTheme.colorScheme.outline
                                 },
                             shape = CircleShape,
                         ),
@@ -107,9 +101,9 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 when (state.result) {
                     CoinSide.HEADS -> {
                         Icon(
-                            imageVector = Icons.Filled.Construction,
+                            imageVector = Icons.Outlined.Construction,
                             contentDescription = stringResource(R.string.heads),
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.onBackground,
                             modifier = Modifier.size(80.dp),
                         )
                     }
@@ -117,18 +111,15 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                         Text(
                             text = "Swiss\nKnife",
                             color = AccentCoin,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
+                            style = MaterialTheme.typography.headlineSmall,
                             textAlign = TextAlign.Center,
-                            lineHeight = 28.sp,
                         )
                     }
                     null -> {
                         Text(
                             text = "?",
-                            fontSize = 56.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = DarkOnSurfaceVariant,
+                            style = MaterialTheme.typography.displayLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -144,14 +135,12 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                     CoinSide.TAILS -> stringResource(R.string.tails)
                     null -> stringResource(R.string.tap_to_flip)
                 },
-            fontSize = 24.sp,
-            fontWeight = FontWeight.SemiBold,
-            color = Color.White,
+            style = MaterialTheme.typography.headlineSmall,
+            color = MaterialTheme.colorScheme.onBackground,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Stats
         if (state.totalFlips > 0) {
             Row(
                 modifier =
@@ -166,7 +155,6 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
             }
         }
 
-        // Buttons
         Button(
             onClick = {
                 flipTrigger++
@@ -176,14 +164,16 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = AccentCoin),
+            shape = RoundedCornerShape(12.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                ),
         ) {
             Text(
                 text = stringResource(R.string.flip),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.Black,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
 
@@ -192,7 +182,10 @@ fun CoinFlipScreen(viewModel: CoinFlipViewModel = viewModel()) {
                 flipTrigger = 0
                 viewModel.reset()
             }) {
-                Text(stringResource(R.string.reset), color = DarkOnSurfaceVariant)
+                Text(
+                    text = stringResource(R.string.reset),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
     }
@@ -206,14 +199,13 @@ private fun StatItem(
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text(
             text = value,
-            fontSize = 20.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color.White,
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onBackground,
         )
         Text(
             text = label,
-            fontSize = 12.sp,
-            color = DarkOnSurfaceVariant,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

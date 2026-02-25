@@ -16,16 +16,14 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.alvarotc.swissknife.R
@@ -33,8 +31,6 @@ import com.alvarotc.swissknife.ui.components.DiceFace
 import com.alvarotc.swissknife.ui.components.PolyDiceFace
 import com.alvarotc.swissknife.ui.theme.AccentDice
 import com.alvarotc.swissknife.ui.theme.AccentDiceContainer
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.DiceRollViewModel
 import com.alvarotc.swissknife.viewmodel.DiceType
 
@@ -50,11 +46,10 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                 .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        // Dice type selector
         Text(
             text = stringResource(R.string.dice_type),
-            color = DarkOnSurfaceVariant,
-            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(8.dp))
         FlowRow(
@@ -70,8 +65,8 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                         FilterChipDefaults.filterChipColors(
                             selectedContainerColor = AccentDiceContainer,
                             selectedLabelColor = AccentDice,
-                            containerColor = DarkSurfaceVariant,
-                            labelColor = DarkOnSurfaceVariant,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                 )
             }
@@ -79,11 +74,10 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Dice count selector
         Text(
             text = stringResource(R.string.number_of_dice),
-            color = DarkOnSurfaceVariant,
-            fontSize = 14.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = MaterialTheme.typography.bodyMedium,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -96,8 +90,8 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                         FilterChipDefaults.filterChipColors(
                             selectedContainerColor = AccentDiceContainer,
                             selectedLabelColor = AccentDice,
-                            containerColor = DarkSurfaceVariant,
-                            labelColor = DarkOnSurfaceVariant,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+                            labelColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                 )
             }
@@ -105,7 +99,6 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Dice display
         if (state.results.isNotEmpty()) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
@@ -133,22 +126,20 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                 Spacer(modifier = Modifier.height(16.dp))
                 Text(
                     text = stringResource(R.string.total, state.results.sum()),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onBackground,
                 )
             }
         } else {
             Text(
                 text = stringResource(R.string.tap_to_roll),
-                fontSize = 18.sp,
-                color = DarkOnSurfaceVariant,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        // Roll button
         Button(
             onClick = { viewModel.roll() },
             enabled = !state.isRolling,
@@ -156,14 +147,16 @@ fun DiceRollScreen(viewModel: DiceRollViewModel = viewModel()) {
                 Modifier
                     .fillMaxWidth()
                     .height(56.dp),
-            shape = RoundedCornerShape(16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = AccentDice),
+            shape = RoundedCornerShape(12.dp),
+            colors =
+                ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                ),
         ) {
             Text(
                 text = if (state.isRolling) stringResource(R.string.rolling) else stringResource(R.string.roll),
-                fontSize = 18.sp,
-                fontWeight = FontWeight.SemiBold,
-                color = Color.White,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
     }
