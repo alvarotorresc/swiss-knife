@@ -1,8 +1,11 @@
 package com.alvarotc.swissknife.ui.screens
 
 import android.content.ClipData
+import android.content.ClipDescription
 import android.content.ClipboardManager
 import android.content.Context
+import android.os.Build
+import android.os.PersistableBundle
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -140,7 +143,12 @@ fun PasswordGeneratorScreen(viewModel: PasswordGeneratorViewModel = viewModel())
                         onClick = {
                             val clipboard =
                                 context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                            val clip = ClipData.newPlainText("password", state.password)
+                            val clip = ClipData.newPlainText("", state.password)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                clip.description.extras = PersistableBundle().apply {
+                                    putBoolean(ClipDescription.EXTRA_IS_SENSITIVE, true)
+                                }
+                            }
                             clipboard.setPrimaryClip(clip)
                         },
                     ) {
