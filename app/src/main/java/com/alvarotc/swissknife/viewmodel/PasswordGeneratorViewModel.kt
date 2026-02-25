@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.security.SecureRandom
 import kotlinx.coroutines.flow.update
 
 sealed class PasswordError {
@@ -23,6 +24,7 @@ data class PasswordGeneratorUiState(
 class PasswordGeneratorViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(PasswordGeneratorUiState())
     val uiState: StateFlow<PasswordGeneratorUiState> = _uiState.asStateFlow()
+    private val secureRandom = SecureRandom()
 
     private val uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
     private val lowercaseChars = "abcdefghijklmnopqrstuvwxyz"
@@ -66,7 +68,7 @@ class PasswordGeneratorViewModel : ViewModel() {
 
         val password =
             (1..state.length)
-                .map { charset.random() }
+                .map { charset[secureRandom.nextInt(charset.length)] }
                 .joinToString("")
 
         _uiState.update { it.copy(password = password, error = null) }
