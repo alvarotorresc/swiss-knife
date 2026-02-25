@@ -13,14 +13,8 @@
     <string name="tool_secret_santa">Amigo Invisible</string>
     <string name="tool_random_list">Lista Aleatoria</string>
     <string name="tool_password_generator">Contraseñas</string>
-    <string name="tool_counter">Contador</string>
-    <string name="tool_timer">Temporizador</string>
-    <string name="tool_tip_calculator">Propinas</string>
-    <string name="tool_unit_converter">Conversor</string>
-    <string name="tool_level">Nivel</string>
     <string name="tool_fortune_wheel">Ruleta</string>
     <string name="tool_finger_picker">Selector Dedos</string>
-    <string name="tool_qr">Generador QR</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -80,42 +74,6 @@
     <string name="copy">Copiar</string>
     <string name="error_select_at_least_one">Selecciona al menos un tipo de carácter</string>
 
-    <!-- Counter -->
-    <string name="increment">Incrementar</string>
-    <string name="decrement">Decrementar</string>
-
-    <!-- Timer -->
-    <string name="stopwatch">Cronómetro</string>
-    <string name="countdown">Cuenta Atrás</string>
-    <string name="minutes_short">Min</string>
-    <string name="seconds_short">Seg</string>
-    <string name="start">Iniciar</string>
-    <string name="pause">Pausar</string>
-
-    <!-- Tip Calculator -->
-    <string name="bill_amount">Importe de la Cuenta</string>
-    <string name="tip_percent">Propina: %d%%</string>
-    <string name="split_between">Dividir entre</string>
-    <string name="people_count">%d personas</string>
-    <string name="tip_amount">Propina</string>
-    <string name="total_amount">Total</string>
-    <string name="per_person">Por Persona</string>
-
-    <!-- Unit Converter -->
-    <string name="category_length">Longitud</string>
-    <string name="category_weight">Peso</string>
-    <string name="category_temperature">Temperatura</string>
-    <string name="category_volume">Volumen</string>
-    <string name="from">Desde</string>
-    <string name="to">Hasta</string>
-    <string name="swap">Intercambiar</string>
-    <string name="value">Valor</string>
-    <string name="result">Resultado</string>
-
-    <!-- Level -->
-    <string name="sensor_not_available">Acelerómetro no disponible</string>
-    <string name="level_perfect">¡Nivelado!</string>
-    <string name="level_adjust">Ajusta el dispositivo</string>
 
     <!-- Fortune Wheel -->
     <string name="option">Opción</string>
@@ -130,13 +88,6 @@
     <string name="pick_winners">Elegir Ganadores</string>
     <string name="winner_selected">¡Ganador Seleccionado!</string>
     <string name="winners_selected">¡Ganadores Seleccionados!</string>
-
-    <!-- QR Tool -->
-    <string name="text_to_encode">Texto a codificar</string>
-    <string name="qr_code">Código QR</string>
-    <string name="qr_preview_here">El código QR aparecerá aquí</string>
-    <string name="generate_qr">Generar QR</string>
-    <string name="new_qr">Nuevo QR</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

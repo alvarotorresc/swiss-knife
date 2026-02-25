@@ -13,14 +13,8 @@
     <string name="tool_secret_santa">Secret Santa</string>
     <string name="tool_random_list">Random from List</string>
     <string name="tool_password_generator">Password Generator</string>
-    <string name="tool_counter">Counter</string>
-    <string name="tool_timer">Timer</string>
-    <string name="tool_tip_calculator">Tip Calculator</string>
-    <string name="tool_unit_converter">Unit Converter</string>
-    <string name="tool_level">Level</string>
     <string name="tool_fortune_wheel">Fortune Wheel</string>
     <string name="tool_finger_picker">Finger Picker</string>
-    <string name="tool_qr">QR Generator</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Pick a tool</string>
@@ -80,42 +74,6 @@
     <string name="copy">Copy</string>
     <string name="error_select_at_least_one">Select at least one character type</string>
 
-    <!-- Counter -->
-    <string name="increment">Increment</string>
-    <string name="decrement">Decrement</string>
-
-    <!-- Timer -->
-    <string name="stopwatch">Stopwatch</string>
-    <string name="countdown">Countdown</string>
-    <string name="minutes_short">Min</string>
-    <string name="seconds_short">Sec</string>
-    <string name="start">Start</string>
-    <string name="pause">Pause</string>
-
-    <!-- Tip Calculator -->
-    <string name="bill_amount">Bill Amount</string>
-    <string name="tip_percent">Tip: %d%%</string>
-    <string name="split_between">Split between</string>
-    <string name="people_count">%d people</string>
-    <string name="tip_amount">Tip</string>
-    <string name="total_amount">Total</string>
-    <string name="per_person">Per Person</string>
-
-    <!-- Unit Converter -->
-    <string name="category_length">Length</string>
-    <string name="category_weight">Weight</string>
-    <string name="category_temperature">Temperature</string>
-    <string name="category_volume">Volume</string>
-    <string name="from">From</string>
-    <string name="to">To</string>
-    <string name="swap">Swap</string>
-    <string name="value">Value</string>
-    <string name="result">Result</string>
-
-    <!-- Level -->
-    <string name="sensor_not_available">Accelerometer not available</string>
-    <string name="level_perfect">Level!</string>
-    <string name="level_adjust">Adjust device</string>
 
     <!-- Fortune Wheel -->
     <string name="option">Option</string>
@@ -130,13 +88,6 @@
     <string name="pick_winners">Pick Winners</string>
     <string name="winner_selected">Winner Selected!</string>
     <string name="winners_selected">Winners Selected!</string>
-
-    <!-- QR Tool -->
-    <string name="text_to_encode">Text to encode</string>
-    <string name="qr_code">QR Code</string>
-    <string name="qr_preview_here">QR code will appear here</string>
-    <string name="generate_qr">Generate QR</string>
-    <string name="new_qr">New QR</string>
 
     <!-- Settings -->
     <string name="settings_language">Language</string>
