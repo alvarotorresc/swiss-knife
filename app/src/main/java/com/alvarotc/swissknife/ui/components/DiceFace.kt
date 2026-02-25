@@ -2,6 +2,7 @@ package com.alvarotc.swissknife.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
@@ -9,7 +10,6 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.alvarotc.swissknife.ui.theme.AccentDice
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 
 private val dotPositions =
     mapOf(
@@ -46,7 +46,7 @@ private val dotPositions =
 fun DiceFace(
     value: Int,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = DarkSurfaceVariant,
+    backgroundColor: Color = MaterialTheme.colorScheme.surfaceVariant,
     dotColor: Color = AccentDice,
 ) {
     Canvas(modifier = modifier.size(80.dp)) {

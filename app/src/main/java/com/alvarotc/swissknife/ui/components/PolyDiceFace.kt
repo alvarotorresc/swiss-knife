@@ -2,6 +2,7 @@ package com.alvarotc.swissknife.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -12,7 +13,6 @@ import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.unit.dp
 import com.alvarotc.swissknife.ui.theme.AccentDice
-import com.alvarotc.swissknife.ui.theme.DarkSurfaceVariant
 import com.alvarotc.swissknife.viewmodel.DiceType
 import kotlin.math.cos
 import kotlin.math.sin
@@ -25,6 +25,8 @@ fun PolyDiceFace(
     accentColor: Color = AccentDice,
 ) {
     val sides = polygonSides(diceType)
+    val bgColor = MaterialTheme.colorScheme.surfaceVariant
+    val textColor = MaterialTheme.colorScheme.onSurface
 
     Canvas(modifier = modifier.size(80.dp)) {
         val canvasSize = size.minDimension
@@ -32,19 +34,16 @@ fun PolyDiceFace(
         val radius = canvasSize * 0.42f
         val strokeWidth = 2.dp.toPx()
 
-        // Dark background fill
         val bgPath = polygonPath(center, radius + strokeWidth, sides)
-        drawPath(bgPath, color = DarkSurfaceVariant)
+        drawPath(bgPath, color = bgColor)
 
-        // Accent border
         val borderPath = polygonPath(center, radius, sides)
         drawPath(borderPath, color = accentColor, style = Stroke(width = strokeWidth))
 
-        // Result number in center
         drawContext.canvas.nativeCanvas.apply {
             val valuePaint =
                 android.graphics.Paint().apply {
-                    color = Color.White.toArgb()
+                    color = textColor.toArgb()
                     textAlign = android.graphics.Paint.Align.CENTER
                     textSize = canvasSize * 0.32f
                     isAntiAlias = true
@@ -57,7 +56,6 @@ fun PolyDiceFace(
                 valuePaint,
             )
 
-            // Die type label at bottom
             val labelPaint =
                 android.graphics.Paint().apply {
                     color = accentColor.toArgb()
@@ -93,8 +91,8 @@ private fun polygonPath(
     val path = Path()
     val angleOffset =
         when (sides) {
-            3 -> -Math.PI / 2.0 // Triangle pointing up
-            4 -> -Math.PI / 4.0 // Diamond (rotated square)
+            3 -> -Math.PI / 2.0
+            4 -> -Math.PI / 4.0
             else -> -Math.PI / 2.0
         }
 
