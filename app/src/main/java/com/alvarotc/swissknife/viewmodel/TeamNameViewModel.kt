@@ -22,23 +22,10 @@ class TeamNameViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(TeamNameUiState())
     val uiState: StateFlow<TeamNameUiState> = _uiState.asStateFlow()
 
-    private val adjectives =
-        listOf(
-            "Thunder", "Shadow", "Iron", "Phantom", "Blazing", "Cosmic", "Savage", "Mystic",
-            "Atomic", "Electric", "Frozen", "Crimson", "Golden", "Stealth", "Turbo", "Neon",
-            "Rapid", "Silent", "Inferno", "Crystal", "Storm", "Dark", "Solar", "Quantum",
-            "Venom", "Noble", "Rogue", "Titan", "Hyper", "Omega",
-        )
-
-    private val nouns =
-        listOf(
-            "Wolves", "Dragons", "Hawks", "Panthers", "Vipers", "Knights", "Titans", "Falcons",
-            "Sharks", "Lions", "Eagles", "Cobras", "Foxes", "Bears", "Stallions", "Raptors",
-            "Phoenix", "Spartans", "Vikings", "Samurai", "Ninjas", "Pirates", "Raiders",
-            "Legends", "Warriors", "Strikers", "Rovers", "Blazers", "Mavericks", "Guardians",
-        )
-
-    fun generate() {
+    fun generate(
+        adjectives: List<String>,
+        nouns: List<String>,
+    ) {
         val adjective = adjectives.random()
         val noun = nouns.random()
         val fullName = "$adjective $noun"

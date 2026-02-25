@@ -29,6 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -45,6 +46,8 @@ import com.alvarotc.swissknife.viewmodel.TeamNameViewModel
 fun TeamNameScreen(viewModel: TeamNameViewModel = viewModel()) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val adjectives = stringArrayResource(R.array.team_adjectives).toList()
+    val nouns = stringArrayResource(R.array.team_nouns).toList()
 
     val infiniteTransition = rememberInfiniteTransition(label = "cursor")
     val cursorAlpha by infiniteTransition.animateFloat(
@@ -155,7 +158,7 @@ fun TeamNameScreen(viewModel: TeamNameViewModel = viewModel()) {
         }
 
         Button(
-            onClick = { viewModel.generate() },
+            onClick = { viewModel.generate(adjectives, nouns) },
             enabled = !state.isGenerating,
             modifier =
                 Modifier

@@ -14,6 +14,9 @@ class TeamNameViewModelTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
+    private val testAdjectives = listOf("Thunder", "Shadow", "Iron", "Phantom", "Blazing")
+    private val testNouns = listOf("Wolves", "Dragons", "Hawks", "Panthers", "Vipers")
+
     @Test
     fun `initial state has empty name and no history`() {
         val vm = TeamNameViewModel()
@@ -30,7 +33,7 @@ class TeamNameViewModelTest {
     fun `generate produces a team name with adjective and noun`() =
         runTest {
             val vm = TeamNameViewModel()
-            vm.generate()
+            vm.generate(testAdjectives, testNouns)
             advanceUntilIdle()
             val state = vm.uiState.value
             assertTrue(state.adjective.isNotEmpty())
@@ -42,7 +45,7 @@ class TeamNameViewModelTest {
     fun `generate completes revealing animation`() =
         runTest {
             val vm = TeamNameViewModel()
-            vm.generate()
+            vm.generate(testAdjectives, testNouns)
             advanceUntilIdle()
             val state = vm.uiState.value
             assertEquals(state.fullName.length, state.revealedChars)
@@ -53,7 +56,7 @@ class TeamNameViewModelTest {
     fun `generate adds name to history`() =
         runTest {
             val vm = TeamNameViewModel()
-            vm.generate()
+            vm.generate(testAdjectives, testNouns)
             advanceUntilIdle()
             val state = vm.uiState.value
             assertEquals(1, state.history.size)
@@ -65,7 +68,7 @@ class TeamNameViewModelTest {
         runTest {
             val vm = TeamNameViewModel()
             repeat(12) {
-                vm.generate()
+                vm.generate(testAdjectives, testNouns)
                 advanceUntilIdle()
             }
             assertEquals(8, vm.uiState.value.history.size)
@@ -75,11 +78,10 @@ class TeamNameViewModelTest {
     fun `history has most recent name first`() =
         runTest {
             val vm = TeamNameViewModel()
-            vm.generate()
+            vm.generate(testAdjectives, testNouns)
             advanceUntilIdle()
-            val firstName = vm.uiState.value.fullName
 
-            vm.generate()
+            vm.generate(testAdjectives, testNouns)
             advanceUntilIdle()
             val secondName = vm.uiState.value.fullName
 
@@ -92,7 +94,7 @@ class TeamNameViewModelTest {
             val vm = TeamNameViewModel()
             val names = mutableSetOf<String>()
             repeat(20) {
-                vm.generate()
+                vm.generate(testAdjectives, testNouns)
                 advanceUntilIdle()
                 names.add(vm.uiState.value.fullName)
             }
@@ -103,9 +105,8 @@ class TeamNameViewModelTest {
     fun `reset clears name but not history`() =
         runTest {
             val vm = TeamNameViewModel()
-            vm.generate()
+            vm.generate(testAdjectives, testNouns)
             advanceUntilIdle()
-            val historyBefore = vm.uiState.value.history.toList()
             vm.reset()
             val state = vm.uiState.value
             assertEquals("", state.adjective)
@@ -113,16 +114,13 @@ class TeamNameViewModelTest {
             assertEquals("", state.fullName)
             assertEquals(false, state.isGenerating)
             assertEquals(0, state.revealedChars)
-            // Reset in the ViewModel only clears name fields, not history
-            // Looking at the reset() implementation, it does NOT clear history
         }
 
     @Test
     fun `generate sets isGenerating during animation`() =
         runTest {
             val vm = TeamNameViewModel()
-            vm.generate()
-            // Before advancing time, isGenerating should be true
+            vm.generate(testAdjectives, testNouns)
             assertTrue(vm.uiState.value.isGenerating)
             advanceUntilIdle()
             assertEquals(false, vm.uiState.value.isGenerating)
@@ -133,7 +131,7 @@ class TeamNameViewModelTest {
         runTest {
             val vm = TeamNameViewModel()
             repeat(10) {
-                vm.generate()
+                vm.generate(testAdjectives, testNouns)
                 advanceUntilIdle()
                 val state = vm.uiState.value
                 assertEquals("${state.adjective} ${state.noun}", state.fullName)
