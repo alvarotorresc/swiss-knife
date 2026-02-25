@@ -6,18 +6,18 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -35,7 +35,6 @@ import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
-import com.alvarotc.swissknife.ui.theme.DarkBackground
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +64,12 @@ fun SwissKnifeApp() {
         topBar = {
             if (showTopBar) {
                 CenterAlignedTopAppBar(
-                    title = { Text(title) },
+                    title = {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                    },
                     navigationIcon = {
                         if (showBack) {
                             IconButton(onClick = { navController.popBackStack() }) {
@@ -80,7 +84,7 @@ fun SwissKnifeApp() {
                         if (currentRoute == NavRoutes.Home.route) {
                             IconButton(onClick = { navController.navigate(NavRoutes.Settings.route) }) {
                                 Icon(
-                                    imageVector = Icons.Filled.Settings,
+                                    imageVector = Icons.Outlined.Settings,
                                     contentDescription = stringResource(R.string.settings),
                                 )
                             }
@@ -88,15 +92,15 @@ fun SwissKnifeApp() {
                     },
                     colors =
                         TopAppBarDefaults.centerAlignedTopAppBarColors(
-                            containerColor = DarkBackground,
-                            titleContentColor = Color.White,
-                            navigationIconContentColor = Color.White,
-                            actionIconContentColor = Color.White,
+                            containerColor = MaterialTheme.colorScheme.background,
+                            titleContentColor = MaterialTheme.colorScheme.onBackground,
+                            navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
+                            actionIconContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                 )
             }
         },
-        containerColor = DarkBackground,
+        containerColor = MaterialTheme.colorScheme.background,
     ) { innerPadding ->
         NavHost(
             navController = navController,
