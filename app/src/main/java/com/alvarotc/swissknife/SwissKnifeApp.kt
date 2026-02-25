@@ -28,6 +28,7 @@ import com.alvarotc.swissknife.ui.screens.CoinFlipScreen
 import com.alvarotc.swissknife.ui.screens.DiceRollScreen
 import com.alvarotc.swissknife.ui.screens.FingerPickerScreen
 import com.alvarotc.swissknife.ui.screens.FortuneWheelScreen
+import com.alvarotc.swissknife.ui.screens.GroupGeneratorScreen
 import com.alvarotc.swissknife.ui.screens.HomeScreen
 import com.alvarotc.swissknife.ui.screens.PasswordGeneratorScreen
 import com.alvarotc.swissknife.ui.screens.RandomListScreen
@@ -56,6 +57,7 @@ fun SwissKnifeApp() {
             NavRoutes.FortuneWheel.route -> stringResource(R.string.tool_fortune_wheel)
             NavRoutes.FingerPicker.route -> stringResource(R.string.tool_finger_picker)
             NavRoutes.Timer.route -> stringResource(R.string.tool_timer)
+            NavRoutes.GroupGenerator.route -> stringResource(R.string.tool_group_generator)
             else -> stringResource(R.string.app_name)
         }
 
@@ -156,6 +158,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.Timer.route) {
                 TimerScreen()
+            }
+            composable(NavRoutes.GroupGenerator.route) {
+                GroupGeneratorScreen()
             }
         }
     }

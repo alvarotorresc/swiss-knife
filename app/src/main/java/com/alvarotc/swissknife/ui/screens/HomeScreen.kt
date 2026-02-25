@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.CardGiftcard
 import androidx.compose.material.icons.outlined.Casino
 import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.FrontHand
+import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Timer
@@ -28,6 +29,7 @@ import com.alvarotc.swissknife.ui.components.ToolCard
 import com.alvarotc.swissknife.ui.theme.AccentCoin
 import com.alvarotc.swissknife.ui.theme.AccentDice
 import com.alvarotc.swissknife.ui.theme.AccentFinger
+import com.alvarotc.swissknife.ui.theme.AccentGroups
 import com.alvarotc.swissknife.ui.theme.AccentList
 import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRandom
@@ -92,6 +94,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Outlined.Timer,
                 accentColor = AccentTimer,
                 route = NavRoutes.Timer.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_group_generator,
+                icon = Icons.Outlined.Groups,
+                accentColor = AccentGroups,
+                route = NavRoutes.GroupGenerator.route,
             ),
         )
 
