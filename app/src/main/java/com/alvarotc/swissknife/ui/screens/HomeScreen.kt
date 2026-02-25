@@ -7,23 +7,22 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CardGiftcard
-import androidx.compose.material.icons.filled.Casino
-import androidx.compose.material.icons.filled.ControlCamera
-import androidx.compose.material.icons.filled.FormatListBulleted
-import androidx.compose.material.icons.filled.FrontHand
-import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.Numbers
-import androidx.compose.material.icons.filled.Toll
+import androidx.compose.material.icons.outlined.CardGiftcard
+import androidx.compose.material.icons.outlined.Casino
+import androidx.compose.material.icons.outlined.ControlCamera
+import androidx.compose.material.icons.outlined.FormatListBulleted
+import androidx.compose.material.icons.outlined.FrontHand
+import androidx.compose.material.icons.outlined.Key
+import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.Toll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.alvarotc.swissknife.R
 import com.alvarotc.swissknife.model.ToolItem
 import com.alvarotc.swissknife.navigation.NavRoutes
@@ -36,7 +35,6 @@ import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
 import com.alvarotc.swissknife.ui.theme.AccentWheel
-import com.alvarotc.swissknife.ui.theme.DarkOnSurfaceVariant
 
 @Composable
 fun HomeScreen(onNavigate: (String) -> Unit) {
@@ -44,49 +42,49 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
         listOf(
             ToolItem(
                 titleResId = R.string.tool_coin_flip,
-                icon = Icons.Filled.Toll,
+                icon = Icons.Outlined.Toll,
                 accentColor = AccentCoin,
                 route = NavRoutes.CoinFlip.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_dice_roll,
-                icon = Icons.Filled.Casino,
+                icon = Icons.Outlined.Casino,
                 accentColor = AccentDice,
                 route = NavRoutes.DiceRoll.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_random_number,
-                icon = Icons.Filled.Numbers,
+                icon = Icons.Outlined.Numbers,
                 accentColor = AccentRandom,
                 route = NavRoutes.RandomNumber.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_secret_santa,
-                icon = Icons.Filled.CardGiftcard,
+                icon = Icons.Outlined.CardGiftcard,
                 accentColor = AccentSanta,
                 route = NavRoutes.SecretSanta.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_random_list,
-                icon = Icons.Filled.FormatListBulleted,
+                icon = Icons.Outlined.FormatListBulleted,
                 accentColor = AccentList,
                 route = NavRoutes.RandomList.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_fortune_wheel,
-                icon = Icons.Filled.ControlCamera,
+                icon = Icons.Outlined.ControlCamera,
                 accentColor = AccentWheel,
                 route = NavRoutes.FortuneWheel.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_finger_picker,
-                icon = Icons.Filled.FrontHand,
+                icon = Icons.Outlined.FrontHand,
                 accentColor = AccentFinger,
                 route = NavRoutes.FingerPicker.route,
             ),
             ToolItem(
                 titleResId = R.string.tool_password_generator,
-                icon = Icons.Filled.Key,
+                icon = Icons.Outlined.Key,
                 accentColor = AccentPassword,
                 route = NavRoutes.PasswordGenerator.route,
             ),
@@ -97,26 +95,26 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
         modifier =
             Modifier
                 .fillMaxSize()
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 20.dp),
         contentPadding = PaddingValues(bottom = 24.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item(span = { GridItemSpan(2) }) {
             Text(
                 text = stringResource(R.string.pick_a_tool),
-                color = DarkOnSurfaceVariant,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Normal,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(top = 8.dp, bottom = 4.dp),
             )
         }
-        items(tools, key = { it.route }) { tool ->
+        itemsIndexed(tools, key = { _, it -> it.route }) { index, tool ->
             ToolCard(
                 title = stringResource(tool.titleResId),
                 icon = tool.icon,
                 accentColor = tool.accentColor,
                 onClick = { onNavigate(tool.route) },
+                animationDelay = index * 60,
             )
         }
     }
