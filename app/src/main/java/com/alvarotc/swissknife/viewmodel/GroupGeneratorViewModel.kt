@@ -1,10 +1,13 @@
 package com.alvarotc.swissknife.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 sealed class GroupGeneratorError {
     data object NameAlreadyAdded : GroupGeneratorError()
@@ -18,6 +21,7 @@ data class GroupGeneratorUiState(
     val numGroups: Int = 2,
     val groups: List<List<String>> = emptyList(),
     val error: GroupGeneratorError? = null,
+    val isShuffling: Boolean = false,
 )
 
 class GroupGeneratorViewModel : ViewModel() {
@@ -61,6 +65,18 @@ class GroupGeneratorViewModel : ViewModel() {
         _uiState.update { it.copy(numGroups = count.coerceIn(2, 10), groups = emptyList()) }
     }
 
+    private fun distributeIntoGroups(
+        participants: List<String>,
+        numGroups: Int,
+    ): List<List<String>> {
+        val shuffled = participants.shuffled()
+        val groups = List(numGroups) { mutableListOf<String>() }
+        shuffled.forEachIndexed { index, name ->
+            groups[index % numGroups].add(name)
+        }
+        return groups
+    }
+
     fun generate() {
         val state = _uiState.value
         if (state.participants.size <= state.numGroups) {
@@ -68,13 +84,21 @@ class GroupGeneratorViewModel : ViewModel() {
             return
         }
 
-        val shuffled = state.participants.shuffled()
-        val groups = List(state.numGroups) { mutableListOf<String>() }
-        shuffled.forEachIndexed { index, name ->
-            groups[index % state.numGroups].add(name)
-        }
+        viewModelScope.launch {
+            _uiState.update { it.copy(isShuffling = true, error = null) }
 
-        _uiState.update { it.copy(groups = groups, error = null) }
+            val shuffleIterations = 15
+            val shuffleDelay = 100L
+
+            repeat(shuffleIterations) {
+                val intermediateGroups = distributeIntoGroups(state.participants, state.numGroups)
+                _uiState.update { it.copy(groups = intermediateGroups) }
+                delay(shuffleDelay)
+            }
+
+            val finalGroups = distributeIntoGroups(state.participants, state.numGroups)
+            _uiState.update { it.copy(groups = finalGroups, isShuffling = false) }
+        }
     }
 
     fun reset() {

@@ -87,7 +87,7 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
                 .fillMaxSize()
                 .padding(24.dp),
     ) {
-        if (state.groups.isEmpty()) {
+        if (state.groups.isEmpty() && !state.isShuffling) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth(),
@@ -180,7 +180,7 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            if (state.groups.isEmpty()) {
+            if (state.groups.isEmpty() && !state.isShuffling) {
                 itemsIndexed(state.participants) { _, name ->
                     Surface(
                         color = MaterialTheme.colorScheme.surfaceVariant,
@@ -273,7 +273,7 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        if (state.groups.isEmpty()) {
+        if (state.groups.isEmpty() && !state.isShuffling) {
             Button(
                 onClick = { viewModel.generate() },
                 enabled = state.participants.size > state.numGroups,
@@ -300,6 +300,7 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
             ) {
                 Button(
                     onClick = { viewModel.generate() },
+                    enabled = !state.isShuffling,
                     modifier =
                         Modifier
                             .weight(1f)
@@ -317,7 +318,10 @@ fun GroupGeneratorScreen(viewModel: GroupGeneratorViewModel = viewModel()) {
                     )
                 }
             }
-            TextButton(onClick = { viewModel.reset() }) {
+            TextButton(
+                onClick = { viewModel.reset() },
+                enabled = !state.isShuffling,
+            ) {
                 Text(
                     text = stringResource(R.string.reset),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,

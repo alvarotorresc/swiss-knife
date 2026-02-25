@@ -2,12 +2,20 @@ package com.alvarotc.swissknife
 
 import com.alvarotc.swissknife.viewmodel.GroupGeneratorError
 import com.alvarotc.swissknife.viewmodel.GroupGeneratorViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
+import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class GroupGeneratorViewModelTest {
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
+
     @Test
     fun `initial state has empty participants and 2 groups`() {
         val vm = GroupGeneratorViewModel()
@@ -22,8 +30,7 @@ class GroupGeneratorViewModelTest {
     @Test
     fun `setNameInput updates input and clears error`() {
         val vm = GroupGeneratorViewModel()
-        // First trigger an error
-        vm.addParticipant() // blank name -> no-op, no error
+        vm.addParticipant()
         vm.setNameInput("Alice")
         assertEquals("Alice", vm.uiState.value.nameInput)
         assertNull(vm.uiState.value.error)
@@ -61,33 +68,37 @@ class GroupGeneratorViewModelTest {
         val vm = GroupGeneratorViewModel()
         vm.setNameInput("Alice")
         vm.addParticipant()
-        vm.setNameInput("alice") // case-insensitive duplicate
+        vm.setNameInput("alice")
         vm.addParticipant()
         assertEquals(GroupGeneratorError.NameAlreadyAdded, vm.uiState.value.error)
         assertEquals(1, vm.uiState.value.participants.size)
     }
 
     @Test
-    fun `addParticipant clears previous groups`() {
-        val vm = GroupGeneratorViewModel()
-        addParticipants(vm, "Alice", "Bob", "Charlie", "Diana")
-        vm.generate()
-        assertTrue(vm.uiState.value.groups.isNotEmpty())
-        vm.setNameInput("Eve")
-        vm.addParticipant()
-        assertTrue(vm.uiState.value.groups.isEmpty())
-    }
+    fun `addParticipant clears previous groups`() =
+        runTest {
+            val vm = GroupGeneratorViewModel()
+            addParticipants(vm, "Alice", "Bob", "Charlie", "Diana")
+            vm.generate()
+            advanceUntilIdle()
+            assertTrue(vm.uiState.value.groups.isNotEmpty())
+            vm.setNameInput("Eve")
+            vm.addParticipant()
+            assertTrue(vm.uiState.value.groups.isEmpty())
+        }
 
     @Test
-    fun `removeParticipant removes name and clears groups`() {
-        val vm = GroupGeneratorViewModel()
-        addParticipants(vm, "Alice", "Bob", "Charlie")
-        vm.generate()
-        vm.removeParticipant("Bob")
-        assertEquals(2, vm.uiState.value.participants.size)
-        assertTrue("Bob" !in vm.uiState.value.participants)
-        assertTrue(vm.uiState.value.groups.isEmpty())
-    }
+    fun `removeParticipant removes name and clears groups`() =
+        runTest {
+            val vm = GroupGeneratorViewModel()
+            addParticipants(vm, "Alice", "Bob", "Charlie")
+            vm.generate()
+            advanceUntilIdle()
+            vm.removeParticipant("Bob")
+            assertEquals(2, vm.uiState.value.participants.size)
+            assertTrue("Bob" !in vm.uiState.value.participants)
+            assertTrue(vm.uiState.value.groups.isEmpty())
+        }
 
     @Test
     fun `setNumGroups updates count and clears groups`() {
@@ -106,32 +117,36 @@ class GroupGeneratorViewModelTest {
     }
 
     @Test
-    fun `generate creates correct number of groups`() {
-        val vm = GroupGeneratorViewModel()
-        addParticipants(vm, "Alice", "Bob", "Charlie", "Diana", "Eve")
-        vm.setNumGroups(3)
-        vm.generate()
-        val state = vm.uiState.value
-        assertEquals(3, state.groups.size)
-        assertNull(state.error)
-    }
+    fun `generate creates correct number of groups`() =
+        runTest {
+            val vm = GroupGeneratorViewModel()
+            addParticipants(vm, "Alice", "Bob", "Charlie", "Diana", "Eve")
+            vm.setNumGroups(3)
+            vm.generate()
+            advanceUntilIdle()
+            val state = vm.uiState.value
+            assertEquals(3, state.groups.size)
+            assertNull(state.error)
+        }
 
     @Test
-    fun `generate distributes all participants across groups`() {
-        val vm = GroupGeneratorViewModel()
-        val names = listOf("Alice", "Bob", "Charlie", "Diana", "Eve", "Frank")
-        addParticipants(vm, *names.toTypedArray())
-        vm.setNumGroups(2)
-        vm.generate()
-        val allInGroups = vm.uiState.value.groups.flatten().sorted()
-        assertEquals(names.sorted(), allInGroups)
-    }
+    fun `generate distributes all participants across groups`() =
+        runTest {
+            val vm = GroupGeneratorViewModel()
+            val names = listOf("Alice", "Bob", "Charlie", "Diana", "Eve", "Frank")
+            addParticipants(vm, *names.toTypedArray())
+            vm.setNumGroups(2)
+            vm.generate()
+            advanceUntilIdle()
+            val allInGroups = vm.uiState.value.groups.flatten().sorted()
+            assertEquals(names.sorted(), allInGroups)
+        }
 
     @Test
     fun `generate shows error when participants not enough for groups`() {
         val vm = GroupGeneratorViewModel()
         addParticipants(vm, "Alice", "Bob")
-        vm.setNumGroups(2) // need more than 2 for 2 groups
+        vm.setNumGroups(2)
         vm.generate()
         assertEquals(GroupGeneratorError.NeedMoreForGroups, vm.uiState.value.error)
         assertTrue(vm.uiState.value.groups.isEmpty())
@@ -141,20 +156,22 @@ class GroupGeneratorViewModelTest {
     fun `generate shows error when participants equal to group count`() {
         val vm = GroupGeneratorViewModel()
         addParticipants(vm, "Alice", "Bob", "Charlie")
-        vm.setNumGroups(3) // exactly 3 participants for 3 groups -> still error (need MORE)
+        vm.setNumGroups(3)
         vm.generate()
         assertEquals(GroupGeneratorError.NeedMoreForGroups, vm.uiState.value.error)
     }
 
     @Test
-    fun `reset clears groups only`() {
-        val vm = GroupGeneratorViewModel()
-        addParticipants(vm, "Alice", "Bob", "Charlie", "Diana")
-        vm.generate()
-        vm.reset()
-        assertTrue(vm.uiState.value.groups.isEmpty())
-        assertEquals(4, vm.uiState.value.participants.size) // participants preserved
-    }
+    fun `reset clears groups only`() =
+        runTest {
+            val vm = GroupGeneratorViewModel()
+            addParticipants(vm, "Alice", "Bob", "Charlie", "Diana")
+            vm.generate()
+            advanceUntilIdle()
+            vm.reset()
+            assertTrue(vm.uiState.value.groups.isEmpty())
+            assertEquals(4, vm.uiState.value.participants.size)
+        }
 
     private fun addParticipants(
         vm: GroupGeneratorViewModel,
