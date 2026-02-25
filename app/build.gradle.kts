@@ -25,12 +25,14 @@ android {
         versionName = "0.3.0"
     }
 
-    signingConfigs {
-        create("release") {
-            storeFile = rootProject.file(signingProps.getProperty("storeFile", ""))
-            storePassword = signingProps.getProperty("storePassword", "")
-            keyAlias = signingProps.getProperty("keyAlias", "")
-            keyPassword = signingProps.getProperty("keyPassword", "")
+    if (signingPropsFile.exists()) {
+        signingConfigs {
+            create("release") {
+                storeFile = rootProject.file(signingProps.getProperty("storeFile"))
+                storePassword = signingProps.getProperty("storePassword")
+                keyAlias = signingProps.getProperty("keyAlias")
+                keyPassword = signingProps.getProperty("keyPassword")
+            }
         }
     }
 
@@ -38,7 +40,9 @@ android {
         release {
             isMinifyEnabled = true
             isShrinkResources = true
-            signingConfig = signingConfigs.getByName("release")
+            if (signingPropsFile.exists()) {
+                signingConfig = signingConfigs.getByName("release")
+            }
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
