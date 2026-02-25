@@ -15,6 +15,13 @@
     <string name="tool_password_generator">Contraseñas</string>
     <string name="tool_fortune_wheel">Ruleta</string>
     <string name="tool_finger_picker">Selector Dedos</string>
+    <string name="tool_timer">Temporizador</string>
+    <string name="tool_group_generator">Generador Grupos</string>
+    <string name="tool_rock_paper_scissors">Piedra Papel Tijera</string>
+    <string name="tool_lottery">Sorteo</string>
+    <string name="tool_eight_ball">Bola 8 Mágica</string>
+    <string name="tool_random_color">Color Aleatorio</string>
+    <string name="tool_team_name">Nombre Equipo</string>
 
     <!-- Home Screen -->
     <string name="pick_a_tool">Elige una herramienta</string>
@@ -90,6 +97,54 @@
     <string name="pick_winners">Elegir Ganadores</string>
     <string name="winner_selected">¡Ganador Seleccionado!</string>
     <string name="winners_selected">¡Ganadores Seleccionados!</string>
+
+    <!-- Timer -->
+    <string name="stopwatch">Cronómetro</string>
+    <string name="countdown">Cuenta atrás</string>
+    <string name="start">Iniciar</string>
+    <string name="pause">Pausar</string>
+    <string name="resume">Reanudar</string>
+    <string name="timer_minutes">Min</string>
+    <string name="timer_seconds">Seg</string>
+    <string name="timer_finished">¡Tiempo!</string>
+
+    <!-- Group Generator -->
+    <string name="number_of_groups">Número de grupos</string>
+    <string name="generate_groups">Generar Grupos</string>
+    <string name="group_label">Grupo %d</string>
+    <string name="error_need_more_for_groups">Se necesitan más personas que grupos</string>
+
+    <!-- Rock Paper Scissors -->
+    <string name="rock">Piedra</string>
+    <string name="paper">Papel</string>
+    <string name="scissors">Tijera</string>
+    <string name="you_win">¡Ganaste!</string>
+    <string name="you_lose">¡Perdiste!</string>
+    <string name="draw_result">¡Empate!</string>
+    <string name="vs">VS</string>
+    <string name="play_again">Jugar de nuevo</string>
+    <string name="choose_your_move">Elige tu jugada</string>
+
+    <!-- Lottery -->
+    <string name="how_many_numbers">Cantidad de números</string>
+    <string name="number_range">Rango (1 a %d)</string>
+    <string name="draw_numbers">Sortear</string>
+    <string name="error_count_exceeds_range">La cantidad supera el rango</string>
+    <string name="range_max">Máx</string>
+    <string name="numbers_to_draw">Números</string>
+
+    <!-- Magic 8-Ball -->
+    <string name="ask_a_question">Haz una pregunta</string>
+    <string name="shake_to_answer">Agita para preguntar</string>
+    <string name="ask">Preguntar</string>
+
+    <!-- Random Color -->
+    <string name="generate_color">Generar Color</string>
+    <string name="tap_to_generate">Toca para generar</string>
+
+    <!-- Team Name Generator -->
+    <string name="generate_name">Generar Nombre</string>
+    <string name="team_name_result">Tu nombre de equipo:</string>
 
     <!-- Settings -->
     <string name="settings_language">Idioma</string>

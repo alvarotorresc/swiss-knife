@@ -15,6 +15,7 @@ import androidx.compose.material.icons.outlined.ControlCamera
 import androidx.compose.material.icons.outlined.FrontHand
 import androidx.compose.material.icons.outlined.Key
 import androidx.compose.material.icons.outlined.Numbers
+import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.material.icons.outlined.Toll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,6 +32,7 @@ import com.alvarotc.swissknife.ui.theme.AccentList
 import com.alvarotc.swissknife.ui.theme.AccentPassword
 import com.alvarotc.swissknife.ui.theme.AccentRandom
 import com.alvarotc.swissknife.ui.theme.AccentSanta
+import com.alvarotc.swissknife.ui.theme.AccentTimer
 import com.alvarotc.swissknife.ui.theme.AccentWheel
 
 @Composable
@@ -84,6 +86,12 @@ fun HomeScreen(onNavigate: (String) -> Unit) {
                 icon = Icons.Outlined.Key,
                 accentColor = AccentPassword,
                 route = NavRoutes.PasswordGenerator.route,
+            ),
+            ToolItem(
+                titleResId = R.string.tool_timer,
+                icon = Icons.Outlined.Timer,
+                accentColor = AccentTimer,
+                route = NavRoutes.Timer.route,
             ),
         )
 

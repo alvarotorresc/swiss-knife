@@ -22,4 +22,18 @@ sealed class NavRoutes(val route: String) {
     data object FortuneWheel : NavRoutes("fortune_wheel")
 
     data object FingerPicker : NavRoutes("finger_picker")
+
+    data object Timer : NavRoutes("timer")
+
+    data object GroupGenerator : NavRoutes("group_generator")
+
+    data object RockPaperScissors : NavRoutes("rock_paper_scissors")
+
+    data object Lottery : NavRoutes("lottery")
+
+    data object EightBall : NavRoutes("eight_ball")
+
+    data object RandomColor : NavRoutes("random_color")
+
+    data object TeamNameGenerator : NavRoutes("team_name_generator")
 }

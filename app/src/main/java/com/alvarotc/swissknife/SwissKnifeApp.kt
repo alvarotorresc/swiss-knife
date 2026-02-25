@@ -35,6 +35,7 @@ import com.alvarotc.swissknife.ui.screens.RandomNumberScreen
 import com.alvarotc.swissknife.ui.screens.SecretSantaScreen
 import com.alvarotc.swissknife.ui.screens.SettingsScreen
 import com.alvarotc.swissknife.ui.screens.SplashScreen
+import com.alvarotc.swissknife.ui.screens.TimerScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +55,7 @@ fun SwissKnifeApp() {
             NavRoutes.PasswordGenerator.route -> stringResource(R.string.tool_password_generator)
             NavRoutes.FortuneWheel.route -> stringResource(R.string.tool_fortune_wheel)
             NavRoutes.FingerPicker.route -> stringResource(R.string.tool_finger_picker)
+            NavRoutes.Timer.route -> stringResource(R.string.tool_timer)
             else -> stringResource(R.string.app_name)
         }
 
@@ -151,6 +153,9 @@ fun SwissKnifeApp() {
             }
             composable(NavRoutes.FingerPicker.route) {
                 FingerPickerScreen()
+            }
+            composable(NavRoutes.Timer.route) {
+                TimerScreen()
             }
         }
     }
